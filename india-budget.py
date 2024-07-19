@@ -83,7 +83,6 @@ df['Description'] = pd.Categorical(df['Description'], categories=main_cat_order_
 df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
 
 df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
-
 df["Actual"] = (df["Actual"].astype(float)/100000).round(2) #converting into Rs Lakk Cr
 df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakk Cr
 
@@ -91,7 +90,8 @@ df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakk Cr
 unique_dates = df['Date'].unique()
 date_index = range(len(unique_dates))
 
-# title_placeholder = st.empty()
+title_placeholder = st.empty()
+slider_placeholder = st.sidebar.empty()
 
 # Sidebar for date index selection using a slider
 selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates) - 1, 0)
@@ -107,60 +107,95 @@ overall_be_max_value = df['BE'].max()
 play_button = st.sidebar.button("Play")
 pause_button = st.sidebar.button("Pause")
 
-slider_placeholder = st.sidebar.empty()
 
 # Filter data based on selected date index
 selected_date = unique_dates[selected_date_index]
 filtered_data = df[df['Date'] == selected_date]
 
-# Create subplot
-fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]],column_widths=[0.75, 0.25], horizontal_spacing=0.01)
 
-# Add scatter plot
-fig.add_trace(go.Scatter(
-    x=filtered_data['Actual'], y=filtered_data['Description'], mode='markers', name='Actual', marker=dict(size=15)
-), row=1, col=1)
+def update_plot(selected_date):
+    filtered_data = df[df['Date'] == selected_date]
+    fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]], column_widths=[0.75, 0.25], horizontal_spacing=0.01)
+    fig.add_trace(go.Scatter(x=filtered_data['Actual'], y=filtered_data['Description'], mode='markers', name='Actual', marker=dict(size=15)), row=1, col=1)
+    fig.add_trace(go.Bar(x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate'), row=1, col=2)
+    fig.add_trace(go.Bar(x=filtered_data['Actual'], y=filtered_data['Description'], orientation='h', name='Actual', marker=dict(color='red', opacity=0.6)), row=1, col=2)
+    fig.update_layout(title=f'Financial Data Comparison for {selected_date}', xaxis_title='Actual Values', xaxis2_title='Budget Estimates', yaxis_title='Description', showlegend=False, height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0))
+    plot_placeholder.plotly_chart(fig, use_container_width=True)
+
+selected_date = unique_dates[selected_date_index]
+update_plot(selected_date)  # Initial plot update
+
+def update_title(selected_date):
+    title = f"Financial Data Comparison for {selected_date.strftime('%B %d, %Y')}"
+    title_placeholder.title(title)
+
+update_title(selected_date)  # Initial title update
+
+play_button = st.sidebar.button("Play")
+pause_button = st.sidebar.button("Pause")
+
+if play_button:
+    st.session_state.is_playing = True
+if pause_button:
+    st.session_state.is_playing = False
+
+if st.session_state.is_playing:
+    for i in range(selected_date_index, len(unique_dates)):
+        if not st.session_state.is_playing:
+            break
+        update_plot(unique_dates[i])
+        update_title(unique_dates[i])
+        time.sleep(0.3)
+        selected_date_index = i
+
+# # Create subplot
+# fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]],column_widths=[0.75, 0.25], horizontal_spacing=0.01)
+
+# # Add scatter plot
+# fig.add_trace(go.Scatter(
+#     x=filtered_data['Actual'], y=filtered_data['Description'], mode='markers', name='Actual', marker=dict(size=15)
+# ), row=1, col=1)
 
 
-# Add horizontal bar chart
-fig.add_trace(go.Bar(
-    x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate',
-), row=1, col=2)
+# # Add horizontal bar chart
+# fig.add_trace(go.Bar(
+#     x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate',
+# ), row=1, col=2)
 
-# Adding Actual values as a line or bar on top of the BE bars
-fig.add_trace(go.Bar(
-    x=filtered_data['Actual'], y=filtered_data['Description'], orientation='h', name='Actual',
-    marker=dict(color='red', opacity=0.6), # semi-transparent red bars for Actual
-    textposition='outside', textfont=dict(size=15, family='Arial', color='black', weight='bold')
-), row=1, col=2)
+# # Adding Actual values as a line or bar on top of the BE bars
+# fig.add_trace(go.Bar(
+#     x=filtered_data['Actual'], y=filtered_data['Description'], orientation='h', name='Actual',
+#     marker=dict(color='red', opacity=0.6), # semi-transparent red bars for Actual
+#     textposition='outside', textfont=dict(size=15, family='Arial', color='black', weight='bold')
+# ), row=1, col=2)
 
-# Update layout
-fig.update_layout(
-    title='Financial Data Comparison by Date',
-    xaxis_title='Actual Values',
-    xaxis2_title='Budget Estimates',
-    yaxis_title='Description',
-    showlegend=False
-)
+# # Update layout
+# fig.update_layout(
+#     title='Financial Data Comparison by Date',
+#     xaxis_title='Actual Values',
+#     xaxis2_title='Budget Estimates',
+#     yaxis_title='Description',
+#     showlegend=False
+# )
 
-# Update the y-axis tick labels to be bold
-fig.update_yaxes(tickfont=dict(size=15, family='Arial', color='black', weight='bold'), row=1, col=1)
+# # Update the y-axis tick labels to be bold
+# fig.update_yaxes(tickfont=dict(size=15, family='Arial', color='black', weight='bold'), row=1, col=1)
 
-fig.update_layout(height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0), showlegend=False, yaxis=dict(automargin=True))
+# fig.update_layout(height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0), showlegend=False, yaxis=dict(automargin=True))
 
-# Update the layout for the combined figure for 1
-fig.update_xaxes(row=1, col=1, range=[0, overall_actual_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
-fig.update_yaxes(row=1, col=1, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+# # Update the layout for the combined figure for 1
+# fig.update_xaxes(row=1, col=1, range=[0, overall_actual_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+# fig.update_yaxes(row=1, col=1, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
-# Update the layout for the combined figure for 2
-fig.update_xaxes(row=1, col=2, range=[0, overall_be_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
-fig.update_yaxes(row=1, col=2, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+# # Update the layout for the combined figure for 2
+# fig.update_xaxes(row=1, col=2, range=[0, overall_be_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+# fig.update_yaxes(row=1, col=2, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
-# # Placeholder for the plot
-plot_placeholder = st.empty()
+# # # Placeholder for the plot
+# plot_placeholder = st.empty()
 
-# Display the plot in the placeholder
-plot_placeholder.plotly_chart(fig, use_container_width=True)
+# # Display the plot in the placeholder
+# plot_placeholder.plotly_chart(fig, use_container_width=True)
 
 
 # def update_title(selected_date):
