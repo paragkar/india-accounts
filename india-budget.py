@@ -103,13 +103,16 @@ fig.add_trace(go.Scatter(
     x=filtered_data['Actual'], y=filtered_data['Description'], mode='markers', name='Actual'
 ), row=1, col=1)
 
-fig.add_trace(go.Scatter(
-    x=filtered_data['Actual % of BE'], y=filtered_data['Description'], mode='lines+markers', name='Actual % of BE', marker=dict(color='red')
-), row=1, col=1)
 
 # Add horizontal bar chart
 fig.add_trace(go.Bar(
     x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate'
+), row=1, col=2)
+
+# Adding Actual values as a line or bar on top of the BE bars
+fig.add_trace(go.Bar(
+    x=filtered_data['Actual'], y=filtered_data['Description'], orientation='h', name='Actual',
+    marker=dict(color='red', opacity=0.6)  # semi-transparent red bars for Actual
 ), row=1, col=2)
 
 # Update layout
