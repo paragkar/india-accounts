@@ -97,8 +97,8 @@ plot_placeholder = st.empty()
 # Sidebar for date index selection using a slider
 selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates) - 1, 0)
 
-overall_actual_min_value = df['Actual'].min()
-overall_actual_max_value = df['Actual'].max()
+overall_actual_min_value = df['Actual % of BE'].min()
+overall_actual_max_value = df['Actual % of BE'].max()
 
 # Calculate the overall min and max values for the 'BE' column in the entire dataset
 overall_be_min_value = df['BE'].min()
