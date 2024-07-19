@@ -85,13 +85,17 @@ main_cat_order_list = [
 ]
 
 
-# Convert 'Date' column to datetime
+# Replace descriptions based on 'contains'
+for entry in main_cat_order_list:
+    df.loc[df['Description'].str.contains(entry, case=False, na=False), 'Description'] = entry
+
+# Convert 'Date' column to datetime if not already done
 df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
 
-# Set the 'Description' column to a categorical type with the defined order
+# Convert 'Description' to a categorical type for sorting
 df['Description'] = pd.Categorical(df['Description'], categories=main_cat_order_list, ordered=True)
 
-# Sort by 'Date' descending and 'Description'
+# Sort the DataFrame by 'Date' (newest first) and 'Description'
 df = df.sort_values(by=['Date', 'Description'], ascending=[False, True])
 
 
