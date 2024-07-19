@@ -60,12 +60,6 @@ df['Date'] = pd.to_datetime(df['Date'])
 df["Description"] = [x.strip() for x in df["Description"]]
 
 
-# df = df.sort_values("Date", ascending = False).reset_index(drop=True)
-
-# # Convert Date column to string without time
-# df['Date_str'] = df['Date'].dt.strftime('%d-%m-%Y')
-
-
 main_cat_order_list = [
     "Revenue Receipts",
     "Rev Recp - Tax Revenue Net",
