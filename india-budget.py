@@ -84,10 +84,28 @@ main_cat_order_list = [
     "Primary Deficit - Fiscal Deficit Minus Interest Payments"
 ]
 
+# Define key phrases to check in descriptions
+key_phrases = [
+    "Revenue Receipts",
+    "Tax Revenue Net",
+    "Non Tax Revenue",
+    "Non Debt Capital Receipt",
+    "Recovery of Loans",
+    "Other Receipt",
+    "Total Recp",
+    "Revenue Expenditure",
+    "Interest Payments",
+    "Capital Expenditure",
+    "Loan Disbursed",
+    "Total Exp",
+    "TotalExp Minus TotalRecp",
+    "RevExp Minus RevRecp",
+    "Fiscal Deficit Minus Interest"
+]
 
-# Replace descriptions based on 'contains'
-for entry in main_cat_order_list:
-    df.loc[df['Description'].str.contains(entry, case=False, na=False), 'Description'] = entry
+# Replace descriptions based on 'contains' with key phrases
+for i, phrase in enumerate(key_phrases):
+    df.loc[df['Description'].str.contains(phrase, case=False, na=False), 'Description'] = main_cat_order_list[i]
 
 # Convert 'Date' column to datetime if not already done
 df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
