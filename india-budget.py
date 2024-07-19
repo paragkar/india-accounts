@@ -133,14 +133,16 @@ def update_plot(selected_date):
         x=filtered_data['BE'], 
         y=filtered_data['Description'], 
         orientation='h', 
-        name='Budget Estimate'
+        name='Budget Estimate',
+        textposition='outside'  # Position text 
     ), row=1, col=2)
     fig.add_trace(go.Bar(
         x=filtered_data['Actual'], 
         y=filtered_data['Description'], 
         orientation='h', 
         name='Actual', 
-        marker=dict(color='red', opacity=0.6)
+        marker=dict(color='red', opacity=0.6),
+        textposition='outside'  # Position text 
     ), row=1, col=2)
 
     
