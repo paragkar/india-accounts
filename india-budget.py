@@ -122,7 +122,7 @@ def update_plot(selected_date):
         name='Actual', 
         marker=dict(size=15),
         text=filtered_data['Actual'].round(2).astype(str),  # Display rounded actual values as text
-        textposition='top right'  # Position text to the top right of each marker
+        textposition='middle right'  # Position text to the top right of each marker
     ), row=1, col=1)
 
     # fig.add_trace(go.Bar(x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate'), row=1, col=2)
