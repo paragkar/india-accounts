@@ -236,7 +236,7 @@ if st.session_state.get('is_playing', False):
             break
         update_plot(unique_dates[i])
         update_title(unique_dates[i])
-        time.sleep(0.3)  # Adjust sleep time to control
+        time.sleep(0.5)  # Adjust sleep time to control
         selected_date_index = i
 
 # # Create subplot
