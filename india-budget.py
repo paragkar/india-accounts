@@ -120,7 +120,8 @@ fig.add_trace(go.Bar(
 # Adding Actual values as a line or bar on top of the BE bars
 fig.add_trace(go.Bar(
     x=filtered_data['Actual'], y=filtered_data['Description'], orientation='h', name='Actual',
-    marker=dict(color='red', opacity=0.6)  # semi-transparent red bars for Actual
+    marker=dict(color='red', opacity=0.6), # semi-transparent red bars for Actual
+    textposition='outside', textfont=dict(size=15, family='Arial', color='black', weight='bold')
 ), row=1, col=2)
 
 # Update layout
