@@ -117,7 +117,7 @@ fig.add_trace(go.Scatter(
 
 # Add horizontal bar chart
 fig.add_trace(go.Bar(
-    x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate', text_auto='.2f'
+    x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate',
 ), row=1, col=2)
 
 # Adding Actual values as a line or bar on top of the BE bars
