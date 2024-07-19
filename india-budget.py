@@ -86,6 +86,8 @@ df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100)
 df["Actual"] = (df["Actual"].astype(float)/100000).round(2) #converting into Rs Lakk Cr
 df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakk Cr
 
+st.write(df)
+
 # Unique dates sorted
 unique_dates = df['Date'].unique()
 date_index = range(len(unique_dates))
