@@ -89,8 +89,6 @@ df["GDP_Current"] = (df["GDP_Current"].astype(float)/100000).round(2) #convertin
 df["Actual % of GDP"] = ((df["Actual"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
 df["BE % of GDP"] = ((df["BE"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
 
-st.write(df)
-
 # Unique dates sorted
 unique_dates = df['Date'].unique()
 date_index = range(len(unique_dates))
@@ -118,7 +116,7 @@ def update_plot(selected_date):
     filtered_data = df[df['Date'] == selected_date]
     # fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]], column_widths=[0.75, 0.25], horizontal_spacing=0.01)
    
-    fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.75, 0.25], horizontal_spacing=0.01)
+    fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.5, 0.5], horizontal_spacing=0.01)
 
 
     # # Add scatter plot on the left with text labels
