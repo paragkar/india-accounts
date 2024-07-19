@@ -87,6 +87,6 @@ main_cat_order_list = [
 df['Description'] = pd.Categorical(df['Description'], categories=main_cat_order_list, ordered=True)
 
 # Sort the DataFrame by the 'Description' column
-# df = df.sort_values('Description')
+df = df.sort_values('Description')
 
 st.write(df)
