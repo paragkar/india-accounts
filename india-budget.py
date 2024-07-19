@@ -124,5 +124,8 @@ fig.update_layout(
     showlegend=False
 )
 
+# Update the y-axis tick labels to be bold
+fig.update_yaxes(tickfont=dict(size=15, family='Arial', color='black', weight='bold'), row=1, col=1)
+
 # Display plot
 st.plotly_chart(fig)
