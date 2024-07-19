@@ -91,6 +91,11 @@ df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakk Cr
 unique_dates = df['Date'].unique()
 date_index = range(len(unique_dates))
 
+title_placeholder = st.empty()
+    
+# Placeholder for the plot
+plot_placeholder = st.empty()
+
 # Sidebar for date index selection using a slider
 selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates) - 1, 0)
 
