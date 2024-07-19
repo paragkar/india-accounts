@@ -96,8 +96,8 @@ selected_date = unique_dates[selected_date_index]
 filtered_data = df[df['Date'] == selected_date]
 
 # Calculate the overall min and max values for the 'Value' column in the entire dataset
-overall_min_value = filtered_data['Value'].min()
-overall_max_value = filtered_data['Value'].max()
+overall_min_value = filtered_data['Actual'].min()
+overall_max_value = filtered_data['Actual'].max()
 
 # Create subplot
 fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]])
