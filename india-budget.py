@@ -57,13 +57,12 @@ df = loadfile()
 # Ensuring the Date column is of datetime type
 df['Date'] = pd.to_datetime(df['Date'])
 
-# Sorting dataframe by Date to ensure proper animation sequence
-df = df.sort_values(by='Date')
+
+df = df.sort_values("Date", ascending = False).reset_index(drop=True)
 
 # Convert Date column to string without time
 df['Date_str'] = df['Date'].dt.strftime('%d-%m-%Y')
 
-df = df.sort_values("Date", ascending = False).reset_index(drop=True)
 
 main_cat_order_list = [
     "Revenue Receipts",
