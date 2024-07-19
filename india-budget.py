@@ -95,9 +95,13 @@ selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates
 selected_date = unique_dates[selected_date_index]
 filtered_data = df[df['Date'] == selected_date]
 
-# Calculate the overall min and max values for the 'Value' column in the entire dataset
-overall_min_value = filtered_data['Actual'].min()
-overall_max_value = filtered_data['Actual'].max()
+# Calculate the overall min and max values for the 'Actual' column in the entire dataset
+overall_actual_min_value = filtered_data['Actual'].min()
+overall_actual_max_value = filtered_data['Actual'].max()
+
+# Calculate the overall min and max values for the 'BE' column in the entire dataset
+overall_be_min_value = filtered_data['BE'].min()
+overall_be_max_value = filtered_data['BE'].max()
 
 # Create subplot
 fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]],column_widths=[0.75, 0.25], horizontal_spacing=0.01)
@@ -133,9 +137,13 @@ fig.update_yaxes(tickfont=dict(size=15, family='Arial', color='black', weight='b
 
 fig.update_layout(height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0), showlegend=False, yaxis=dict(automargin=True))
 
-# Update the layout for the combined figure
-fig.update_xaxes(row=1, col=1, range=[-1000, overall_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+# Update the layout for the combined figure for 1
+fig.update_xaxes(row=1, col=1, range=[-1000, overall_actual_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 fig.update_yaxes(row=1, col=1, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+
+# Update the layout for the combined figure for 2
+fig.update_xaxes(row=1, col=2, range=[-1000, overall_be_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+fig.update_yaxes(row=1, col=2, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
 # Display plot
 st.plotly_chart(fig)
