@@ -57,6 +57,8 @@ df = loadfile()
 # Ensuring the Date column is of datetime type
 df['Date'] = pd.to_datetime(df['Date'])
 
+df["Description"] = [x.strip() for x in df["Description"]]
+
 
 # df = df.sort_values("Date", ascending = False).reset_index(drop=True)
 
