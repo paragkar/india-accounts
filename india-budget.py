@@ -80,7 +80,7 @@ df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').apply(lambda x : x.da
 df['Description'] = pd.Categorical(df['Description'], categories=main_cat_order_list, ordered=True)
 
 # Sort the DataFrame by 'Date' (newest first) and 'Description'
-df = df.sort_values(by=['Date', 'Description'], ascending=[False, True])
+df = df.sort_values(by=['Date', 'Description'], ascending=[False, False])
 
 df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
 
