@@ -84,6 +84,17 @@ df = df.sort_values(by=['Date', 'Description'], ascending=[False, True])
 
 df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
 
+# Unique dates sorted
+unique_dates = df['Date'].dt.date.unique()
+date_index = range(len(unique_dates))
+
+# Sidebar for date index selection using a slider
+selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates) - 1, 0)
+
+# Filter data based on selected date index
+selected_date = unique_dates[selected_date_index]
+filtered_data = df[df['Date'].dt.date == selected_date]
+
 # Create subplot
 fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]])
 
