@@ -93,7 +93,7 @@ selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates
 
 # Filter data based on selected date index
 selected_date = unique_dates[selected_date_index]
-filtered_data = df[df['Date'].dt.date == selected_date]
+filtered_data = df[df['Date'] == selected_date]
 
 # Create subplot
 fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]])
