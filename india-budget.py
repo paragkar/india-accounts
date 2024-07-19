@@ -128,7 +128,7 @@ def update_plot(selected_date):
     # fig.update_yaxes(showticklabels=False, row=1, col=1)
     fig.update_yaxes(tickfont=dict(size=15), row=1, col=1)
 
-    fig.update_layout(title=f'Financial Data Comparison for {selected_date}', xaxis_title='Actual Values', xaxis2_title='Budget Estimates', yaxis_title='Description', showlegend=False, height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0))
+    fig.update_layout(title=f'Financial Data Comparison for {selected_date}', xaxis_title='Actual Values', xaxis2_title='Budget Estimates', yaxis_title='', showlegend=False, height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0))
     plot_placeholder.plotly_chart(fig, use_container_width=True)
 
 selected_date = unique_dates[selected_date_index]
