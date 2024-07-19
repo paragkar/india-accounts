@@ -80,7 +80,7 @@ main_cat_order_list = [
 
 
 # Convert 'Date' column to datetime if not already done
-df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').date()
+df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').apply(lambda x : x.date())
 
 # Convert 'Description' to a categorical type for sorting
 df['Description'] = pd.Categorical(df['Description'], categories=main_cat_order_list, ordered=True)
