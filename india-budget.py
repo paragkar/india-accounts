@@ -106,10 +106,15 @@ overall_actual_max_value = df['Actual'].max()
 overall_be_min_value = df['BE'].min()
 overall_be_max_value = df['BE'].max()
 
+#Place the "Play" button at the top of the sidebar
+play_button = st.sidebar.button("Play")
+pause_button = st.sidebar.button("Pause")
+
+slider_placeholder = st.sidebar.empty()
+
 # Filter data based on selected date index
 selected_date = unique_dates[selected_date_index]
 filtered_data = df[df['Date'] == selected_date]
-
 
 # Create subplot
 fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]],column_widths=[0.75, 0.25], horizontal_spacing=0.01)
@@ -154,8 +159,8 @@ fig.update_yaxes(row=1, col=1, tickfont=dict(size=15),fixedrange=True, showline=
 fig.update_xaxes(row=1, col=2, range=[0, overall_be_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 fig.update_yaxes(row=1, col=2, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
-# Display plot
-st.plotly_chart(fig)
+ # Display the plot in the placeholder
+plot_placeholder.plotly_chart(fig, use_container_width=True)
 
 
 def update_title(selected_date):
