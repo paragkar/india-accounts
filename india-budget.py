@@ -12,7 +12,6 @@ import time
 
 pd.set_option('future.no_silent_downcasting', True)
 pd.set_option('display.max_columns', None)
-
 st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
@@ -74,7 +73,6 @@ main_cat_order_list = [
     "Primary Deficit - FisicalDef Minus InterestPay"
 ]
 
-
 # Convert 'Date' column to datetime if not already done
 df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').apply(lambda x : x.date())
 
@@ -84,5 +82,6 @@ df['Description'] = pd.Categorical(df['Description'], categories=main_cat_order_
 # Sort the DataFrame by 'Date' (newest first) and 'Description'
 df = df.sort_values(by=['Date', 'Description'], ascending=[False, True])
 
+df["Actual % of BE"] = df["Actual"].astype(float)/df["BE"].astype(float)
 
 st.write(df)
