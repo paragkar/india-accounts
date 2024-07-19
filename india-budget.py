@@ -116,12 +116,12 @@ def update_plot(selected_date):
 
     # Add scatter plot on the left with text labels
     fig.add_trace(go.Scatter(
-        x=filtered_data['Actual'], 
+        x=filtered_data["Actual % of BE"], 
         y=filtered_data['Description'], 
         mode='markers+text',  # Include both markers and text
         name='Actual', 
         marker=dict(size=15),
-        text=filtered_data['Actual'].round(2).astype(str), 
+        text=filtered_data["Actual % of BE"].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         textposition='middle right'  # Position text 
     ), row=1, col=1)
