@@ -86,6 +86,8 @@ df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100)
 df["Actual"] = (df["Actual"].astype(float)/100000).round(2) #converting into Rs Lakk Cr
 df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakk Cr
 df["GDP_Current"] = (df["GDP_Current"].astype(float)/100000).round(2) #converting into Rs Lakk Cr
+df["Actual % of GDP"] = ((df["Actual"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
+df["BE % of GDP"] = ((df["BE"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
 
 st.write(df)
 
