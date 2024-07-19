@@ -151,3 +151,54 @@ fig.update_yaxes(row=1, col=2, tickfont=dict(size=15),fixedrange=True, showline=
 
 # Display plot
 st.plotly_chart(fig)
+
+
+def update_title(selected_date):
+    # # Create the styled title
+    # styled_category_type = f"<span style='color:red; font-weight:bold;'>{selected_category_type}</span>"
+    # styled_sector_type = f"<span style='color:blue; font-weight:bold;'>{selected_sector_type}</span>"
+    # styled_metric_type = f"<span style='color:brown; font-weight:bold;'>{selected_metric_type}</span>"
+    styled_month = f"<span style='color:green; font-weight:bold;'>{selected_date.strftime('%b %Y')}</span>"
+    # title = f"Consumer Price {styled_category_type} {styled_sector_type} {styled_metric_type} Data For Month - {styled_month}"
+    title = f"Consumer Price Data For Month - {styled_month}"
+
+    # Display the date with month on top along with the title
+    title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
+
+# Initialize title and slider
+if 'current_index' not in st.session_state:
+    st.session_state.current_index = 0
+
+if 'is_playing' not in st.session_state:
+    st.session_state.is_playing = False
+
+# Validate the current index
+if st.session_state.current_index >= len(unique_dates):
+    st.session_state.current_index = 0
+
+slider = slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=st.session_state.current_index, key="date_slider")
+update_title(unique_dates[slider])
+
+if play_button:
+    st.session_state.is_playing = True
+    if st.session_state.current_index == len(unique_dates) - 1:
+        st.session_state.current_index = 0
+
+if pause_button:
+    st.session_state.is_playing = False
+
+if st.session_state.is_playing:
+    for i in range(st.session_state.current_index, len(unique_dates)):
+        if not st.session_state.is_playing:
+            break
+        selected_date = unique_dates[i]
+        update_plot(selected_date)
+        update_title(selected_date)
+        st.session_state.current_index = i
+        slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=i, key=f"date_slider_{i}")
+        time.sleep(0.3)  # Adjust the sleep time to control the animation speed
+else:
+    selected_date = unique_dates[slider]
+    update_plot(selected_date)
+    update_title(selected_date)
+    st.session_state.current_index = slider
