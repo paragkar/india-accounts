@@ -79,12 +79,8 @@ main_cat_order_list = [
 ]
 
 
-# # Replace descriptions based on 'contains' with key phrases
-# for i, phrase in enumerate(key_phrases):
-#     df.loc[df['Description'].str.contains(phrase, case=False, na=False), 'Description'] = main_cat_order_list[i]
-
 # Convert 'Date' column to datetime if not already done
-df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
+df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').date()
 
 # Convert 'Description' to a categorical type for sorting
 df['Description'] = pd.Categorical(df['Description'], categories=main_cat_order_list, ordered=True)
