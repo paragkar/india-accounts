@@ -54,11 +54,7 @@ def loadfile():
 # Main Program Starts Here
 df = loadfile()
 
-# Ensuring the Date column is of datetime type
-df['Date'] = pd.to_datetime(df['Date'])
-
 df["Description"] = [x.strip() for x in df["Description"]]
-
 
 main_cat_order_list = [
     "Revenue Receipts",
