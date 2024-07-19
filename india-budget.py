@@ -132,21 +132,27 @@ def update_title(selected_date):
 
 update_title(selected_date)  # Initial title update
 
-play_button = st.sidebar.button("Play")
-pause_button = st.sidebar.button("Pause")
+# Place the "Play" and "Pause" button at the top of the sidebar with unique keys
+play_button = st.sidebar.button("Play", key="play_button")
+pause_button = st.sidebar.button("Pause", key="pause_button")
 
+# Use these buttons in your control logic
 if play_button:
     st.session_state.is_playing = True
+    st.session_state.current_index = max(0, st.session_state.get('current_index', 0))  # Ensure current_index is initialized
 if pause_button:
     st.session_state.is_playing = False
 
-if st.session_state.is_playing:
-    for i in range(selected_date_index, len(unique_dates)):
+# Animation loop controlled by the play button
+if st.session_state.get('is_playing', False):
+    # Ensure the index is within bounds
+    start_index = st.session_state.current_index
+    for i in range(start_index, len(unique_dates)):
         if not st.session_state.is_playing:
             break
         update_plot(unique_dates[i])
         update_title(unique_dates[i])
-        time.sleep(0.3)
+        time.sleep(0.3)  # Adjust sleep time to control
         selected_date_index = i
 
 # # Create subplot
