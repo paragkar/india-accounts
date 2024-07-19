@@ -134,6 +134,7 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Budget Estimate',
+        text=filtered_data['BE'].round(2).astype(str),  # Display rounded actual values as text
         textposition='outside'  # Position text 
     ), row=1, col=2)
     fig.add_trace(go.Bar(
@@ -141,6 +142,7 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Actual', 
+        text=filtered_data['Actual'].round(2).astype(str),  # Display rounded actual values as text
         marker=dict(color='red', opacity=0.6),
         textposition='outside'  # Position text 
     ), row=1, col=2)
