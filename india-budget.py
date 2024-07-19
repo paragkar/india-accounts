@@ -111,7 +111,7 @@ fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter
 
 # Add scatter plot
 fig.add_trace(go.Scatter(
-    x=filtered_data['Actual'], y=filtered_data['Description'], mode='markers', name='Actual', marker=dict(size=20)
+    x=filtered_data['Actual'], y=filtered_data['Description'], mode='markers', name='Actual', marker=dict(size=15)
 ), row=1, col=1)
 
 
