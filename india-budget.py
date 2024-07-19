@@ -112,9 +112,37 @@ filtered_data = df[df['Date'] == selected_date]
 def update_plot(selected_date):
     filtered_data = df[df['Date'] == selected_date]
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]], column_widths=[0.75, 0.25], horizontal_spacing=0.01)
-    fig.add_trace(go.Scatter(x=filtered_data['Actual'], y=filtered_data['Description'], mode='markers', name='Actual', marker=dict(size=15)), row=1, col=1)
-    fig.add_trace(go.Bar(x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate'), row=1, col=2)
-    fig.add_trace(go.Bar(x=filtered_data['Actual'], y=filtered_data['Description'], orientation='h', name='Actual', marker=dict(color='red', opacity=0.6)), row=1, col=2)
+    # fig.add_trace(go.Scatter(x=filtered_data['Actual'], y=filtered_data['Description'], mode='markers', name='Actual', marker=dict(size=15)), row=1, col=1)
+
+    # Add scatter plot on the left with text labels
+    fig.add_trace(go.Scatter(
+        x=filtered_data['Actual'], 
+        y=filtered_data['Description'], 
+        mode='markers+text',  # Include both markers and text
+        name='Actual', 
+        marker=dict(size=15),
+        text=filtered_data['Actual'].round(2).astype(str),  # Display rounded actual values as text
+        textposition='top right'  # Position text to the top right of each marker
+    ), row=1, col=1)
+
+    # fig.add_trace(go.Bar(x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate'), row=1, col=2)
+    # fig.add_trace(go.Bar(x=filtered_data['Actual'], y=filtered_data['Description'], orientation='h', name='Actual', marker=dict(color='red', opacity=0.6)), row=1, col=2)
+
+    # Add bar charts on the right
+    fig.add_trace(go.Bar(
+        x=filtered_data['BE'], 
+        y=filtered_data['Description'], 
+        orientation='h', 
+        name='Budget Estimate'
+    ), row=1, col=2)
+    fig.add_trace(go.Bar(
+        x=filtered_data['Actual'], 
+        y=filtered_data['Description'], 
+        orientation='h', 
+        name='Actual', 
+        marker=dict(color='red', opacity=0.6)
+    ), row=1, col=2)
+
     
     # Update the layout for the combined figure for 1
     fig.update_xaxes(row=1, col=1, range=[0, overall_actual_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
