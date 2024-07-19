@@ -92,9 +92,6 @@ unique_dates = df['Date'].unique()
 date_index = range(len(unique_dates))
 
 # title_placeholder = st.empty()
-    
-# # Placeholder for the plot
-# plot_placeholder = st.empty()
 
 # Sidebar for date index selection using a slider
 selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates) - 1, 0)
@@ -159,7 +156,10 @@ fig.update_yaxes(row=1, col=1, tickfont=dict(size=15),fixedrange=True, showline=
 fig.update_xaxes(row=1, col=2, range=[0, overall_be_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 fig.update_yaxes(row=1, col=2, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
- # Display the plot in the placeholder
+# # Placeholder for the plot
+plot_placeholder = st.empty()
+
+# Display the plot in the placeholder
 plot_placeholder.plotly_chart(fig, use_container_width=True)
 
 
