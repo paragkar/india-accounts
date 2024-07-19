@@ -54,4 +54,13 @@ def loadfile():
 # Main Program Starts Here
 df = loadfile()
 
+# Ensuring the Date column is of datetime type
+df['Date'] = pd.to_datetime(df['Date'])
+
+# Sorting dataframe by Date to ensure proper animation sequence
+df = df.sort_values(by='Date')
+
+# Convert Date column to string without time
+df['Date_str'] = df['Date'].dt.strftime('%d-%m-%Y')
+
 st.write(df)
