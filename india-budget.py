@@ -58,10 +58,10 @@ df = loadfile()
 df['Date'] = pd.to_datetime(df['Date'])
 
 
-df = df.sort_values("Date", ascending = False).reset_index(drop=True)
+# df = df.sort_values("Date", ascending = False).reset_index(drop=True)
 
-# Convert Date column to string without time
-df['Date_str'] = df['Date'].dt.strftime('%d-%m-%Y')
+# # Convert Date column to string without time
+# df['Date_str'] = df['Date'].dt.strftime('%d-%m-%Y')
 
 
 main_cat_order_list = [
@@ -82,10 +82,15 @@ main_cat_order_list = [
     "Primary Deficit - Fiscal Deficit Minus Interest Payments"
 ]
 
-# Convert the 'Description' column to a categorical type with the defined order
+
+# Convert 'Date' column to datetime
+df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
+
+# Set the 'Description' column to a categorical type with the defined order
 df['Description'] = pd.Categorical(df['Description'], categories=main_cat_order_list, ordered=True)
 
-# Sort the DataFrame by the 'Description' column
-df = df.sort_values('Description')
+# Sort by 'Date' descending and 'Description'
+df = df.sort_values(by=['Date', 'Description'], ascending=[False, True])
+
 
 st.write(df)
