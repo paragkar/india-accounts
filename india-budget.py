@@ -109,13 +109,17 @@ overall_be_max_value = df['BE'].max()
 selected_date = unique_dates[selected_date_index]
 filtered_data = df[df['Date'] == selected_date]
 
-
 def update_plot(selected_date):
     filtered_data = df[df['Date'] == selected_date]
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]], column_widths=[0.75, 0.25], horizontal_spacing=0.01)
     fig.add_trace(go.Scatter(x=filtered_data['Actual'], y=filtered_data['Description'], mode='markers', name='Actual', marker=dict(size=15)), row=1, col=1)
     fig.add_trace(go.Bar(x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate'), row=1, col=2)
     fig.add_trace(go.Bar(x=filtered_data['Actual'], y=filtered_data['Description'], orientation='h', name='Actual', marker=dict(color='red', opacity=0.6)), row=1, col=2)
+    
+    # Fixed x-axis settings
+    fig.update_xaxes(row=1, col=1, range=[0, overall_actual_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+    fig.update_xaxes(row=1, col=2, range=[0, overall_be_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+
     fig.update_layout(title=f'Financial Data Comparison for {selected_date}', xaxis_title='Actual Values', xaxis2_title='Budget Estimates', yaxis_title='Description', showlegend=False, height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0))
     plot_placeholder.plotly_chart(fig, use_container_width=True)
 
