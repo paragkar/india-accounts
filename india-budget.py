@@ -84,4 +84,27 @@ df = df.sort_values(by=['Date', 'Description'], ascending=[False, True])
 
 df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
 
-st.write(df)
+# Create subplot
+fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]])
+
+# Add scatter plot
+fig.add_trace(go.Scatter(
+    x=filtered_data['Actual'], y=filtered_data['Description'], mode='markers', name='Actual'
+), row=1, col=1)
+
+# Add horizontal bar chart
+fig.add_trace(go.Bar(
+    x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate'
+), row=1, col=2)
+
+# Update layout
+fig.update_layout(
+    title='Financial Data Comparison by Date',
+    xaxis_title='Actual Values',
+    xaxis2_title='Budget Estimates',
+    yaxis_title='Description',
+    showlegend=False
+)
+
+# Display plot
+st.plotly_chart(fig)
