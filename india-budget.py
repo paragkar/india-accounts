@@ -65,4 +65,28 @@ df['Date_str'] = df['Date'].dt.strftime('%d-%m-%Y')
 
 df = df.sort_values("Date", ascending = False).reset_index(drop=True)
 
+main_cat_order_list = [
+    "Revenue Receipts",
+    "Rev Recp - Tax Revenue Net",
+    "Rev Recp - Non Tax Revenue",
+    "Non Debt Capital Receipt",
+    "Non Debt - Recovery of Loans",
+    "Non Debt - Other Receipt",
+    "Total Recp - RevRecp Plus NonDebtRecp",
+    "Revenue Expenditure",
+    "Rev Exp - Interest Payments",
+    "Capital Expenditure",
+    "Cap Exp - Loan Disbursed",
+    "Total Exp - RevExp + CapExp",
+    "Fiscal Deficit - TotalExp Minus TotalRecp",
+    "Revenue Deficit - RevExp Minus RevRecp",
+    "Primary Deficit - Fiscal Deficit Minus Interest Payments"
+]
+
+# Convert the 'Description' column to a categorical type with the defined order
+df['Description'] = pd.Categorical(df['Description'], categories=main_cat_order_list, ordered=True)
+
+# Sort the DataFrame by the 'Description' column
+# df = df.sort_values('Description')
+
 st.write(df)
