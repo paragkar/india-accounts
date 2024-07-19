@@ -63,4 +63,6 @@ df = df.sort_values(by='Date')
 # Convert Date column to string without time
 df['Date_str'] = df['Date'].dt.strftime('%d-%m-%Y')
 
+df = df.sort_values("Date", ascending = False)
+
 st.write(df)
