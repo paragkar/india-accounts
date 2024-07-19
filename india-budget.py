@@ -92,6 +92,7 @@ date_index = range(len(unique_dates))
 
 title_placeholder = st.empty()
 slider_placeholder = st.sidebar.empty()
+plot_placeholder = st.empty()
 
 # Sidebar for date index selection using a slider
 selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates) - 1, 0)
