@@ -100,7 +100,7 @@ overall_min_value = filtered_data['Actual'].min()
 overall_max_value = filtered_data['Actual'].max()
 
 # Create subplot
-fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]])
+fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]],column_widths=[0.75, 0.25], horizontal_spacing=0.01)
 
 # Add scatter plot
 fig.add_trace(go.Scatter(
