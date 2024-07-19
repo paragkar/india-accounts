@@ -94,17 +94,17 @@ date_index = range(len(unique_dates))
 # Sidebar for date index selection using a slider
 selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates) - 1, 0)
 
+overall_actual_min_value = df['Actual'].min()
+overall_actual_max_value = df['Actual'].max()
+
+# Calculate the overall min and max values for the 'BE' column in the entire dataset
+overall_be_min_value = df['BE'].min()
+overall_be_max_value = df['BE'].max()
+
 # Filter data based on selected date index
 selected_date = unique_dates[selected_date_index]
 filtered_data = df[df['Date'] == selected_date]
 
-# Calculate the overall min and max values for the 'Actual' column in the entire dataset
-overall_actual_min_value = filtered_data['Actual'].min()
-overall_actual_max_value = filtered_data['Actual'].max()
-
-# Calculate the overall min and max values for the 'BE' column in the entire dataset
-overall_be_min_value = filtered_data['BE'].min()
-overall_be_max_value = filtered_data['BE'].max()
 
 # Create subplot
 fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]],column_widths=[0.75, 0.25], horizontal_spacing=0.01)
