@@ -121,8 +121,9 @@ def update_plot(selected_date):
         mode='markers+text',  # Include both markers and text
         name='Actual', 
         marker=dict(size=15),
-        text=filtered_data['Actual'].round(2).astype(str),  # Display rounded actual values as text
-        textposition='middle right'  # Position text to the top right of each marker
+        text=filtered_data['Actual'].round(2).astype(str), 
+        textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
+        textposition='middle right'  # Position text 
     ), row=1, col=1)
 
     # Add bar charts on the right
@@ -131,7 +132,8 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Budget Estimate',
-        text=filtered_data['BE'].round(2).astype(str),  # Display rounded actual values as text
+        text=filtered_data['BE'].round(2).astype(str), 
+        textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         textposition='outside'  # Position text 
     ), row=1, col=2)
 
@@ -140,7 +142,8 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Actual', 
-        text=filtered_data['Actual'].round(2).astype(str),  # Display rounded actual values as text
+        text=filtered_data['Actual'].round(2).astype(str), 
+        textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         marker=dict(color='red', opacity=0.6),
         textposition='outside'  # Position text 
     ), row=1, col=2)
