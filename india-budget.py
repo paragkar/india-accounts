@@ -102,8 +102,8 @@ plot_placeholder = st.empty()
 # Sidebar for date index selection using a slider
 selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates) - 1, 0)
 
-overall_actual_min_value = df['Actual % of BE'].min()
-overall_actual_max_value = df['Actual % of BE'].max()
+overall_actual_min_value = df['Actual % of GDP'].min()
+overall_actual_max_value = df['Actual % of GDP'].max()
 
 # Calculate the overall min and max values for the 'BE' column in the entire dataset
 overall_be_min_value = df['BE'].min()
@@ -116,22 +116,47 @@ filtered_data = df[df['Date'] == selected_date]
 
 def update_plot(selected_date):
     filtered_data = df[df['Date'] == selected_date]
-    fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]], column_widths=[0.75, 0.25], horizontal_spacing=0.01)
-    # fig.add_trace(go.Scatter(x=filtered_data['Actual'], y=filtered_data['Description'], mode='markers', name='Actual', marker=dict(size=15)), row=1, col=1)
+    # fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]], column_widths=[0.75, 0.25], horizontal_spacing=0.01)
+   
+    fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.75, 0.25], horizontal_spacing=0.01)
 
-    # Add scatter plot on the left with text labels
-    fig.add_trace(go.Scatter(
-        x=filtered_data["Actual % of BE"], 
+
+    # # Add scatter plot on the left with text labels
+    # fig.add_trace(go.Scatter(
+    #     x=filtered_data["Actual % of BE"], 
+    #     y=filtered_data['Description'], 
+    #     mode='markers+text',  # Include both markers and text
+    #     name='Actual', 
+    #     marker=dict(size=15),
+    #     text=filtered_data["Actual % of BE"].round(2).astype(str), 
+    #     textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
+    #     textposition='middle right'  # Position text 
+    # ), row=1, col=1)
+
+    # Add bar charts on the left 1
+    fig.add_trace(go.Bar(
+        x=filtered_data['BE % of GDP'], 
         y=filtered_data['Description'], 
-        mode='markers+text',  # Include both markers and text
-        name='Actual', 
-        marker=dict(size=15),
-        text=filtered_data["Actual % of BE"].round(2).astype(str), 
+        orientation='h', 
+        name='Budget Estimate',
+        text=filtered_data['BE % of GDP'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
-        textposition='middle right'  # Position text 
+        textposition='outside'  # Position text 
     ), row=1, col=1)
 
-    # Add bar charts on the right
+    # Add bar charts on the left 2
+    fig.add_trace(go.Bar(
+        x=filtered_data['Actual % of GDP'], 
+        y=filtered_data['Description'], 
+        orientation='h', 
+        name='Budget Estimate',
+        text=filtered_data['Actual % of GDP'].round(2).astype(str), 
+        textfont=dict(size=15, family='Arial', color='black', weight='bold'),
+        marker=dict(color='red', opacity=0.6),
+        textposition='outside'  # Position text 
+    ), row=1, col=1)
+
+    # Add bar charts on the right 1
     fig.add_trace(go.Bar(
         x=filtered_data['BE'], 
         y=filtered_data['Description'], 
@@ -142,6 +167,7 @@ def update_plot(selected_date):
         textposition='outside'  # Position text 
     ), row=1, col=2)
 
+     # Add bar charts on the right 2
     fig.add_trace(go.Bar(
         x=filtered_data['Actual'], 
         y=filtered_data['Description'], 
