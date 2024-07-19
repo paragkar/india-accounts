@@ -125,9 +125,6 @@ def update_plot(selected_date):
         textposition='middle right'  # Position text to the top right of each marker
     ), row=1, col=1)
 
-    # fig.add_trace(go.Bar(x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate'), row=1, col=2)
-    # fig.add_trace(go.Bar(x=filtered_data['Actual'], y=filtered_data['Description'], orientation='h', name='Actual', marker=dict(color='red', opacity=0.6)), row=1, col=2)
-
     # Add bar charts on the right
     fig.add_trace(go.Bar(
         x=filtered_data['BE'], 
@@ -137,6 +134,7 @@ def update_plot(selected_date):
         text=filtered_data['BE'].round(2).astype(str),  # Display rounded actual values as text
         textposition='outside'  # Position text 
     ), row=1, col=2)
+
     fig.add_trace(go.Bar(
         x=filtered_data['Actual'], 
         y=filtered_data['Description'], 
@@ -153,7 +151,7 @@ def update_plot(selected_date):
     fig.update_yaxes(row=1, col=1, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
     # Update the layout for the combined figure for 2
-    fig.update_xaxes(row=1, col=2, range=[0, overall_be_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+    fig.update_xaxes(row=1, col=2, range=[0, overall_be_max_value * 1.2], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
     fig.update_yaxes(row=1, col=2, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
     # Update y-axes: remove y-axis labels from the first chart (left)
