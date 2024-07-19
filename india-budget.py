@@ -104,10 +104,6 @@ overall_actual_max_value = df['Actual'].max()
 overall_be_min_value = df['BE'].min()
 overall_be_max_value = df['BE'].max()
 
-#Place the "Play" button at the top of the sidebar
-play_button = st.sidebar.button("Play")
-pause_button = st.sidebar.button("Pause")
-
 
 # Filter data based on selected date index
 selected_date = unique_dates[selected_date_index]
