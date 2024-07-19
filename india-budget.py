@@ -83,9 +83,9 @@ main_cat_order_list = [
 ]
 
 # Convert the 'Description' column to a categorical type with the defined order
-# df['Description'] = pd.Categorical(df['Description'], categories=main_cat_order_list, ordered=True)
+df['Description'] = pd.Categorical(df['Description'], categories=main_cat_order_list, ordered=True)
 
 # Sort the DataFrame by the 'Description' column
-# df = df.sort_values('Description')
+df = df.sort_values('Description')
 
 st.write(df)
