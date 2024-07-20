@@ -294,15 +294,39 @@ if 'is_playing' not in st.session_state:
 if st.session_state.current_index >= len(unique_dates):
     st.session_state.current_index = 0
 
+# Place the slider
 slider = slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=st.session_state.current_index, key="date_slider")
-selected_date = unique_dates[slider]
-update_plot(selected_date)
-update_title(selected_date)
 
-# Synchronize the current_index with the slider
+# Add buttons for finer control
+col1, col2 = st.columns(2)
+with col1:
+    if st.button('Previous', key='prev'):
+        # Decrement the slider value
+        if st.session_state.current_index > 0:
+            st.session_state.current_index -= 1
+            slider = st.session_state.current_index  # Update the slider variable to reflect the change
+            update_plot(unique_dates[st.session_state.current_index])
+            update_title(unique_dates[st.session_state.current_index])
+
+with col2:
+    if st.button('Next', key='next'):
+        # Increment the slider value
+        if st.session_state.current_index < len(unique_dates) - 1:
+            st.session_state.current_index += 1
+            slider = st.session_state.current_index  # Update the slider variable to reflect the change
+            update_plot(unique_dates[st.session_state.current_index])
+            update_title(unique_dates[st.session_state.current_index])
+
+# Synchronize the current_index with the slider if it's moved directly
 if slider != st.session_state.current_index:
     st.session_state.current_index = slider
-
+    selected_date = unique_dates[slider]
+    update_plot(selected_date)
+    update_title(selected_date)
+else:
+    selected_date = unique_dates[st.session_state.current_index]
+    update_plot(selected_date)
+    update_title(selected_date)
 
 # Place the "Play" and "Pause" button at the top of the sidebar with unique keys
 play_button = st.sidebar.button("Play", key="play_button")
@@ -310,9 +334,6 @@ pause_button = st.sidebar.button("Pause", key="pause_button")
 
 # Use these buttons in your control logic
 if play_button:
-    # Check if the current index is at the end, and reset if so
-    if st.session_state.current_index >= len(unique_dates) - 1:
-        st.session_state.current_index = 0
     st.session_state.is_playing = True
 
 if pause_button:
@@ -320,21 +341,13 @@ if pause_button:
     update_plot(unique_dates[st.session_state.current_index])
     update_title(unique_dates[st.session_state.current_index])
 
-# Slider updates should trigger the plot and title updates outside the loop
-# selected_date = unique_dates[slider]
-update_plot(selected_date)
-update_title(selected_date)
-
 # Animation loop controlled by the play button
 if st.session_state.get('is_playing', False):
-    start_index = st.session_state.current_index
-    for i in range(start_index, len(unique_dates)):
+    for i in range(st.session_state.current_index, len(unique_dates)):
         if not st.session_state.is_playing:
             break
-        selected_date = unique_dates[i]
-        update_plot(selected_date)
-        update_title(selected_date)
         st.session_state.current_index = i
+        update_plot(unique_dates[i])
+        update_title(unique_dates[i])
         slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=i, key=f"date_slider_{i}")
         time.sleep(0.5)  # Adjust sleep time to control
-
