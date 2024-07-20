@@ -196,11 +196,11 @@ if selected_category in ["Main Category", "Expenditure Details"]:
     df["GDP_Current"] = (df["GDP_Current"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
     df["Actual % of GDP"] = ((df["Actual"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
     df["BE % of GDP"] = ((df["BE"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
-    st.write(df)
     fig2_xaxis_min_value = df['Actual % of GDP'].min()
     fig2_xaxis_max_value = df['Actual % of GDP'].max()
     fig1_xaxis_min_value = df['BE'].min()
     fig1_xaxis_max_value = df['BE'].max()
+    st.write(df)
     xaxis1_title = 'Absolute Values Rs Lakh Cr (Top Bar - Actuals, Bottom Bar - BE)'
     xaxis2_title ='Values % of GDP'
 
