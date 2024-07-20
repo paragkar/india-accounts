@@ -258,7 +258,7 @@ if pause_button:
     update_title(unique_dates[st.session_state.current_index])
 
 # Slider updates should trigger the plot and title updates outside the loop
-selected_date = unique_dates[slider]
+# selected_date = unique_dates[slider]
 update_plot(selected_date)
 update_title(selected_date)
 
