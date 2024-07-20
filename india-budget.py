@@ -208,13 +208,12 @@ def update_plot(selected_date):
     fig.update_yaxes(row=1, col=1, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
     # Update y-axes: remove y-axis labels from the first chart (left)
-    # fig.update_yaxes(showticklabels=False, row=1, col=1)
     fig.update_yaxes(tickfont=dict(size=15, family='Arial', color='black', weight='bold'), row=1, col=1)
 
     # Update layout for axis properties to remove y-axis title and reclaim space
     fig.update_layout(
-        title=f'Financial Data Comparison for {selected_date}',
-        title_font=dict(size=15, family='Arial', color='black', weight='bold'),
+        # title=f'Financial Data Comparison for {selected_date}',
+        # title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         plot_bgcolor="white",  # Ensures background doesn't add unexpected styles
         paper_bgcolor="white",
         xaxis1_title='Absolute Values Rs Lakh Cr',
@@ -256,7 +255,6 @@ def update_title(selected_date):
     title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
     
     title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
-
 
 
 # Initialize title and slider
