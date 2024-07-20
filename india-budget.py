@@ -283,56 +283,62 @@ def update_title(selected_date):
     title_placeholder.markdown(f"<h1 style='font-size:30px;'>{title}</h1>", unsafe_allow_html=True)
 
 
-# Initialize session state for control variables if not already set
+# Initialize title and slider
 if 'current_index' not in st.session_state:
     st.session_state.current_index = 0
+
 if 'is_playing' not in st.session_state:
     st.session_state.is_playing = False
 
-# Validate the current index is within bounds
+# Validate the current index
 if st.session_state.current_index >= len(unique_dates):
     st.session_state.current_index = 0
 
-# Setup columns for buttons
-col1, col2 = st.columns(2)
-with col1:
-    prev_button = st.button('Previous')
-with col2:
-    next_button = st.button('Next')
-
-# Handle previous and next button functionality
-if prev_button:
-    if st.session_state.current_index > 0:
-        st.session_state.current_index -= 1
-elif next_button:
-    if st.session_state.current_index < len(unique_dates) - 1:
-        st.session_state.current_index += 1
-
-# Display the slider and synchronize it with the current index
-slider = st.slider("Select Date Index", min_value=0, max_value=len(unique_dates) - 1, value=st.session_state.current_index, key="main_date_slider")
-
-# Update plot and title based on current index or slider interaction
-selected_date = unique_dates[st.session_state.current_index]
+slider = slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=st.session_state.current_index, key="date_slider")
+selected_date = unique_dates[slider]
 update_plot(selected_date)
 update_title(selected_date)
 
-# Handle play and pause functionality
-play_button = st.sidebar.button("Play")
-pause_button = st.sidebar.button("Pause")
+# Synchronize the current_index with the slider
+if slider != st.session_state.current_index:
+    st.session_state.current_index = slider
+    # Explicitly trigger updates
+    selected_date = unique_dates[slider]
+    update_plot(selected_date)
+    update_title(selected_date)
+    st.experimental_rerun()  # Optionally force a rerun if necessary
+
+# Place the "Play" and "Pause" button at the top of the sidebar with unique keys
+play_button = st.sidebar.button("Play", key="play_button")
+pause_button = st.sidebar.button("Pause", key="pause_button")
+
+# Use these buttons in your control logic
 if play_button:
+    # Check if the current index is at the end, and reset if so
+    if st.session_state.current_index >= len(unique_dates) - 1:
+        st.session_state.current_index = 0
     st.session_state.is_playing = True
+
 if pause_button:
     st.session_state.is_playing = False
+    update_plot(unique_dates[st.session_state.current_index])
+    update_title(unique_dates[st.session_state.current_index])
 
-# Animation loop
-if st.session_state.is_playing:
-    while st.session_state.current_index < len(unique_dates):
+# Slider updates should trigger the plot and title updates outside the loop
+# selected_date = unique_dates[slider]
+update_plot(selected_date)
+update_title(selected_date)
+
+# Animation loop controlled by the play button
+if st.session_state.get('is_playing', False):
+    start_index = st.session_state.current_index
+    for i in range(start_index, len(unique_dates)):
         if not st.session_state.is_playing:
             break
-        update_plot(unique_dates[st.session_state.current_index])
-        update_title(unique_dates[st.session_state.current_index])
-        st.session_state.current_index += 1
-        time.sleep(0.5)  # Adjust sleep time as needed
-        # Make sure to update the slider's value in session state
-        st.session_state.main_date_slider = st.session_state.current_index
-        
+        selected_date = unique_dates[i]
+        update_plot(selected_date)
+        update_title(selected_date)
+        st.session_state.current_index = i
+        slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=i, key=f"date_slider_{i}")
+        time.sleep(0.5)  # Adjust sleep time to control
+
