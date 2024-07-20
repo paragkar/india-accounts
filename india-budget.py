@@ -187,7 +187,7 @@ if selected_category in ["Expenditure Details"]:
     df = loadfileexp()
     # Dropdown for user to choose between 'Revenue' and 'Capital'
     category_choice = st.selectbox('Select Category:', ['Revenue', 'Capital'])
-    df = sort_dataframe(df, category_choice)
+    df = sort_and_filter_dataframe(df, category_choice)
 
 
 if selected_category in ["Main Category", "Expenditure Details"]:
