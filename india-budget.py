@@ -118,6 +118,8 @@ def update_plot(selected_date):
     filtered_data = df[df['Date'] == selected_date]
     # fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]], column_widths=[0.75, 0.25], horizontal_spacing=0.01)
    
+    color_map = get_color_map(filtered_data['Description'].unique())
+    
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.5, 0.5], horizontal_spacing=0.01)
 
 
