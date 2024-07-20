@@ -216,6 +216,21 @@ def update_title(selected_date):
 
 update_title(selected_date)  # Initial title update
 
+
+# Initialize title and slider
+if 'current_index' not in st.session_state:
+    st.session_state.current_index = 0
+
+if 'is_playing' not in st.session_state:
+    st.session_state.is_playing = False
+
+# Validate the current index
+if st.session_state.current_index >= len(unique_dates):
+    st.session_state.current_index = 0
+
+slider = slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=st.session_state.current_index, key="date_slider")
+update_title(unique_dates[slider])
+
 # Place the "Play" and "Pause" button at the top of the sidebar with unique keys
 play_button = st.sidebar.button("Play", key="play_button")
 pause_button = st.sidebar.button("Pause", key="pause_button")
