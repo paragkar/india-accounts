@@ -115,7 +115,7 @@ def loadfiletax():
     df = pd.read_excel(excel_content, sheet_name="Sheet1")
     return df
 
- Load file function
+ #Load file function
 @st.cache_data
 def loadfileexp():
     password = st.secrets["db_password"]
