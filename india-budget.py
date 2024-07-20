@@ -283,63 +283,56 @@ def update_title(selected_date):
     title_placeholder.markdown(f"<h1 style='font-size:30px;'>{title}</h1>", unsafe_allow_html=True)
 
 
-# Initialize title and slider
+# Initialize session state for control variables if not already set
 if 'current_index' not in st.session_state:
     st.session_state.current_index = 0
-
 if 'is_playing' not in st.session_state:
     st.session_state.is_playing = False
 
-# Validate the current index
+# Validate the current index is within bounds
 if st.session_state.current_index >= len(unique_dates):
     st.session_state.current_index = 0
 
-# Slider display with unique key
-slider = slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=st.session_state.current_index, key="main_date_slider")
-
-# Manual control buttons for finer control
+# Setup columns for buttons
 col1, col2 = st.columns(2)
 with col1:
-    if st.button('Previous'):
-        if st.session_state.current_index > 0:
-            st.session_state.current_index -= 1
-            update_plot(unique_dates[st.session_state.current_index])
-            update_title(unique_dates[st.session_state.current_index])
-
+    prev_button = st.button('Previous')
 with col2:
-    if st.button('Next'):
-        if st.session_state.current_index < len(unique_dates) - 1:
-            st.session_state.current_index += 1
-            update_plot(unique_dates[st.session_state.current_index])
-            update_title(unique_dates[st.session_state.current_index])
+    next_button = st.button('Next')
 
-# Synchronize slider and current_index
-if slider != st.session_state.current_index:
-    st.session_state.current_index = slider
-    update_plot(unique_dates[slider])
-    update_title(unique_dates[slider])
+# Handle previous and next button functionality
+if prev_button:
+    if st.session_state.current_index > 0:
+        st.session_state.current_index -= 1
+elif next_button:
+    if st.session_state.current_index < len(unique_dates) - 1:
+        st.session_state.current_index += 1
 
-# Animation controls
+# Display the slider and synchronize it with the current index
+slider = st.slider("Select Date Index", min_value=0, max_value=len(unique_dates) - 1, value=st.session_state.current_index, key="main_date_slider")
+
+# Update plot and title based on current index or slider interaction
+selected_date = unique_dates[st.session_state.current_index]
+update_plot(selected_date)
+update_title(selected_date)
+
+# Handle play and pause functionality
 play_button = st.sidebar.button("Play")
 pause_button = st.sidebar.button("Pause")
-
 if play_button:
-    if st.session_state.current_index >= len(unique_dates) - 1:
-        st.session_state.current_index = 0
     st.session_state.is_playing = True
-
 if pause_button:
     st.session_state.is_playing = False
-    update_plot(unique_dates[st.session_state.current_index])
-    update_title(unique_dates[st.session_state.current_index])
 
 # Animation loop
-if st.session_state.get('is_playing', False):
-    for i in range(st.session_state.current_index, len(unique_dates)):
+if st.session_state.is_playing:
+    while st.session_state.current_index < len(unique_dates):
         if not st.session_state.is_playing:
             break
-        st.session_state.current_index = i
-        update_plot(unique_dates[i])
-        update_title(unique_dates[i])
-        slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=i, key=f"animation_slider_{i}")
-        time.sleep(0.5)  # Adjust sleep time to control
+        update_plot(unique_dates[st.session_state.current_index])
+        update_title(unique_dates[st.session_state.current_index])
+        st.session_state.current_index += 1
+        time.sleep(0.5)  # Adjust sleep time as needed
+        # Make sure to update the slider's value in session state
+        st.session_state.main_date_slider = st.session_state.current_index
+        
