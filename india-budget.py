@@ -173,23 +173,27 @@ def sort_dataframe(df):
 
 if selected_category in ["Main Category", "Tax Details"]:
     df, cat_order_list = loaddata()
+    df["Description"] = [x.strip() for x in df["Description"]]
+    # Convert 'Date' column to datetime if not already done
+    df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').apply(lambda x : x.date())
+    # Convert 'Description' to a categorical type for sorting
+    df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list, ordered=True)
+    # Sort the DataFrame by 'Date' (newest first) and 'Description'
+    df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
+    
 if selected_category in ["Expenditure Details"]:
     df = loadfileexp()
     df = sort_dataframe(df)
     
 
-df["Description"] = [x.strip() for x in df["Description"]]
+# df["Description"] = [x.strip() for x in df["Description"]]
+# # Convert 'Date' column to datetime if not already done
+# df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').apply(lambda x : x.date())
+# # Convert 'Description' to a categorical type for sorting
+# df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list, ordered=True)
+# # Sort the DataFrame by 'Date' (newest first) and 'Description'
+# df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
 
-# Convert 'Date' column to datetime if not already done
-df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').apply(lambda x : x.date())
-
-# Convert 'Description' to a categorical type for sorting
-df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list, ordered=True)
-
-# Sort the DataFrame by 'Date' (newest first) and 'Description'
-df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
-
-st.write(df)
 
 if selected_category == "Main Category":
     df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
