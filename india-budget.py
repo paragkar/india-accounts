@@ -109,8 +109,8 @@ overall_be_max_value = df['BE'].max()
 
 
 # Filter data based on selected date index
-selected_date = unique_dates[selected_date_index]
-filtered_data = df[df['Date'] == selected_date]
+# selected_date = unique_dates[selected_date_index]
+# filtered_data = df[df['Date'] == selected_date]
 
 def update_plot(selected_date):
     filtered_data = df[df['Date'] == selected_date]
@@ -248,8 +248,9 @@ if st.session_state.get('is_playing', False):
     for i in range(start_index, len(unique_dates)):
         if not st.session_state.is_playing:
             break
-        update_plot(unique_dates[i])
-        update_title(unique_dates[i])
+        selected_date = unique_dates[i]
+        update_plot(selected_date)
+        update_title(selected_date)
         st.session_state.current_index = i
         slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=i, key=f"date_slider_{i}")
         time.sleep(0.5)  # Adjust sleep time to control
