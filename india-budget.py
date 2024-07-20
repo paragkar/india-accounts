@@ -115,11 +115,25 @@ def loadfiletax():
     df = pd.read_excel(excel_content, sheet_name="Sheet1")
     return df
 
+ Load file function
+@st.cache_data
+def loadfileexp():
+    password = st.secrets["db_password"]
+    excel_content = io.BytesIO()
+    with open("T12_Expenditure.xlsx", 'rb') as f:
+        excel = msoffcrypto.OfficeFile(f)
+        excel.load_key(password)
+        excel.decrypt(excel_content)
+    
+    # Loading data from excel file
+    df = pd.read_excel(excel_content, sheet_name="Sheet1")
+    return df
+
 # Main Program Starts Here
 
 selected_category = st.sidebar.selectbox(
     "Select Category",
-    ["Main Category", "Tax Details"]
+    ["Main Category", "Tax Details", "Expenditure Details"]
 )
 
 def loaddata():
@@ -129,9 +143,16 @@ def loaddata():
     if selected_category == "Tax Details":
         df = loadfiletax()
         cat_order_list = tax_order_list
+    if selected_category == "Expenditure Details":
+        df = loadfileexp()
+        df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
+        df = df.sort_values(by=['BE', 'Date'], ascending=[False, False])
+        cat_order_list = []
     return df, cat_order_list
 
 df, cat_order_list = loaddata()
+
+st.write(df)
 
 df["Description"] = [x.strip() for x in df["Description"]]
 
