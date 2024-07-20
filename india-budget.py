@@ -350,6 +350,7 @@ with col2:
 # Handle previous and next button functionality
 if prev_button:
     if st.session_state.current_index > 0:
+        st.session_state.is_playing = False
         st.session_state.current_index -= 1
 elif next_button:
     if st.session_state.current_index < len(unique_dates) - 1:
