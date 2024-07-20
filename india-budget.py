@@ -19,20 +19,13 @@ st.set_page_config(
 )
 
 st.markdown("""
-<style>
-    h1, .stMarkdown {
-        border-bottom: none !important;
-    }
-    /* General div elements might have borders or pseudo-elements */
-    div {
-        border-bottom: none !important;
-    }
-    /* Specific targeting of pseudo-elements */
-    div::after, div::before {
-        content: none !important;
-    }
-</style>
-""", unsafe_allow_html=True)
+    <style>
+        .stMultiSelect [data-baseweb=select] span{
+            max-width: 250px;
+            font-size: 0.7rem;
+        }
+    </style>
+    """, unsafe_allow_html=True)
 
 # Hide Streamlit style and buttons
 hide_st_style = '''
@@ -213,6 +206,9 @@ def update_plot(selected_date):
     # Update layout for axis properties to remove y-axis title and reclaim space
     fig.update_layout(
         title=f'Financial Data Comparison for {selected_date}',
+        title_font=dict(size=15, family='Arial', color='black', weight='bold'),
+        plot_bgcolor="white",  # Ensures background doesn't add unexpected styles
+        paper_bgcolor="white",
         xaxis1_title='Absolute Values Rs Lakh Cr',
         xaxis2_title='Values % of GDP',
         xaxis1_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
