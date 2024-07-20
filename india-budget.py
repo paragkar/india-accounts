@@ -155,9 +155,9 @@ if selected_category in ["Expenditure Details"]:
     latest_date = df['Date'].max()
     # Get the ordering for the latest date based on 'BE'
     latest_date_ordering = df[df['Date'] == latest_date].sort_values(by='BE', ascending=False)['Description'].tolist()
+    st.write(latest_date_ordering)
     # Ensure all descriptions are included in the sort order with a stable sort
     all_descriptions = pd.CategoricalDtype(categories=latest_date_ordering, ordered=True)
-    st.write(all_descriptions)
     df['Description'] = df['Description'].astype(all_descriptions)
     # Sort DataFrame by 'Date' and ordered 'Description'
     df = df.sort_values(by=['Date', 'Description'])
