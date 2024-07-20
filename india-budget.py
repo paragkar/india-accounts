@@ -52,47 +52,6 @@ hide_st_style = '''
 '''
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-# Load file function
-@st.cache_data
-def loadfilemain():
-    password = st.secrets["db_password"]
-    excel_content = io.BytesIO()
-    with open("T01_Main.xlsx", 'rb') as f:
-        excel = msoffcrypto.OfficeFile(f)
-        excel.load_key(password)
-        excel.decrypt(excel_content)
-    
-    # Loading data from excel file
-    df = pd.read_excel(excel_content, sheet_name="Sheet1")
-    return df
-
-# Load file function
-@st.cache_data
-def loadfiletax():
-    password = st.secrets["db_password"]
-    excel_content = io.BytesIO()
-    with open("T02_TAX_Details.xlsx", 'rb') as f:
-        excel = msoffcrypto.OfficeFile(f)
-        excel.load_key(password)
-        excel.decrypt(excel_content)
-    
-    # Loading data from excel file
-    df = pd.read_excel(excel_content, sheet_name="Sheet1")
-    return df
-
-# Main Program Starts Here
-
-category_choice = st.sidebar.selectbox(
-    "Select Category",
-    ["Main Category", "Tax Details"]
-)
-
-
-df = loadfilemain()
-# dftax = loadfiletax()
-
-df["Description"] = [x.strip() for x in df["Description"]]
-# dftax["Description"] = [x.strip() for x in dftax["Description"]]
 
 main_cat_order_list = [
     "Revenue Receipts",
@@ -128,11 +87,59 @@ tax_order_list = [
     "IGST"
 ]
 
+# Load file function
+@st.cache_data
+def loadfilemain():
+    password = st.secrets["db_password"]
+    excel_content = io.BytesIO()
+    with open("T01_Main.xlsx", 'rb') as f:
+        excel = msoffcrypto.OfficeFile(f)
+        excel.load_key(password)
+        excel.decrypt(excel_content)
+    
+    # Loading data from excel file
+    df = pd.read_excel(excel_content, sheet_name="Sheet1")
+    return df
+
+# Load file function
+@st.cache_data
+def loadfiletax():
+    password = st.secrets["db_password"]
+    excel_content = io.BytesIO()
+    with open("T02_TAX_Details.xlsx", 'rb') as f:
+        excel = msoffcrypto.OfficeFile(f)
+        excel.load_key(password)
+        excel.decrypt(excel_content)
+    
+    # Loading data from excel file
+    df = pd.read_excel(excel_content, sheet_name="Sheet1")
+    return df
+
+# Main Program Starts Here
+
+category_choice = st.sidebar.selectbox(
+    "Select Category",
+    ["Main Category", "Tax Details"]
+)
+
+def loaddata():
+    if category_choice == "Main Category":
+        df = loadfilemain()
+        cat_order_list = main_cat_order_list
+    if category_choice == "Tax Details":
+        df = loadfiletax()
+        cat_order_list = tax_order_list
+    return df, cat_order_list 
+
+df, cat_order_list = loaddata()
+
+df["Description"] = [x.strip() for x in df["Description"]]
+
 # Convert 'Date' column to datetime if not already done
 df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').apply(lambda x : x.date())
 
 # Convert 'Description' to a categorical type for sorting
-df['Description'] = pd.Categorical(df['Description'], categories=main_cat_order_list, ordered=True)
+df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list, ordered=True)
 
 # Sort the DataFrame by 'Date' (newest first) and 'Description'
 df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
@@ -175,7 +182,7 @@ def get_color_map(descriptions):
     return dict(zip(unique_descriptions, colors))
 
 
-def update_plot(selected_date):
+def cat_order_list(selected_date):
     filtered_data = df[df['Date'] == selected_date]
     
     color_map = get_color_map(filtered_data['Description'].unique())
