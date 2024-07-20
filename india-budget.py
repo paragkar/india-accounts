@@ -145,6 +145,16 @@ def loadfileexp():
 #         key='category_select'
 #     )
 
+# Initialize title and slider
+if 'current_index' not in st.session_state:
+    st.session_state.current_index = 0
+
+if 'is_playing' not in st.session_state:
+    st.session_state.is_playing = False
+
+if 'selected_category' not in st.session_state:
+    st.session_state.selected_category = None
+
 # Sidebar for category selection
 with st.sidebar:
     selected_category = st.selectbox("Select Category", ["Main Category", "Tax Details", "Expenditure Details"], key='category_select')
@@ -444,19 +454,19 @@ def update_title(selected_date, selected_category):
 
 
 
-# Initialize title and slider
-if 'current_index' not in st.session_state:
-    st.session_state.current_index = 0
+# # Initialize title and slider
+# if 'current_index' not in st.session_state:
+#     st.session_state.current_index = 0
 
-if 'is_playing' not in st.session_state:
-    st.session_state.is_playing = False
+# if 'is_playing' not in st.session_state:
+#     st.session_state.is_playing = False
 
-if 'selected_category' not in st.session_state:
-    st.session_state.selected_category = None
+# if 'selected_category' not in st.session_state:
+#     st.session_state.selected_category = None
 
-# Validate the current index
-if st.session_state.current_index >= len(unique_dates):
-    st.session_state.current_index = 0
+# # Validate the current index
+# if st.session_state.current_index >= len(unique_dates):
+#     st.session_state.current_index = 0
 
 # Setup columns for buttons
 col1, col2 = st.columns(2)
