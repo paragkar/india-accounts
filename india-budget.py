@@ -106,13 +106,6 @@ overall_be_min_value = df['BE'].min()
 overall_be_max_value = df['BE'].max()
 
 
-# def get_color_map(descriptions):
-#     # Get a list of colors from Plotly's built-in palettes
-#     palette = px.colors.qualitative.Plotly  # This is an example, choose the palette that fits your aesthetic
-#     # If there are more descriptions than colors in the palette, cycle through the palette
-#     color_cycle = [palette[i % len(palette)] for i in range(len(descriptions))]
-#     return dict(zip(descriptions, color_cycle))
-
 def get_unique_colors(n):
     # Generate colors using HSV transformed to RGB
     hues = [x/n for x in range(n)]  # Generate n distinct hues
@@ -228,13 +221,7 @@ def update_plot(selected_date):
 
     update_title(selected_date)
 
-    # fig.update_layout(title=f'Financial Data Comparison for {selected_date}', xaxis_title='Actual Values', xaxis2_title='Budget Estimates', yaxis_title='', showlegend=False, height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0))
     plot_placeholder.plotly_chart(fig, use_container_width=True)
-
-
-# def update_title(selected_date):
-#     title = f"Financial Data Comparison for {selected_date.strftime('%B %d, %Y')}"
-#     title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
 
 def get_financial_year(date):
     year = date.year
@@ -257,6 +244,8 @@ def update_title(selected_date):
     title = f"{fy} <span style='color:red;'>{formatted_date}</span>"
     
     title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
+
+
 
 
 # Initialize title and slider
