@@ -129,55 +129,55 @@ def update_plot(selected_date):
         x=filtered_data['BE % of GDP'], 
         y=filtered_data['Description'], 
         orientation='h', 
-        name='Budget Estimate',
+        name='Budget Estimate % of GDP',
         text=filtered_data['BE % of GDP'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         textposition='outside'  # Position text 
-    ), row=1, col=1)
+    ), row=1, col=2)
 
     # Add bar charts on the left 2
     fig.add_trace(go.Bar(
         x=filtered_data['Actual % of GDP'], 
         y=filtered_data['Description'], 
         orientation='h', 
-        name='Budget Estimate',
+        name='Actual Spend % of GDP',
         text=filtered_data['Actual % of GDP'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'),
         marker=dict(color='red', opacity=0.6),
         textposition='outside'  # Position text 
-    ), row=1, col=1)
+    ), row=1, col=2)
 
     # Add bar charts on the right 1
     fig.add_trace(go.Bar(
         x=filtered_data['BE'], 
         y=filtered_data['Description'], 
         orientation='h', 
-        name='Budget Estimate',
+        name='Budget Estimate Rs Lakh Cr',
         text=filtered_data['BE'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         textposition='outside'  # Position text 
-    ), row=1, col=2)
+    ), row=1, col=1)
 
      # Add bar charts on the right 2
     fig.add_trace(go.Bar(
         x=filtered_data['Actual'], 
         y=filtered_data['Description'], 
         orientation='h', 
-        name='Actual', 
+        name='Actual Spend Rs Lakh Cr', 
         text=filtered_data['Actual'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         marker=dict(color='red', opacity=0.6),
         textposition='outside'  # Position text 
-    ), row=1, col=2)
+    ), row=1, col=1)
 
     
     # Update the layout for the combined figure for 1
-    fig.update_xaxes(row=1, col=1, range=[0, overall_actual_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
-    fig.update_yaxes(row=1, col=1, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+    fig.update_xaxes(row=1, col=2, range=[0, overall_actual_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+    fig.update_yaxes(row=1, col=2, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
     # Update the layout for the combined figure for 2
-    fig.update_xaxes(row=1, col=2, range=[0, overall_be_max_value * 1.2], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
-    fig.update_yaxes(row=1, col=2, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+    fig.update_xaxes(row=1, col=1, range=[0, overall_be_max_value * 1.2], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+    fig.update_yaxes(row=1, col=1, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
     # Update y-axes: remove y-axis labels from the first chart (left)
     # fig.update_yaxes(showticklabels=False, row=1, col=1)
@@ -186,8 +186,8 @@ def update_plot(selected_date):
     # Update layout for axis properties to remove y-axis title and reclaim space
     fig.update_layout(
         title=f'Financial Data Comparison for {selected_date}',
-        xaxis_title='Actual Values',
-        xaxis2_title='Budget Estimates',
+        xaxis1_title='Absolute Values Rs Lakh Cr',
+        xaxis2_title='Values % of GDP',
         showlegend=False,
         height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0),
         yaxis=dict(
