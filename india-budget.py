@@ -81,13 +81,18 @@ def loadfiletax():
     return df
 
 # Main Program Starts Here
+
+category_choice = st.sidebar.selectbox(
+    "Select Category",
+    ["Main Category", "Tax Details"]
+)
+
+
 df = loadfilemain()
-
-df1 = loadfiletax()
-
-st.write(df1)
+# dftax = loadfiletax()
 
 df["Description"] = [x.strip() for x in df["Description"]]
+# dftax["Description"] = [x.strip() for x in dftax["Description"]]
 
 main_cat_order_list = [
     "Revenue Receipts",
@@ -105,6 +110,22 @@ main_cat_order_list = [
     "Fiscal Deficit - TotalExp Minus TotalRecp",
     "Revenue Deficit - RevExp Minus RevRecp",
     "Primary Deficit - FisicalDef Minus InterestPay"
+]
+
+tax_order_list = [
+    "Gross Tax Revenue",
+    "Corporation Tax",
+    "Income Tax",
+    "Goods & Service Tax",
+    "UT GST",
+    "Customs",
+    "Union Excise Duties",
+    "Service Tax",
+    "Other Taxes",
+    "NCCD to NDRF",
+    "Assignment to States",
+    "GST Comp Cess",
+    "IGST"
 ]
 
 # Convert 'Date' column to datetime if not already done
