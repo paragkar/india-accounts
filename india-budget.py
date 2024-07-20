@@ -200,7 +200,6 @@ if selected_category in ["Main Category", "Expenditure Details"]:
     fig2_xaxis_max_value = df['Actual % of GDP'].max()
     fig1_xaxis_min_value = df['BE'].min()
     fig1_xaxis_max_value = df['BE'].max()
-    st.write(df)
     xaxis1_title = 'Absolute Values Rs Lakh Cr (Top Bar - Actuals, Bottom Bar - BE)'
     xaxis2_title ='Values % of GDP'
 
@@ -400,6 +399,9 @@ def update_title(selected_date, selected_category):
     if selected_category == "Main Category":
         # Prepare the title with financial year and formatted date
         title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+    if selected_category == "Expenditure Details":
+        # Prepare the title with financial year and formatted date
+        title = f"Central Government's Expenditure For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
     if selected_category == "Tax Details":
          # Prepare the title with financial year and formatted date
         title = f"Central Government's Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
