@@ -19,13 +19,23 @@ st.set_page_config(
 )
 
 st.markdown("""
-    <style>
-        .stMultiSelect [data-baseweb=select] span{
-            max-width: 250px;
-            font-size: 0.7rem;
-        }
-    </style>
-    """, unsafe_allow_html=True)
+<style>
+    /* Attempt to remove any borders or lines below headers and markdown containers */
+    .stMarkdown, .stMarkdown h1 {
+        border-bottom: none !important;
+    }
+    /* If the line is a part of a pseudo-element */
+    .stMarkdown::after, .stMarkdown::before {
+        content: none !important;
+    }
+    /* Additional targeting based on inspection */
+    .css-1s44ra, .css-1s44ra h1, .css-1s44ra::after {
+        border: none !important;
+        content: none !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 
 # Hide Streamlit style and buttons
 hide_st_style = '''
