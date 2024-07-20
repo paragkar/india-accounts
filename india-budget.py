@@ -19,13 +19,21 @@ st.set_page_config(
 )
 
 st.markdown("""
-    <style>
-        .stMultiSelect [data-baseweb=select] span{
-            max-width: 250px;
-            font-size: 0.7rem;
-        }
-    </style>
-    """, unsafe_allow_html=True)
+<style>
+    .reportview-container .markdown-text-container {
+        position: relative;
+        top: -20px;  /* Adjust this value to move the title up */
+    }
+    h1 {
+        margin-top: -50px !important;  /* Decrease the space above the title */
+        border-bottom: none !important;  /* Ensures no line is under the title */
+    }
+    /* Add additional global resets for hr elements if they are still appearing */
+    hr {
+        display: none !important;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # Hide Streamlit style and buttons
 hide_st_style = '''
