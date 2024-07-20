@@ -186,8 +186,8 @@ def update_plot(selected_date):
     # Update layout for axis properties to remove y-axis title and reclaim space
     fig.update_layout(
         title=f'Financial Data Comparison for {selected_date}',
-        xaxis1_title='Values % of GDP',
-        xaxis2_title='Absolute Values Rs Lakh Cr',
+        xaxis1_title='Absolute Values Rs Lakh Cr',
+        xaxis2_title='Values % of GDP',
         showlegend=False,
         height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0),
         yaxis=dict(
