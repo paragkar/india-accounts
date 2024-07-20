@@ -272,7 +272,7 @@ def update_title(selected_date):
         h1 {
             text-align: center; /* Center align the title */
             margin-top: -20px !important; /* Adjust top margin to reduce gap */
-            margin-bottom: 10px; /* Add a bit of margin below the title if needed */
+            margin-bottom: 5px; /* Add a bit of margin below the title if needed */
             border-bottom: none !important; /* Ensures no line is under the title */
         }
     </style>
