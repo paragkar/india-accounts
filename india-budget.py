@@ -54,7 +54,7 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 
 # Load file function
 @st.cache_data
-def loadfile():
+def loadfilemain():
     password = st.secrets["db_password"]
     excel_content = io.BytesIO()
     with open("T01_Main.xlsx", 'rb') as f:
@@ -67,7 +67,7 @@ def loadfile():
     return df
 
 # Main Program Starts Here
-df = loadfile()
+df = loadfilemain()
 
 df["Description"] = [x.strip() for x in df["Description"]]
 
