@@ -98,7 +98,7 @@ slider_placeholder = st.sidebar.empty()
 plot_placeholder = st.empty()
 
 # Sidebar for date index selection using a slider
-selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates) - 1, 0)
+# selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates) - 1, 0)
 
 overall_actual_min_value = df['Actual % of GDP'].min()
 overall_actual_max_value = df['Actual % of GDP'].max()
@@ -207,8 +207,8 @@ def update_plot(selected_date):
     # fig.update_layout(title=f'Financial Data Comparison for {selected_date}', xaxis_title='Actual Values', xaxis2_title='Budget Estimates', yaxis_title='', showlegend=False, height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0))
     plot_placeholder.plotly_chart(fig, use_container_width=True)
 
-selected_date = unique_dates[selected_date_index]
-update_plot(selected_date)  # Initial plot update
+# selected_date = unique_dates[selected_date_index]
+# update_plot(selected_date)  # Initial plot update
 
 def update_title(selected_date):
     title = f"Financial Data Comparison for {selected_date.strftime('%B %d, %Y')}"
