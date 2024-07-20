@@ -155,18 +155,14 @@ def sort_dataframe(df):
     # Get the ordering for the latest date based on 'BE'
     latest_date_ordering = df[df['Date'] == latest_date].sort_values(by='BE', ascending=False)['Description'].tolist()
 
-    # Limit to the top 20 descriptions
-    top_descriptions = latest_date_ordering[:20]
+    # Get the ordering for the latest date based on 'BE' values
+    top_descriptions = df[df['Date'] == latest_date].sort_values(by='BE', ascending=False)['Description'].head(20).tolist()
 
-    # Get all unique descriptions to ensure none are missed
-    all_unique_descriptions = df['Description'].unique().tolist()
+    # Filter the DataFrame to keep only rows with descriptions in the top 20 list
+    df = df[df['Description'].isin(top_descriptions)]
 
-    # Create a complete list of descriptions ensuring all are included
-    # Start with the latest_date_ordering and append any missing descriptions
-    complete_description_order = top_descriptions + [desc for desc in all_unique_descriptions if desc not in top_descriptions]
-
-    # Define categorical type with complete order
-    all_descriptions = pd.CategoricalDtype(categories=complete_description_order, ordered=True)
+    # # Define categorical type with top descriptions only
+    all_descriptions = pd.CategoricalDtype(categories=top_descriptions, ordered=True)
     df['Description'] = df['Description'].astype(all_descriptions)
 
     # Sort DataFrame by 'Date' and ordered 'Description'
