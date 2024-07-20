@@ -504,41 +504,58 @@ def update_title(selected_date, selected_category):
 
 # Sidebar Control Setup
 with st.sidebar:
-    selected_category = st.selectbox("Select Category", ["Main Category", "Tax Details", "Expenditure Details"])
+    # Use the 'category_select' key to ensure it's uniquely addressed
+    selected_category = st.selectbox(
+        "Select Category", 
+        ["Main Category", "Tax Details", "Expenditure Details"], 
+        key='category_select'
+    )
+
+    # Ensure these buttons also have unique keys if their behavior or existence is dependent on other conditions
     play_button = st.button("Play", key="play_button")
     pause_button = st.button("Pause", key="pause_button")
-    # Setup columns for manual navigation buttons
-    col1, col2 = st.columns(2)
-    prev_button = col1.button('Previous')
-    next_button = col2.button('Next')
-    slider = st.slider("Select Date Index", 0, len(unique_dates)-1, key="date_slider")
 
-# Initialize state if not already done
+    # Manual navigation buttons with unique keys
+    col1, col2 = st.columns(2)
+    prev_button = col1.button('Previous', key='prev_button')
+    next_button = col2.button('Next', key='next_button')
+
+    # Slider with a unique key reflecting its dependency on selected_category
+    slider = st.slider(
+        "Select Date Index", 
+        0, 
+        len(unique_dates)-1, 
+        key=f"date_slider_{selected_category}"
+    )
+
+# Initial state setup
 if 'current_index' not in st.session_state:
-    st.session_state.current_index = slider
+    st.session_state.current_index = 0
 if 'is_playing' not in st.session_state:
     st.session_state.is_playing = False
 
-# Handle button functionalities
-if prev_button and st.session_state.current_index > 0:
-    st.session_state.current_index -= 1
-    st.session_state.is_playing = False  # Stop animation on manual control use
-elif next_button and st.session_state.current_index < len(unique_dates) - 1:
-    st.session_state.current_index += 1
-    st.session_state.is_playing = False  # Stop animation on manual control use
+# Button functionality handling
+if prev_button:
+    if st.session_state.current_index > 0:
+        st.session_state.current_index -= 1
+        st.session_state.is_playing = False
+elif next_button:
+    if st.session_state.current_index < len(unique_dates) - 1:
+        st.session_state.current_index += 1
+        st.session_state.is_playing = False
 
 if play_button:
     st.session_state.is_playing = True
     if st.session_state.current_index >= len(unique_dates) - 1:
-        st.session_state.current_index = 0  # Reset to start if at the end
+        st.session_state.current_index = 0
 
 if pause_button:
     st.session_state.is_playing = False
 
-# Update plots and titles based on current index or slider movement
+# Update plot and title according to the current index
 selected_date = unique_dates[st.session_state.current_index]
-if st.session_state.current_index != slider:
-    st.session_state.current_index = slider  # Sync slider with manual buttons or script logic
+if slider != st.session_state.current_index:
+    st.session_state.current_index = slider
     update_plot(selected_date, selected_category)
     update_title(selected_date, selected_category)
     st.experimental_rerun()
@@ -546,7 +563,7 @@ if st.session_state.current_index != slider:
 update_plot(selected_date, selected_category)
 update_title(selected_date, selected_category)
 
-# Continuous animation loop
+# Animation handling
 if st.session_state.is_playing:
     for i in range(st.session_state.current_index, len(unique_dates)):
         if not st.session_state.is_playing:
@@ -554,6 +571,4 @@ if st.session_state.is_playing:
         st.session_state.current_index = i
         update_plot(unique_dates[i], selected_category)
         update_title(unique_dates[i], selected_category)
-        st.experimental_rerun()
-        time.sleep(0.5)  # Adjust sleep time to control speed of animation
-
+        time.sleep(0.5)
