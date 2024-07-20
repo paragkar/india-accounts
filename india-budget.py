@@ -171,6 +171,8 @@ def sort_dataframe(df):
 
     return df_sorted
 
+
+#Loading Data
 if selected_category in ["Main Category", "Tax Details"]:
     df, cat_order_list = loaddata()
     df["Description"] = [x.strip() for x in df["Description"]]
@@ -180,7 +182,8 @@ if selected_category in ["Main Category", "Tax Details"]:
     df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list, ordered=True)
     # Sort the DataFrame by 'Date' (newest first) and 'Description'
     df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
-
+    
+#Loading Data
 if selected_category in ["Expenditure Details"]:
     df = loadfileexp()
     df = sort_dataframe(df)
