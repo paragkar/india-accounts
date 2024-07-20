@@ -237,14 +237,14 @@ def update_title(selected_date):
     # Get the financial year string
     fy = get_financial_year(selected_date)
     
-    # Format the date as 'Jan 31st, 2018'
-    formatted_date = selected_date.strftime('%b %dst, %Y') if selected_date.day == 1 else selected_date.strftime('%b %dnd, %Y') if selected_date.day == 2 else selected_date.strftime('%b %drd, %Y') if selected_date.day == 3 else selected_date.strftime('%b %dth, %Y')
-
+    # Format the date correctly with ordinal suffix
+    day_suffix = lambda n: 'th' if 11 <= n <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')
+    formatted_date = selected_date.strftime(f'%b {selected_date.day}{day_suffix(selected_date.day)}, %Y')
+    
     # Prepare the title with financial year and formatted date
-    title = f"{fy} <span style='color:red;'>{formatted_date}</span>"
+    title = f"<span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
     
     title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
-
 
 
 
