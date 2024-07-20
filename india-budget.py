@@ -19,20 +19,13 @@ st.set_page_config(
 )
 
 st.markdown("""
-<style>
-    * {
-        border: none !important;
-        box-shadow: none !important;
-        outline: none !important;
-    }
-    h1, .stMarkdown, div {
-        border-bottom: none !important;
-    }
-    div::after, div::before {
-        content: none !important;
-    }
-</style>
-""", unsafe_allow_html=True)
+    <style>
+        .stMultiSelect [data-baseweb=select] span{
+            max-width: 250px;
+            font-size: 0.7rem;
+        }
+    </style>
+    """, unsafe_allow_html=True)
 
 # Hide Streamlit style and buttons
 hide_st_style = '''
