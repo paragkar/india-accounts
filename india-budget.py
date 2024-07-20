@@ -233,25 +233,34 @@ def update_plot(selected_date):
             title='',  # No title
             showticklabels=True,  # Keep tick labels
             automargin=True  # Automatically adjust margin to tick labels
-        )
+        ),
+         annotations=[
+            dict(
+                x=0.5, y=-0.15,  # Adjust y to a negative value that's within the visible range
+                xref="paper", yref="paper",
+                showarrow=False,
+                text="Top Bar: Actual Spend<br>Bottom Bar: Budget Estimate",
+                font=dict(size=12, color="black"),
+                align="center"
+            )]
     )
 
     update_title(selected_date)
 
-    #Add annotations for description
-    annotations = [
-        dict(
-            xref='paper', yref='paper',  # reference coords to the whole paper
-            x=0.01, y=-0.15,  # position of the text (-0.15 means below the chart)
-            xanchor='left', yanchor='bottom',
-            text='Top Bar: Actual Spend<br>Bottom Bar: Budget Estimate',
-            showarrow=False,
-            font=dict(size=12, color='black'),
-            align='left'
-        )
-    ]
+    # #Add annotations for description
+    # annotations = [
+    #     dict(
+    #         xref='paper', yref='paper',  # reference coords to the whole paper
+    #         x=0.01, y=-0.15,  # position of the text (-0.15 means below the chart)
+    #         xanchor='left', yanchor='bottom',
+    #         text='Top Bar: Actual Spend<br>Bottom Bar: Budget Estimate',
+    #         showarrow=False,
+    #         font=dict(size=12, color='black'),
+    #         align='left'
+    #     )
+    # ]
 
-    fig.update_layout(annotations=annotations)
+    # fig.update_layout(annotations=annotations)
 
 
     plot_placeholder.plotly_chart(fig, use_container_width=True)
