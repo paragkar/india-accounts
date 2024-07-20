@@ -251,6 +251,7 @@ if st.session_state.get('is_playing', False):
             break
         update_plot(unique_dates[i])
         update_title(unique_dates[i])
+        slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=i, key=f"date_slider_{i}")
         time.sleep(0.5)  # Adjust sleep time to control
         selected_date_index = i
 
