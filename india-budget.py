@@ -9,6 +9,7 @@ import msoffcrypto
 import numpy as np
 import re
 import time
+import colorsys
 
 pd.set_option('future.no_silent_downcasting', True)
 pd.set_option('display.max_columns', None)
@@ -105,13 +106,26 @@ overall_be_min_value = df['BE'].min()
 overall_be_max_value = df['BE'].max()
 
 
-def get_color_map(descriptions):
-    # Get a list of colors from Plotly's built-in palettes
-    palette = px.colors.qualitative.Plotly  # This is an example, choose the palette that fits your aesthetic
-    # If there are more descriptions than colors in the palette, cycle through the palette
-    color_cycle = [palette[i % len(palette)] for i in range(len(descriptions))]
-    return dict(zip(descriptions, color_cycle))
+# def get_color_map(descriptions):
+#     # Get a list of colors from Plotly's built-in palettes
+#     palette = px.colors.qualitative.Plotly  # This is an example, choose the palette that fits your aesthetic
+#     # If there are more descriptions than colors in the palette, cycle through the palette
+#     color_cycle = [palette[i % len(palette)] for i in range(len(descriptions))]
+#     return dict(zip(descriptions, color_cycle))
 
+def get_unique_colors(n):
+    # Generate colors using HSV transformed to RGB
+    hues = [x/n for x in range(n)]  # Generate n distinct hues
+    colors = [colorsys.hsv_to_rgb(h, 1, 1) for h in hues]  # Convert HSV to RGB
+    # Convert RGB from 0-1 to 0-255 scale and format as hex
+    hex_colors = ['#%02x%02x%02x' % (int(r*255), int(g*255), int(b*255)) for r, g, b in colors]
+    return hex_colors
+
+def get_color_map(descriptions):
+    unique_descriptions = list(set(descriptions))
+    num_descriptions = len(unique_descriptions)
+    colors = get_unique_colors(num_descriptions)
+    return dict(zip(unique_descriptions, colors))
 
 
 def update_plot(selected_date):
