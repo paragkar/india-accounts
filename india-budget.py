@@ -117,16 +117,16 @@ def loadfiletax():
 
 # Main Program Starts Here
 
-category_choice = st.sidebar.selectbox(
+selected_category = st.sidebar.selectbox(
     "Select Category",
     ["Main Category", "Tax Details"]
 )
 
 def loaddata():
-    if category_choice == "Main Category":
+    if selected_category == "Main Category":
         df = loadfilemain()
         cat_order_list = main_cat_order_list
-    if category_choice == "Tax Details":
+    if selected_category == "Tax Details":
         df = loadfiletax()
         cat_order_list = tax_order_list
     return df, cat_order_list
@@ -144,7 +144,7 @@ df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list,
 # Sort the DataFrame by 'Date' (newest first) and 'Description'
 df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
 
-if category_choice == "Main Category":
+if selected_category == "Main Category":
     df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
     df["Actual"] = (df["Actual"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
     df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
@@ -155,14 +155,19 @@ if category_choice == "Main Category":
     fig2_xaxis_max_value = df['Actual % of GDP'].max()
     fig1_xaxis_min_value = df['BE'].min()
     fig1_xaxis_max_value = df['BE'].max()
+    xaxis1_title = 'Absolute Values Rs Lakh Cr (Top Bar - Actuals, Bottom Bar - BE)'
+    xaxis2_title='Values % of GDP',
 
-if category_choice == "Tax Details":
+
+if selected_category == "Tax Details":
     df["Tax Cum Value"] = (df["Month_Cum_Year_CY"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
     df["Tax Cum Value % of GDP"] = ((df["Month_Cum_Year_CY"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
     fig2_xaxis_min_value = df['Tax Cum Value % of GDP'].min()
     fig2_xaxis_max_value = df['Tax Cum Value % of GDP'].max()
     fig1_xaxis_min_value = df["Tax Cum Value"].min()
     fig1_xaxis_max_value = df["Tax Cum Value"].max()
+    xaxis1_title = 'Tax Cum Value Rs Lakh Cr'
+    xaxis2_title = 'Tax Cum Value % of GDP',
 
 # Unique dates sorted
 unique_dates = df['Date'].unique()
@@ -171,7 +176,6 @@ date_index = range(len(unique_dates))
 title_placeholder = st.empty()
 slider_placeholder = st.sidebar.empty()
 plot_placeholder = st.empty()
-
 
 
 def get_unique_colors(n):
@@ -189,74 +193,109 @@ def get_color_map(descriptions):
     return dict(zip(unique_descriptions, colors))
 
 
-def update_plot(selected_date):
+def update_plot(selected_date, selected_category):
     filtered_data = df[df['Date'] == selected_date]
     
     color_map = get_color_map(filtered_data['Description'].unique())
 
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.7, 0.3], horizontal_spacing=0.01)
 
-    # Add bar charts on the left 1
-    fig.add_trace(go.Bar(
-        x=filtered_data['BE % of GDP'], 
-        y=filtered_data['Description'], 
-        orientation='h', 
-        name='Budget Estimate % of GDP',
-        marker=dict(
-            color=[color_map[desc] for desc in filtered_data['Description']],
-            line=dict(color='black', width=1)  # Thin black border
-        ),  # Apply dynamic color map
-        text=filtered_data['BE % of GDP'].round(2).astype(str)+"%", 
-        textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
-        textposition='outside'  # Position text 
-    ), row=1, col=2)
+    if selected_category == "Main Category":
 
-    # Add bar charts on the left 2
-    fig.add_trace(go.Bar(
-        x=filtered_data['Actual % of GDP'], 
-        y=filtered_data['Description'], 
-        orientation='h', 
-        name='Actual Spend % of GDP',
-        marker=dict(
-            color=[color_map[desc] for desc in filtered_data['Description']],opacity=0.5,
-            line=dict(color='black', width=1)  # Thin black border
-        ),
-        text=filtered_data['Actual % of GDP'].round(2).astype(str) + "%", 
-        textfont=dict(size=15, family='Arial', color='black', weight='bold'),
-        # marker=dict(color='red', opacity=0.6),
-        textposition='outside'  # Position text 
-    ), row=1, col=2)
+         # Add bar charts on the right 1
+        fig.add_trace(go.Bar(
+            x=filtered_data['BE'], 
+            y=filtered_data['Description'], 
+            orientation='h', 
+            name='Budget Estimate Rs Lakh Cr',
+            marker=dict(
+                color=[color_map[desc] for desc in filtered_data['Description']],
+                line=dict(color='black', width=1)  # Thin black border
+            ),
+            text=filtered_data['BE'].round(2).astype(str), 
+            textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
+            textposition='outside'  # Position text 
+        ), row=1, col=1)
 
-    # Add bar charts on the right 1
-    fig.add_trace(go.Bar(
-        x=filtered_data['BE'], 
-        y=filtered_data['Description'], 
-        orientation='h', 
-        name='Budget Estimate Rs Lakh Cr',
-        marker=dict(
-            color=[color_map[desc] for desc in filtered_data['Description']],
-            line=dict(color='black', width=1)  # Thin black border
-        ),
-        text=filtered_data['BE'].round(2).astype(str), 
-        textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
-        textposition='outside'  # Position text 
-    ), row=1, col=1)
+         # Add bar charts on the right 2
+        fig.add_trace(go.Bar(
+            x=filtered_data['Actual'], 
+            y=filtered_data['Description'], 
+            orientation='h', 
+            name='Actual Spend Rs Lakh Cr',
+            marker=dict(
+                color=[color_map[desc] for desc in filtered_data['Description']],opacity=0.5,
+                line=dict(color='black', width=1)  # Thin black border
+            ),
+            text=filtered_data['Actual'].round(2).astype(str), 
+            textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
+            # marker=dict(color='red', opacity=0.6),
+            textposition='outside'  # Position text 
+        ), row=1, col=1)
 
-     # Add bar charts on the right 2
-    fig.add_trace(go.Bar(
-        x=filtered_data['Actual'], 
-        y=filtered_data['Description'], 
-        orientation='h', 
-        name='Actual Spend Rs Lakh Cr',
-        marker=dict(
-            color=[color_map[desc] for desc in filtered_data['Description']],opacity=0.5,
-            line=dict(color='black', width=1)  # Thin black border
-        ),
-        text=filtered_data['Actual'].round(2).astype(str), 
-        textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
-        # marker=dict(color='red', opacity=0.6),
-        textposition='outside'  # Position text 
-    ), row=1, col=1)
+        # Add bar charts on the left 1
+        fig.add_trace(go.Bar(
+            x=filtered_data['BE % of GDP'], 
+            y=filtered_data['Description'], 
+            orientation='h', 
+            name='Budget Estimate % of GDP',
+            marker=dict(
+                color=[color_map[desc] for desc in filtered_data['Description']],
+                line=dict(color='black', width=1)  # Thin black border
+            ),  # Apply dynamic color map
+            text=filtered_data['BE % of GDP'].round(2).astype(str)+"%", 
+            textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
+            textposition='outside'  # Position text 
+        ), row=1, col=2)
+
+        # Add bar charts on the left 2
+        fig.add_trace(go.Bar(
+            x=filtered_data['Actual % of GDP'], 
+            y=filtered_data['Description'], 
+            orientation='h', 
+            name='Actual Spend % of GDP',
+            marker=dict(
+                color=[color_map[desc] for desc in filtered_data['Description']],opacity=0.5,
+                line=dict(color='black', width=1)  # Thin black border
+            ),
+            text=filtered_data['Actual % of GDP'].round(2).astype(str) + "%", 
+            textfont=dict(size=15, family='Arial', color='black', weight='bold'),
+            # marker=dict(color='red', opacity=0.6),
+            textposition='outside'  # Position text 
+        ), row=1, col=2)
+
+
+    if selected_category == "Tax Details":
+
+        # Add bar charts on the right 1
+        fig.add_trace(go.Bar(
+            x=filtered_data['Tax Cum Value'], 
+            y=filtered_data['Description'], 
+            orientation='h', 
+            name='Tax Cumulative Value Rs Lakh Cr',
+            marker=dict(
+                color=[color_map[desc] for desc in filtered_data['Description']],
+                line=dict(color='black', width=1)  # Thin black border
+            ),
+            text=filtered_data['Tax Cum Value'].round(2).astype(str), 
+            textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
+            textposition='outside'  # Position text 
+        ), row=1, col=1)
+
+        # Add bar charts on the left 1
+        fig.add_trace(go.Bar(
+            x=filtered_data['Tax Cum Value % of GDP'], 
+            y=filtered_data['Description'], 
+            orientation='h', 
+            name='Tax Cum Value % of GDP',
+            marker=dict(
+                color=[color_map[desc] for desc in filtered_data['Description']],
+                line=dict(color='black', width=1)  # Thin black border
+            ),  # Apply dynamic color map
+            text=filtered_data['Tax Cum Value % of GDP'].round(2).astype(str)+"%", 
+            textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
+            textposition='outside'  # Position text 
+        ), row=1, col=2)
 
     
     # Update the layout for the combined figure for 1
@@ -276,8 +315,8 @@ def update_plot(selected_date):
         # title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         plot_bgcolor="white",  # Ensures background doesn't add unexpected styles
         paper_bgcolor="white",
-        xaxis1_title='Absolute Values Rs Lakh Cr (Top Bar - Actuals, Bottom Bar - BE)',
-        xaxis2_title='Values % of GDP',
+        xaxis1_title= xaxis1_title,
+        xaxis2_title= xaxis2_title,
         xaxis1_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         xaxis2_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         showlegend=False,
@@ -289,7 +328,7 @@ def update_plot(selected_date):
         ),
     )
 
-    update_title(selected_date)
+    update_title(selected_date, selected_category)
 
     plot_placeholder.plotly_chart(fig, use_container_width=True)
 
@@ -299,7 +338,7 @@ def get_financial_year(date):
         year -= 1
     return f'FY{year % 100:02d}-{(year + 1) % 100:02d}'
 
-def update_title(selected_date):
+def update_title(selected_date, selected_category):
     # Convert the selected_date to a datetime object if it isn't one already
     if isinstance(selected_date, str):
         selected_date = datetime.strptime(selected_date, '%Y-%m-%d').date()
@@ -310,14 +349,14 @@ def update_title(selected_date):
     # Format the date correctly with ordinal suffix
     day_suffix = lambda n: 'th' if 11 <= n <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')
     formatted_date = selected_date.strftime(f'%b {selected_date.day}{day_suffix(selected_date.day)}, %Y')
-    
-    # Prepare the title with financial year and formatted date
-    # title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
-    
-    # title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
 
-    # Prepare the title with financial year and formatted date
-    title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+    if selected_category == "Main Category":
+        # Prepare the title with financial year and formatted date
+        title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+    if selected_category == "Tax Details":
+         # Prepare the title with financial year and formatted date
+        title = f"Central Government's Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+
 
     # Use additional CSS to ensure the title is positioned correctly
     title_css = """
@@ -365,16 +404,16 @@ elif next_button:
 
 slider = slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=st.session_state.current_index, key="date_slider")
 selected_date = unique_dates[slider]
-update_plot(selected_date)
-update_title(selected_date)
+update_plot(selected_date, selected_category)
+update_title(selected_date, selected_category)
 
 # Synchronize the current_index with the slider
 if slider != st.session_state.current_index:
     st.session_state.current_index = slider
     # Explicitly trigger updates
     selected_date = unique_dates[slider]
-    update_plot(selected_date)
-    update_title(selected_date)
+    update_plot(selected_date, selected_category)
+    update_title(selected_date, selected_category)
     st.experimental_rerun()  # Optionally force a rerun if necessary
 
 # Place the "Play" and "Pause" button at the top of the sidebar with unique keys
@@ -390,13 +429,13 @@ if play_button:
 
 if pause_button:
     st.session_state.is_playing = False
-    update_plot(unique_dates[st.session_state.current_index])
-    update_title(unique_dates[st.session_state.current_index])
+    update_plot(unique_dates[st.session_state.current_index],selected_category)
+    update_title(unique_dates[st.session_state.current_index],selected_category)
 
 # Slider updates should trigger the plot and title updates outside the loop
 # selected_date = unique_dates[slider]
-update_plot(selected_date)
-update_title(selected_date)
+update_plot(selected_date, selected_category)
+update_title(selected_date, selected_category)
 
 # Animation loop controlled by the play button
 if st.session_state.get('is_playing', False):
@@ -405,8 +444,8 @@ if st.session_state.get('is_playing', False):
         if not st.session_state.is_playing:
             break
         selected_date = unique_dates[i]
-        update_plot(selected_date)
-        update_title(selected_date)
+        update_plot(selected_date, selected_category)
+        update_title(selected_date, selected_category)
         st.session_state.current_index = i
         slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=i, key=f"date_slider_{i}")
         time.sleep(0.5)  # Adjust sleep time to control
