@@ -315,8 +315,8 @@ def update_plot(selected_date, selected_category):
         # title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         plot_bgcolor="white",  # Ensures background doesn't add unexpected styles
         paper_bgcolor="white",
-        xaxis1_title= xaxis1_title,
-        xaxis2_title= xaxis2_title,
+        # xaxis1_title= xaxis1_title,
+        # xaxis2_title= xaxis2_title,
         xaxis1_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         xaxis2_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         showlegend=False,
