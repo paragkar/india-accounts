@@ -167,7 +167,7 @@ def sort_dataframe(df):
     df['Description'] = df['Description'].astype(all_descriptions)
 
     # Sort DataFrame by 'Date' and ordered 'Description'
-    df_sorted = df.sort_values(by=['Date', 'Description'],ascending=[False, True])
+    df_sorted = df.sort_values(by=['Date', 'Description'],ascending=[True, False])
 
     return df_sorted
 
