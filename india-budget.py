@@ -136,14 +136,22 @@ def loadfileexp():
 #     ["Main Category", "Tax Details", "Expenditure Details"]
 # )
 
-# Sidebar Control Setup
+# # Sidebar Control Setup
+# with st.sidebar:
+#     # Use the 'category_select' key to ensure it's uniquely addressed
+#     selected_category = st.selectbox(
+#         "Select Category", 
+#         ["Main Category", "Tax Details", "Expenditure Details"], 
+#         key='category_select'
+#     )
+
+# Sidebar for category selection
 with st.sidebar:
-    # Use the 'category_select' key to ensure it's uniquely addressed
-    selected_category = st.selectbox(
-        "Select Category", 
-        ["Main Category", "Tax Details", "Expenditure Details"], 
-        key='category_select'
-    )
+    selected_category = st.selectbox("Select Category", ["Main Category", "Tax Details", "Expenditure Details"], key='category_select')
+    # Check if category has changed
+    if st.session_state.selected_category != selected_category:
+        st.session_state.selected_category = selected_category
+        st.session_state.is_playing = False  # Auto-pause if category changes
 
 def loaddata():
     if selected_category == "Main Category":
@@ -445,14 +453,6 @@ if 'is_playing' not in st.session_state:
 
 if 'selected_category' not in st.session_state:
     st.session_state.selected_category = None
-
-# Sidebar for category selection
-with st.sidebar:
-    selected_category = st.selectbox("Select Category", ["Main Category", "Tax Details", "Expenditure Details"], key='category_select')
-    # Check if category has changed
-    if st.session_state.selected_category != selected_category:
-        st.session_state.selected_category = selected_category
-        st.session_state.is_playing = False  # Auto-pause if category changes
 
 # Validate the current index
 if st.session_state.current_index >= len(unique_dates):
