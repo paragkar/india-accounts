@@ -182,7 +182,7 @@ if selected_category in ["Main Category", "Tax Details"]:
     df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list, ordered=True)
     # Sort the DataFrame by 'Date' (newest first) and 'Description'
     df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
-    
+
 #Loading Data
 if selected_category in ["Expenditure Details"]:
     df = loadfileexp()
@@ -246,7 +246,7 @@ def update_plot(selected_date, selected_category):
 
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.7, 0.3], horizontal_spacing=0.01)
 
-    if selected_category == "Main Category":
+    if selected_category in ["Main Category", "Expenditure Details]":
 
          # Add bar charts on the right 1
         fig.add_trace(go.Bar(
