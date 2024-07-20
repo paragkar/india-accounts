@@ -119,7 +119,7 @@ def update_plot(selected_date):
     # fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]], column_widths=[0.75, 0.25], horizontal_spacing=0.01)
    
     color_map = get_color_map(filtered_data['Description'].unique())
-    
+
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.5, 0.5], horizontal_spacing=0.01)
 
 
@@ -153,10 +153,10 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Actual Spend % of GDP',
-        # marker=dict(color=[color_map[desc] for desc in filtered_data['Description']]),  # Apply dynamic color map
+        marker=dict(color=[color_map[desc] for desc in filtered_data['Description']], opacity=0.6),  # Apply dynamic color map
         text=filtered_data['Actual % of GDP'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'),
-        marker=dict(color='red', opacity=0.6),
+        # marker=dict(color='red', opacity=0.6),
         textposition='outside'  # Position text 
     ), row=1, col=2)
 
@@ -178,10 +178,10 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Actual Spend Rs Lakh Cr',
-        # marker=dict(color=[color_map[desc] for desc in filtered_data['Description']]),  # Apply dynamic color map 
+        marker=dict(color=[color_map[desc] for desc in filtered_data['Description']],opacity=0.6),  # Apply dynamic color map 
         text=filtered_data['Actual'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
-        marker=dict(color='red', opacity=0.6),
+        # marker=dict(color='red', opacity=0.6),
         textposition='outside'  # Position text 
     ), row=1, col=1)
 
