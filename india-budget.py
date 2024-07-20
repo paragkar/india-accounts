@@ -159,10 +159,9 @@ if selected_category in ["Expenditure Details"]:
     all_descriptions = pd.CategoricalDtype(categories=latest_date_ordering, ordered=True)
     df['Description'] = df['Description'].astype(all_descriptions)
     # Sort DataFrame by 'Date' and ordered 'Description'
-    df_sorted = df.sort_values(by=['Date', 'Description'])
-
+    df = df.sort_values(by=['Date', 'Description'])
     # Display the sorted DataFrame
-    st.write(df_sorted)
+    st.write(df)
 
 
 # st.write(df)
