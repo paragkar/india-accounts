@@ -187,7 +187,7 @@ def update_plot(selected_date):
 
     
     # Update the layout for the combined figure for 1
-    fig.update_xaxes(row=1, col=2, range=[0, overall_actual_max_value * 1.05], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+    fig.update_xaxes(row=1, col=2, range=[0, overall_actual_max_value * 1.15], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
     fig.update_yaxes(row=1, col=2, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
     # Update the layout for the combined figure for 2
