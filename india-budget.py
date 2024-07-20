@@ -156,7 +156,7 @@ if selected_category == "Main Category":
     fig1_xaxis_min_value = df['BE'].min()
     fig1_xaxis_max_value = df['BE'].max()
     xaxis1_title = 'Absolute Values Rs Lakh Cr (Top Bar - Actuals, Bottom Bar - BE)'
-    xaxis2_title='Values % of GDP',
+    xaxis2_title ='Values % of GDP'
 
 
 if selected_category == "Tax Details":
@@ -167,7 +167,7 @@ if selected_category == "Tax Details":
     fig1_xaxis_min_value = df["Tax Cum Value"].min()
     fig1_xaxis_max_value = df["Tax Cum Value"].max()
     xaxis1_title = 'Tax Cum Value Rs Lakh Cr'
-    xaxis2_title = 'Tax Cum Value % of GDP',
+    xaxis2_title = 'Tax Cum Value % of GDP'
 
 # Unique dates sorted
 unique_dates = df['Date'].unique()
@@ -315,8 +315,8 @@ def update_plot(selected_date, selected_category):
         # title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         plot_bgcolor="white",  # Ensures background doesn't add unexpected styles
         paper_bgcolor="white",
-        # xaxis1_title= xaxis1_title,
-        # xaxis2_title= xaxis2_title,
+        xaxis1_title= xaxis1_title,
+        xaxis2_title= xaxis2_title,
         xaxis1_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         xaxis2_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         showlegend=False,
