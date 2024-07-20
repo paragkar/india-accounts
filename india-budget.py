@@ -212,10 +212,9 @@ update_plot(selected_date)  # Initial plot update
 
 def update_title(selected_date):
     title = f"Financial Data Comparison for {selected_date.strftime('%B %d, %Y')}"
-    title_placeholder.title(title)
+    title_placeholder.markdown(title)
 
 update_title(selected_date)  # Initial title update
-
 
 # Initialize title and slider
 if 'current_index' not in st.session_state:
