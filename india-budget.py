@@ -297,15 +297,23 @@ pause_button = st.sidebar.button("Pause", key="pause_button")
 
 # Use these buttons in your control logic
 if play_button:
+    # Check if the current index is at the end, and reset if so
+    if st.session_state.current_index >= len(unique_dates) - 1:
+        st.session_state.current_index = 0
     st.session_state.is_playing = True
+
 if pause_button:
     st.session_state.is_playing = False
     update_plot(unique_dates[st.session_state.current_index])
     update_title(unique_dates[st.session_state.current_index])
 
+# Slider updates should trigger the plot and title updates outside the loop
+selected_date = unique_dates[slider]
+update_plot(selected_date)
+update_title(selected_date)
+
 # Animation loop controlled by the play button
 if st.session_state.get('is_playing', False):
-    # Ensure the index is within bounds
     start_index = st.session_state.current_index
     for i in range(start_index, len(unique_dates)):
         if not st.session_state.is_playing:
