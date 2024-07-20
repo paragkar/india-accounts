@@ -264,11 +264,11 @@ if st.session_state.get('is_playing', False):
         slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=i, key=f"date_slider_{i}")
         time.sleep(0.5)  # Adjust sleep time to control
         # selected_date_index = i
-    # else:
-    #     selected_date = unique_dates[slider]
-    #     update_plot(selected_date)
-    #     update_title(selected_date)
-    #     st.session_state.current_index = slider
+    else:
+        selected_date = unique_dates[slider]
+        update_plot(selected_date)
+        update_title(selected_date)
+        st.session_state.current_index = slider
 
 # # Create subplot
 # fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]],column_widths=[0.75, 0.25], horizontal_spacing=0.01)
