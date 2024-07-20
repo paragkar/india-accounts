@@ -143,16 +143,28 @@ def loaddata():
     if selected_category == "Tax Details":
         df = loadfiletax()
         cat_order_list = tax_order_list
-    if selected_category == "Expenditure Details":
-        df = loadfileexp()
-        df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
-        df = df.sort_values(by=['Date', 'BE'], ascending=[False, False])
-        cat_order_list = []
     return df, cat_order_list
 
-df, cat_order_list = loaddata()
+if selected_category in ["Main Category", "Tax Details"]:
+    df, cat_order_list = loaddata()
+if selected_category in ["Expenditure Details"]:
+    # Convert 'Date' to datetime
+    df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
+    # Identify the latest date
+    latest_date = df['Date'].max()
+    # Get the ordering for the latest date based on 'BE'
+    latest_date_ordering = df[df['Date'] == latest_date].sort_values(by='BE', ascending=False)['Description'].tolist()
+    # Ensure all descriptions are included in the sort order with a stable sort
+    all_descriptions = pd.CategoricalDtype(categories=latest_date_ordering, ordered=True)
+    df['Description'] = df['Description'].astype(all_descriptions)
+    # Sort DataFrame by 'Date' and ordered 'Description'
+    df_sorted = df.sort_values(by=['Date', 'Description'])
 
-st.write(df)
+    # Display the sorted DataFrame
+    print(df_sorted)
+
+
+# st.write(df)
 
 df["Description"] = [x.strip() for x in df["Description"]]
 
