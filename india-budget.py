@@ -120,7 +120,7 @@ def update_plot(selected_date):
    
     color_map = get_color_map(filtered_data['Description'].unique())
 
-    fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.5, 0.5], horizontal_spacing=0.01)
+    fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.7, 0.3], horizontal_spacing=0.01)
 
 
     # # Add scatter plot on the left with text labels
