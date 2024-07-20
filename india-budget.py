@@ -155,7 +155,10 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Budget Estimate % of GDP',
-        marker=dict(color=[color_map[desc] for desc in filtered_data['Description']]),  # Apply dynamic color map
+        marker=dict(
+            color=[color_map[desc] for desc in filtered_data['Description']],
+            line=dict(color='black', width=1)  # Thin black border
+        ),  # Apply dynamic color map
         text=filtered_data['BE % of GDP'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         textposition='outside'  # Position text 
@@ -180,7 +183,10 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Budget Estimate Rs Lakh Cr',
-        marker=dict(color=[color_map[desc] for desc in filtered_data['Description']]),  # Apply dynamic color map
+        marker=dict(
+            color=[color_map[desc] for desc in filtered_data['Description']],
+            line=dict(color='black', width=1)  # Thin black border
+        ),
         text=filtered_data['BE'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         textposition='outside'  # Position text 
