@@ -130,24 +130,10 @@ def get_color_map(descriptions):
 
 def update_plot(selected_date):
     filtered_data = df[df['Date'] == selected_date]
-    # fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]], column_widths=[0.75, 0.25], horizontal_spacing=0.01)
-   
+    
     color_map = get_color_map(filtered_data['Description'].unique())
 
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.7, 0.3], horizontal_spacing=0.01)
-
-
-    # # Add scatter plot on the left with text labels
-    # fig.add_trace(go.Scatter(
-    #     x=filtered_data["Actual % of BE"], 
-    #     y=filtered_data['Description'], 
-    #     mode='markers+text',  # Include both markers and text
-    #     name='Actual', 
-    #     marker=dict(size=15),
-    #     text=filtered_data["Actual % of BE"].round(2).astype(str), 
-    #     textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
-    #     textposition='middle right'  # Position text 
-    # ), row=1, col=1)
 
     # Add bar charts on the left 1
     fig.add_trace(go.Bar(
@@ -240,12 +226,36 @@ def update_plot(selected_date):
         )
     )
 
+    update_title(selected_date)
+
     # fig.update_layout(title=f'Financial Data Comparison for {selected_date}', xaxis_title='Actual Values', xaxis2_title='Budget Estimates', yaxis_title='', showlegend=False, height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0))
     plot_placeholder.plotly_chart(fig, use_container_width=True)
 
 
+# def update_title(selected_date):
+#     title = f"Financial Data Comparison for {selected_date.strftime('%B %d, %Y')}"
+#     title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
+
+def get_financial_year(date):
+    year = date.year
+    if date.month < 4:
+        year -= 1
+    return f'FY{year % 100:02d}-{(year + 1) % 100:02d}'
+
 def update_title(selected_date):
-    title = f"Financial Data Comparison for {selected_date.strftime('%B %d, %Y')}"
+    # Convert the selected_date to a datetime object if it isn't one already
+    if isinstance(selected_date, str):
+        selected_date = datetime.strptime(selected_date, '%Y-%m-%d').date()
+    
+    # Get the financial year string
+    fy = get_financial_year(selected_date)
+    
+    # Format the date as 'Jan 31st, 2018'
+    formatted_date = selected_date.strftime('%b %dst, %Y') if selected_date.day == 1 else selected_date.strftime('%b %dnd, %Y') if selected_date.day == 2 else selected_date.strftime('%b %drd, %Y') if selected_date.day == 3 else selected_date.strftime('%b %dth, %Y')
+
+    # Prepare the title with financial year and formatted date
+    title = f"{fy} <span style='color:red;'>{formatted_date}</span>"
+    
     title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
 
 
