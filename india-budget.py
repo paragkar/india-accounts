@@ -221,7 +221,7 @@ def update_plot(selected_date):
         xaxis1_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         xaxis2_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         showlegend=False,
-        height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0),
+        height=700, width=1200, margin=dict(l=0, r=10, t=0, b=0, pad=0),
         yaxis=dict(
             title='',  # No title
             showticklabels=True,  # Keep tick labels
