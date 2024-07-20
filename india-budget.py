@@ -176,7 +176,6 @@ if selected_category in ["Main Category", "Tax Details"]:
 if selected_category in ["Expenditure Details"]:
     df = loadfileexp()
     df = sort_dataframe(df)
-    st.write(df)
     
 
 df["Description"] = [x.strip() for x in df["Description"]]
@@ -189,6 +188,8 @@ df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list,
 
 # Sort the DataFrame by 'Date' (newest first) and 'Description'
 df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
+
+st.write(df)
 
 if selected_category == "Main Category":
     df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
