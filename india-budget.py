@@ -214,7 +214,7 @@ def update_title(selected_date):
     title = f"Financial Data Comparison for {selected_date.strftime('%B %d, %Y')}"
     title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
 
-update_title(selected_date)  # Initial title update
+# update_title(selected_date)  # Initial title update
 
 # Initialize title and slider
 if 'current_index' not in st.session_state:
