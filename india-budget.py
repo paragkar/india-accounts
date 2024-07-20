@@ -97,9 +97,6 @@ title_placeholder = st.empty()
 slider_placeholder = st.sidebar.empty()
 plot_placeholder = st.empty()
 
-# Sidebar for date index selection using a slider
-# selected_date_index = st.sidebar.slider("Select Date Index", 0, len(unique_dates) - 1, 0)
-
 overall_actual_min_value = df['Actual % of GDP'].min()
 overall_actual_max_value = df['Actual % of GDP'].max()
 
@@ -107,10 +104,6 @@ overall_actual_max_value = df['Actual % of GDP'].max()
 overall_be_min_value = df['BE'].min()
 overall_be_max_value = df['BE'].max()
 
-
-# Filter data based on selected date index
-# selected_date = unique_dates[selected_date_index]
-# filtered_data = df[df['Date'] == selected_date]
 
 def update_plot(selected_date):
     filtered_data = df[df['Date'] == selected_date]
@@ -207,68 +200,10 @@ def update_plot(selected_date):
     # fig.update_layout(title=f'Financial Data Comparison for {selected_date}', xaxis_title='Actual Values', xaxis2_title='Budget Estimates', yaxis_title='', showlegend=False, height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0))
     plot_placeholder.plotly_chart(fig, use_container_width=True)
 
-# selected_date = unique_dates[selected_date_index]
-# update_plot(selected_date)  # Initial plot update
 
 def update_title(selected_date):
     title = f"Financial Data Comparison for {selected_date.strftime('%B %d, %Y')}"
     title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
-
-# update_title(selected_date)  # Initial title update
-
-# # Initialize title and slider
-# if 'current_index' not in st.session_state:
-#     st.session_state.current_index = 0
-
-# if 'is_playing' not in st.session_state:
-#     st.session_state.is_playing = False
-
-# # Validate the current index
-# if st.session_state.current_index >= len(unique_dates):
-#     st.session_state.current_index = 0
-
-# slider = slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=st.session_state.current_index, key="date_slider")
-# update_title(unique_dates[slider])
-
-# # Place the "Play" and "Pause" button at the top of the sidebar with unique keys
-# play_button = st.sidebar.button("Play", key="play_button")
-# pause_button = st.sidebar.button("Pause", key="pause_button")
-
-# # Use these buttons in your control logic
-# if play_button:
-#     st.session_state.is_playing = True
-#     st.session_state.current_index = max(0, st.session_state.get('current_index', 0))  # Ensure current_index is initialized
-# if pause_button:
-#     st.session_state.is_playing = False
-#     # Force update of the plot when paused
-#     update_plot(unique_dates[st.session_state.current_index])
-#     update_title(unique_dates[st.session_state.current_index])
-
-
-# # Slider updates should trigger the plot and title updates outside the loop
-# selected_date = unique_dates[slider]
-# update_plot(selected_date)
-# update_title(selected_date)
-
-# # Animation loop controlled by the play button
-# if st.session_state.get('is_playing', False):
-#     # Ensure the index is within bounds
-#     start_index = st.session_state.current_index
-#     for i in range(start_index, len(unique_dates)):
-#         if not st.session_state.is_playing:
-#             break
-#         selected_date = unique_dates[i]
-#         update_plot(selected_date)
-#         update_title(selected_date)
-#         st.session_state.current_index = i
-#         slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=i, key=f"date_slider_{i}")
-#         time.sleep(0.5)  # Adjust sleep time to control
-        # selected_date_index = i
-    # else:
-    #     selected_date = unique_dates[slider]
-    #     update_plot(selected_date)
-    #     update_title(selected_date)
-    #     st.session_state.current_index = slider
 
 
 # Initialize title and slider
@@ -325,89 +260,3 @@ if st.session_state.get('is_playing', False):
         slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=i, key=f"date_slider_{i}")
         time.sleep(0.5)  # Adjust sleep time to control
 
-# # Create subplot
-# fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]],column_widths=[0.75, 0.25], horizontal_spacing=0.01)
-
-# # Add scatter plot
-# fig.add_trace(go.Scatter(
-#     x=filtered_data['Actual'], y=filtered_data['Description'], mode='markers', name='Actual', marker=dict(size=15)
-# ), row=1, col=1)
-
-
-# # Add horizontal bar chart
-# fig.add_trace(go.Bar(
-#     x=filtered_data['BE'], y=filtered_data['Description'], orientation='h', name='Budget Estimate',
-# ), row=1, col=2)
-
-# # Adding Actual values as a line or bar on top of the BE bars
-# fig.add_trace(go.Bar(
-#     x=filtered_data['Actual'], y=filtered_data['Description'], orientation='h', name='Actual',
-#     marker=dict(color='red', opacity=0.6), # semi-transparent red bars for Actual
-#     textposition='outside', textfont=dict(size=15, family='Arial', color='black', weight='bold')
-# ), row=1, col=2)
-
-# # Update layout
-# fig.update_layout(
-#     title='Financial Data Comparison by Date',
-#     xaxis_title='Actual Values',
-#     xaxis2_title='Budget Estimates',
-#     yaxis_title='Description',
-#     showlegend=False
-# )
-
-# # Update the y-axis tick labels to be bold
-# fig.update_yaxes(tickfont=dict(size=15, family='Arial', color='black', weight='bold'), row=1, col=1)
-
-# fig.update_layout(height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0), showlegend=False, yaxis=dict(automargin=True))
-
-
-
-# def update_title(selected_date):
-#     # # Create the styled title
-#     # styled_category_type = f"<span style='color:red; font-weight:bold;'>{selected_category_type}</span>"
-#     # styled_sector_type = f"<span style='color:blue; font-weight:bold;'>{selected_sector_type}</span>"
-#     # styled_metric_type = f"<span style='color:brown; font-weight:bold;'>{selected_metric_type}</span>"
-#     styled_month = f"<span style='color:green; font-weight:bold;'>{selected_date.strftime('%b %Y')}</span>"
-#     # title = f"Consumer Price {styled_category_type} {styled_sector_type} {styled_metric_type} Data For Month - {styled_month}"
-#     title = f"Consumer Price Data For Month - {styled_month}"
-
-#     # Display the date with month on top along with the title
-#     title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
-
-# # Initialize title and slider
-# if 'current_index' not in st.session_state:
-#     st.session_state.current_index = 0
-
-# if 'is_playing' not in st.session_state:
-#     st.session_state.is_playing = False
-
-# # Validate the current index
-# if st.session_state.current_index >= len(unique_dates):
-#     st.session_state.current_index = 0
-
-# slider = slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=st.session_state.current_index, key="date_slider")
-# update_title(unique_dates[slider])
-
-# if play_button:
-#     st.session_state.is_playing = True
-#     if st.session_state.current_index == len(unique_dates) - 1:
-#         st.session_state.current_index = 0
-
-# if pause_button:
-#     st.session_state.is_playing = False
-
-# if st.session_state.is_playing:
-#     for i in range(st.session_state.current_index, len(unique_dates)):
-#         if not st.session_state.is_playing:
-#             break
-#         selected_date = unique_dates[i]
-#         update_plot(selected_date)
-#         update_title(selected_date)
-#         st.session_state.current_index = i
-#         slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=i, key=f"date_slider_{i}")
-#         time.sleep(0.3)  # Adjust the sleep time to control the animation speed
-# else:
-#     selected_date = unique_dates[slider]
-#     update_plot(selected_date)
-#     update_title(selected_date)
-#     st.session_state.current_index = slider
