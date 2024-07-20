@@ -302,6 +302,11 @@ update_title(selected_date)
 # Synchronize the current_index with the slider
 if slider != st.session_state.current_index:
     st.session_state.current_index = slider
+    # Explicitly trigger updates
+    selected_date = unique_dates[slider]
+    update_plot(selected_date)
+    update_title(selected_date)
+    st.experimental_rerun()  # Optionally force a rerun if necessary
 
 # Place the "Play" and "Pause" button at the top of the sidebar with unique keys
 play_button = st.sidebar.button("Play", key="play_button")
