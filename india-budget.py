@@ -36,7 +36,7 @@ st.markdown("""
     }
     /* Reduce padding on the left and right sides of the main block container */
     .reportview-container .main .block-container{
-        padding-left: 0px;
+        padding-left: -10px;
         padding-right: 0px;
     }
 </style>
