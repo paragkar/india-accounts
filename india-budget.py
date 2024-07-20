@@ -217,6 +217,8 @@ def update_plot(selected_date):
         title=f'Financial Data Comparison for {selected_date}',
         xaxis1_title='Absolute Values Rs Lakh Cr',
         xaxis2_title='Values % of GDP',
+        xaxis1_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
+        xaxis2_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         showlegend=False,
         height=700, width=1200, margin=dict(l=5, r=10, t=0, b=0, pad=0),
         yaxis=dict(
