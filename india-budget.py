@@ -20,17 +20,24 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+    /* Adjust the position of the markdown text container */
     .reportview-container .markdown-text-container {
         position: relative;
         top: -20px;  /* Adjust this value to move the title up */
     }
+    /* Adjust header styling to remove space and lines */
     h1 {
         margin-top: -50px !important;  /* Decrease the space above the title */
         border-bottom: none !important;  /* Ensures no line is under the title */
     }
-    /* Add additional global resets for hr elements if they are still appearing */
+    /* Hide any horizontal rules that might be appearing */
     hr {
         display: none !important;
+    }
+    /* Reduce padding on the left and right sides of the main block container */
+    .reportview-container .main .block-container{
+        padding-left: 0px;
+        padding-right: 0px;
     }
 </style>
 """, unsafe_allow_html=True)
