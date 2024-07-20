@@ -294,6 +294,21 @@ if 'is_playing' not in st.session_state:
 if st.session_state.current_index >= len(unique_dates):
     st.session_state.current_index = 0
 
+# Setup columns for buttons
+col1, col2 = st.columns(2)
+with col1:
+    prev_button = st.button('Previous')
+with col2:
+    next_button = st.button('Next')
+
+# Handle previous and next button functionality
+if prev_button:
+    if st.session_state.current_index > 0:
+        st.session_state.current_index -= 1
+elif next_button:
+    if st.session_state.current_index < len(unique_dates) - 1:
+        st.session_state.current_index += 1
+
 slider = slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=st.session_state.current_index, key="date_slider")
 selected_date = unique_dates[slider]
 update_plot(selected_date)
