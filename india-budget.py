@@ -243,7 +243,7 @@ def update_plot(selected_date):
         dict(
             xref='paper', yref='paper',  # reference coords to the whole paper
             x=0.01, y=-0.15,  # position of the text (-0.15 means below the chart)
-            xanchor='left', yanchor='top',
+            xanchor='left', yanchor='bottom',
             text='Top Bar: Actual Spend<br>Bottom Bar: Budget Estimate',
             showarrow=False,
             font=dict(size=12, color='black'),
