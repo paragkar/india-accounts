@@ -145,23 +145,23 @@ def loaddata():
         cat_order_list = tax_order_list
     return df, cat_order_list
 
-def sort_dataframe(df):
+def sort_and_filter_dataframe(df, category):
     # Convert 'Date' to datetime
     df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
+
+    # Filter based on the category selected by the user
+    df = df[df['Description'].str.contains(category)]
 
     # Identify the latest date
     latest_date = df['Date'].max()
 
-    # Get the ordering for the latest date based on 'BE'
-    latest_date_ordering = df[df['Date'] == latest_date].sort_values(by='BE', ascending=False)['Description'].tolist()
-
-    # Get the ordering for the latest date based on 'BE' values
+    # Get the ordering for the latest date based on 'BE' values for the selected category
     top_descriptions = df[df['Date'] == latest_date].sort_values(by='BE', ascending=False)['Description'].head(20).tolist()
 
     # Filter the DataFrame to keep only rows with descriptions in the top 20 list
     df = df[df['Description'].isin(top_descriptions)]
 
-    # # Define categorical type with top descriptions only
+    # Define categorical type with top descriptions only
     all_descriptions = pd.CategoricalDtype(categories=top_descriptions, ordered=True)
     df['Description'] = df['Description'].astype(all_descriptions)
 
@@ -185,7 +185,9 @@ if selected_category in ["Main Category", "Tax Details"]:
 #Loading Data
 if selected_category in ["Expenditure Details"]:
     df = loadfileexp()
-    df = sort_dataframe(df)
+    # Dropdown for user to choose between 'Revenue' and 'Capital'
+    category_choice = st.selectbox('Select Category:', ['Revenue', 'Capital'])
+    df = sort_dataframe(df, category_choice)
 
 
 if selected_category in ["Main Category", "Expenditure Details"]:
