@@ -129,7 +129,7 @@ def loaddata():
     if category_choice == "Tax Details":
         df = loadfiletax()
         cat_order_list = tax_order_list
-    return df, cat_order_list 
+    return df, cat_order_list
 
 df, cat_order_list = loaddata()
 
@@ -182,7 +182,7 @@ def get_color_map(descriptions):
     return dict(zip(unique_descriptions, colors))
 
 
-def cat_order_list(selected_date):
+def update_plot(selected_date):
     filtered_data = df[df['Date'] == selected_date]
     
     color_map = get_color_map(filtered_data['Description'].unique())
