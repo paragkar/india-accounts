@@ -246,7 +246,7 @@ def update_plot(selected_date, selected_category):
 
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.7, 0.3], horizontal_spacing=0.01)
 
-    if selected_category in ["Main Category", "Expenditure Details]":
+    if selected_category in ["Main Category", "Expenditure Details"]:
 
          # Add bar charts on the right 1
         fig.add_trace(go.Bar(
