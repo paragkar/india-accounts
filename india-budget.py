@@ -153,7 +153,7 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Actual Spend % of GDP',
-        marker=dict(color=[color_map[desc] for desc in filtered_data['Description']]),  # Apply dynamic color map
+        # marker=dict(color=[color_map[desc] for desc in filtered_data['Description']]),  # Apply dynamic color map
         text=filtered_data['Actual % of GDP'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'),
         marker=dict(color='red', opacity=0.6),
@@ -178,7 +178,7 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Actual Spend Rs Lakh Cr',
-        marker=dict(color=[color_map[desc] for desc in filtered_data['Description']]),  # Apply dynamic color map 
+        # marker=dict(color=[color_map[desc] for desc in filtered_data['Description']]),  # Apply dynamic color map 
         text=filtered_data['Actual'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         marker=dict(color='red', opacity=0.6),
