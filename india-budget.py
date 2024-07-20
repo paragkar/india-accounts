@@ -234,7 +234,6 @@ def update_plot(selected_date):
             showticklabels=True,  # Keep tick labels
             automargin=True  # Automatically adjust margin to tick labels
         ),
-        title_x=1,  # Centers the title over the plots specifically
     )
 
     update_title(selected_date)
@@ -260,9 +259,28 @@ def update_title(selected_date):
     formatted_date = selected_date.strftime(f'%b {selected_date.day}{day_suffix(selected_date.day)}, %Y')
     
     # Prepare the title with financial year and formatted date
-    title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+    # title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
     
-    title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
+    # title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
+
+    # Prepare the title with financial year and formatted date
+    title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+
+    # Use additional CSS to ensure the title is positioned correctly
+    title_css = """
+    <style>
+        h1 {
+            text-align: center; /* Center align the title */
+            margin-top: -20px !important; /* Adjust top margin to reduce gap */
+            margin-bottom: 10px; /* Add a bit of margin below the title if needed */
+            border-bottom: none !important; /* Ensures no line is under the title */
+        }
+    </style>
+    """
+
+    # Display the title with custom styling
+    st.markdown(title_css, unsafe_allow_html=True)
+    title_placeholder.markdown(f"<h1 style='font-size:30px;'>{title}</h1>", unsafe_allow_html=True)
 
 
 # Initialize title and slider
