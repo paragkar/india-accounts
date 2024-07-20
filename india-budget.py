@@ -234,7 +234,7 @@ def update_plot(selected_date):
             showticklabels=True,  # Keep tick labels
             automargin=True  # Automatically adjust margin to tick labels
         ),
-        title_x=0.5,  # Centers the title over the plots specifically
+        title_x=1,  # Centers the title over the plots specifically
     )
 
     update_title(selected_date)
