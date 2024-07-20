@@ -145,27 +145,39 @@ def loaddata():
         cat_order_list = tax_order_list
     return df, cat_order_list
 
+def sort_dataframe(df):
+    # Convert 'Date' to datetime
+    df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
+
+    # Identify the latest date
+    latest_date = df['Date'].max()
+
+    # Get the ordering for the latest date based on 'BE'
+    latest_date_ordering = df[df['Date'] == latest_date].sort_values(by='BE', ascending=False)['Description'].tolist()
+
+    # Get all unique descriptions to ensure none are missed
+    all_unique_descriptions = df['Description'].unique().tolist()
+
+    # Create a complete list of descriptions ensuring all are included
+    # Start with the latest_date_ordering and append any missing descriptions
+    complete_description_order = latest_date_ordering + [desc for desc in all_unique_descriptions if desc not in latest_date_ordering]
+
+    # Define categorical type with complete order
+    all_descriptions = pd.CategoricalDtype(categories=complete_description_order, ordered=True)
+    df['Description'] = df['Description'].astype(all_descriptions)
+
+    # Sort DataFrame by 'Date' and ordered 'Description'
+    df_sorted = df.sort_values(by=['Date', 'Description'])
+
+    return df_sorted
+
 if selected_category in ["Main Category", "Tax Details"]:
     df, cat_order_list = loaddata()
 if selected_category in ["Expenditure Details"]:
     df = loadfileexp()
-    # Convert 'Date' to datetime
-    df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
-    # Identify the latest date
-    latest_date = df['Date'].max()
-    # Get the ordering for the latest date based on 'BE'
-    latest_date_ordering = df[df['Date'] == latest_date].sort_values(by='BE', ascending=False)['Description'].tolist()
-    st.write(latest_date_ordering)
-    # Ensure all descriptions are included in the sort order with a stable sort
-    all_descriptions = pd.CategoricalDtype(categories=latest_date_ordering, ordered=True)
-    df['Description'] = df['Description'].astype(all_descriptions)
-    # Sort DataFrame by 'Date' and ordered 'Description'
-    df = df.sort_values(by=['Date', 'Description'])
-    # Display the sorted DataFrame
-    # st.write(df)
-
-
-# st.write(df)
+    df = sort_dataframe(df)
+    st.write(df)
+    
 
 df["Description"] = [x.strip() for x in df["Description"]]
 
