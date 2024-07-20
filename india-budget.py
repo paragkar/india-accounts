@@ -131,10 +131,19 @@ def loadfileexp():
 
 # Main Program Starts Here
 
-selected_category = st.sidebar.selectbox(
-    "Select Category",
-    ["Main Category", "Tax Details", "Expenditure Details"]
-)
+# selected_category = st.sidebar.selectbox(
+#     "Select Category",
+#     ["Main Category", "Tax Details", "Expenditure Details"]
+# )
+
+# Sidebar Control Setup
+with st.sidebar:
+    # Use the 'category_select' key to ensure it's uniquely addressed
+    selected_category = st.selectbox(
+        "Select Category", 
+        ["Main Category", "Tax Details", "Expenditure Details"], 
+        key='category_select'
+    )
 
 def loaddata():
     if selected_category == "Main Category":
@@ -426,14 +435,14 @@ def update_title(selected_date, selected_category):
     title_placeholder.markdown(f"<h1 style='font-size:30px;'>{title}</h1>", unsafe_allow_html=True)
 
 
-# Sidebar Control Setup
-with st.sidebar:
-    # Use the 'category_select' key to ensure it's uniquely addressed
-    selected_category = st.selectbox(
-        "Select Category", 
-        ["Main Category", "Tax Details", "Expenditure Details"], 
-        key='category_select'
-    )
+# # Sidebar Control Setup
+# with st.sidebar:
+#     # Use the 'category_select' key to ensure it's uniquely addressed
+#     selected_category = st.selectbox(
+#         "Select Category", 
+#         ["Main Category", "Tax Details", "Expenditure Details"], 
+#         key='category_select'
+#     )
 
 # Initialize title and slider
 if 'current_index' not in st.session_state:
