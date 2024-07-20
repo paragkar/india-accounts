@@ -159,7 +159,7 @@ def update_plot(selected_date):
             color=[color_map[desc] for desc in filtered_data['Description']],
             line=dict(color='black', width=1)  # Thin black border
         ),  # Apply dynamic color map
-        text=filtered_data['BE % of GDP'].round(2).astype(str), 
+        text=filtered_data['BE % of GDP'].round(2).astype(str)+"%", 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         textposition='outside'  # Position text 
     ), row=1, col=2)
@@ -174,7 +174,7 @@ def update_plot(selected_date):
             color=[color_map[desc] for desc in filtered_data['Description']],opacity=0.5,
             line=dict(color='black', width=1)  # Thin black border
         ),
-        text=filtered_data['Actual % of GDP'].round(2).astype(str), 
+        text=filtered_data['Actual % of GDP'].round(2).astype(str) + "%", 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'),
         # marker=dict(color='red', opacity=0.6),
         textposition='outside'  # Position text 
