@@ -334,12 +334,17 @@ pause_button = st.sidebar.button("Pause", key="pause_button")
 
 # Use these buttons in your control logic
 if play_button:
+    if st.session_state.current_index >= len(unique_dates) - 1:  # Check if at the end
+        st.session_state.current_index = 0  # Reset to the beginning
     st.session_state.is_playing = True
+    update_plot(unique_dates[st.session_state.current_index])  # Update immediately
+    update_title(unique_dates[st.session_state.current_index])
 
 if pause_button:
     st.session_state.is_playing = False
     update_plot(unique_dates[st.session_state.current_index])
     update_title(unique_dates[st.session_state.current_index])
+
 
 # Animation loop controlled by the play button
 if st.session_state.get('is_playing', False):
