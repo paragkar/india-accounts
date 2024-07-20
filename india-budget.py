@@ -234,15 +234,6 @@ def update_plot(selected_date):
             showticklabels=True,  # Keep tick labels
             automargin=True  # Automatically adjust margin to tick labels
         ),
-         annotations=[
-            dict(
-                x=0.5, y=-0.15,  # Adjust y to a negative value that's within the visible range
-                xref="paper", yref="paper",
-                showarrow=False,
-                text="Top Bar: Actual Spend<br>Bottom Bar: Budget Estimate",
-                font=dict(size=12, color="black"),
-                align="center"
-            )]
     )
 
     update_title(selected_date)
