@@ -105,6 +105,15 @@ overall_be_min_value = df['BE'].min()
 overall_be_max_value = df['BE'].max()
 
 
+def get_color_map(descriptions):
+    # Get a list of colors from Plotly's built-in palettes
+    palette = px.colors.qualitative.Plotly  # This is an example, choose the palette that fits your aesthetic
+    # If there are more descriptions than colors in the palette, cycle through the palette
+    color_cycle = [palette[i % len(palette)] for i in range(len(descriptions))]
+    return dict(zip(descriptions, color_cycle))
+
+
+
 def update_plot(selected_date):
     filtered_data = df[df['Date'] == selected_date]
     # fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "scatter"}, {"type": "bar"}]], column_widths=[0.75, 0.25], horizontal_spacing=0.01)
@@ -130,6 +139,7 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Budget Estimate % of GDP',
+        marker=dict(color=[color_map[desc] for desc in filtered_data['Description']]),  # Apply dynamic color map
         text=filtered_data['BE % of GDP'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         textposition='outside'  # Position text 
@@ -141,6 +151,7 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Actual Spend % of GDP',
+        marker=dict(color=[color_map[desc] for desc in filtered_data['Description']]),  # Apply dynamic color map
         text=filtered_data['Actual % of GDP'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'),
         marker=dict(color='red', opacity=0.6),
@@ -153,6 +164,7 @@ def update_plot(selected_date):
         y=filtered_data['Description'], 
         orientation='h', 
         name='Budget Estimate Rs Lakh Cr',
+        marker=dict(color=[color_map[desc] for desc in filtered_data['Description']]),  # Apply dynamic color map
         text=filtered_data['BE'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         textposition='outside'  # Position text 
@@ -163,7 +175,8 @@ def update_plot(selected_date):
         x=filtered_data['Actual'], 
         y=filtered_data['Description'], 
         orientation='h', 
-        name='Actual Spend Rs Lakh Cr', 
+        name='Actual Spend Rs Lakh Cr',
+        marker=dict(color=[color_map[desc] for desc in filtered_data['Description']]),  # Apply dynamic color map 
         text=filtered_data['Actual'].round(2).astype(str), 
         textfont=dict(size=15, family='Arial', color='black', weight='bold'), 
         marker=dict(color='red', opacity=0.6),
