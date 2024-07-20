@@ -223,7 +223,7 @@ def update_plot(selected_date):
         # title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         plot_bgcolor="white",  # Ensures background doesn't add unexpected styles
         paper_bgcolor="white",
-        xaxis1_title='Absolute Values Rs Lakh Cr',
+        xaxis1_title='Absolute Values Rs Lakh Cr (Top Bar - Actuals, Bottom Bar - BE)',
         xaxis2_title='Values % of GDP',
         xaxis1_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
         xaxis2_title_font=dict(size=15, family='Arial', color='black', weight='bold'),
