@@ -245,7 +245,7 @@ def update_title(selected_date):
     formatted_date = selected_date.strftime(f'%b {selected_date.day}{day_suffix(selected_date.day)}, %Y')
     
     # Prepare the title with financial year and formatted date
-    title = f"<span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+    title = f"Central Government Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
     
     title_placeholder.markdown(f"<h1 style='font-size:30px; margin-top: -20px;'>{title}</h1>", unsafe_allow_html=True)
 
