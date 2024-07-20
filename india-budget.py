@@ -146,7 +146,7 @@ def loaddata():
     if selected_category == "Expenditure Details":
         df = loadfileexp()
         df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
-        df = df.sort_values(by=['Date', 'BE'], ascending=[False, True])
+        df = df.sort_values(by=['Date', 'BE'], ascending=[False, False])
         cat_order_list = []
     return df, cat_order_list
 
