@@ -148,6 +148,7 @@ def loaddata():
 if selected_category in ["Main Category", "Tax Details"]:
     df, cat_order_list = loaddata()
 if selected_category in ["Expenditure Details"]:
+    df = loadfileexp()
     # Convert 'Date' to datetime
     df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
     # Identify the latest date
