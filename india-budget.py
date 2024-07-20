@@ -144,12 +144,25 @@ df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list,
 # Sort the DataFrame by 'Date' (newest first) and 'Description'
 df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
 
-df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
-df["Actual"] = (df["Actual"].astype(float)/100000).round(2) #converting into Rs Lakk Cr
-df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakk Cr
-df["GDP_Current"] = (df["GDP_Current"].astype(float)/100000).round(2) #converting into Rs Lakk Cr
-df["Actual % of GDP"] = ((df["Actual"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
-df["BE % of GDP"] = ((df["BE"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
+if category_choice == "Main Category":
+    df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
+    df["Actual"] = (df["Actual"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
+    df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
+    df["GDP_Current"] = (df["GDP_Current"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
+    df["Actual % of GDP"] = ((df["Actual"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
+    df["BE % of GDP"] = ((df["BE"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
+    fig2_xaxis_min_value = df['Actual % of GDP'].min()
+    fig2_xaxis_max_value = df['Actual % of GDP'].max()
+    fig1_xaxis_min_value = df['BE'].min()
+    fig1_xaxis_max_value = df['BE'].max()
+
+if category_choice == "Tax Details":
+    df["Tax Cum Value"] = (df["Month_Cum_Year_CY"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
+    df["Tax Cum Value % of GDP"] = ((df["Month_Cum_Year_CY"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
+    fig2_xaxis_min_value = df['Tax Cum Value % of GDP'].min()
+    fig2_xaxis_max_value = df['Tax Cum Value % of GDP'].max()
+    fig1_xaxis_min_value = df["Tax Cum Value"].min()
+    fig1_xaxis_max_value = df["Tax Cum Value"].max()
 
 # Unique dates sorted
 unique_dates = df['Date'].unique()
@@ -159,12 +172,6 @@ title_placeholder = st.empty()
 slider_placeholder = st.sidebar.empty()
 plot_placeholder = st.empty()
 
-overall_actual_min_value = df['Actual % of GDP'].min()
-overall_actual_max_value = df['Actual % of GDP'].max()
-
-# Calculate the overall min and max values for the 'BE' column in the entire dataset
-overall_be_min_value = df['BE'].min()
-overall_be_max_value = df['BE'].max()
 
 
 def get_unique_colors(n):
@@ -253,11 +260,11 @@ def update_plot(selected_date):
 
     
     # Update the layout for the combined figure for 1
-    fig.update_xaxes(row=1, col=2, range=[0, overall_actual_max_value * 1.15], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+    fig.update_xaxes(row=1, col=2, range=[0, fig2_xaxis_max_value * 1.15], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
     fig.update_yaxes(row=1, col=2, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
     # Update the layout for the combined figure for 2
-    fig.update_xaxes(row=1, col=1, range=[0, overall_be_max_value * 1.2], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+    fig.update_xaxes(row=1, col=1, range=[0, fig1_xaxis_max_value * 1.2], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
     fig.update_yaxes(row=1, col=1, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
     # Update y-axes: remove y-axis labels from the first chart (left)
