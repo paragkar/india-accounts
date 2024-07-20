@@ -66,8 +66,26 @@ def loadfilemain():
     df = pd.read_excel(excel_content, sheet_name="Sheet1")
     return df
 
+# Load file function
+@st.cache_data
+def loadfiletax():
+    password = st.secrets["db_password"]
+    excel_content = io.BytesIO()
+    with open("T02_TAX_Details.xlsx", 'rb') as f:
+        excel = msoffcrypto.OfficeFile(f)
+        excel.load_key(password)
+        excel.decrypt(excel_content)
+    
+    # Loading data from excel file
+    df = pd.read_excel(excel_content, sheet_name="Sheet1")
+    return df
+
 # Main Program Starts Here
 df = loadfilemain()
+
+df1 = loadfiletax()
+
+st.write(df1)
 
 df["Description"] = [x.strip() for x in df["Description"]]
 
