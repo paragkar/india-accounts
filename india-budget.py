@@ -196,7 +196,7 @@ def update_plot(selected_date):
 
     # Update y-axes: remove y-axis labels from the first chart (left)
     # fig.update_yaxes(showticklabels=False, row=1, col=1)
-    fig.update_yaxes(tickfont=dict(size=15), row=1, col=1)
+    fig.update_yaxes(tickfont=dict(size=15, family='Arial', color='black', weight='bold'), row=1, col=1)
 
     # Update layout for axis properties to remove y-axis title and reclaim space
     fig.update_layout(
