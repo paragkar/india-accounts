@@ -162,7 +162,7 @@ if selected_category in ["Expenditure Details"]:
     df_sorted = df.sort_values(by=['Date', 'Description'])
 
     # Display the sorted DataFrame
-    print(df_sorted)
+    st.write(df_sorted)
 
 
 # st.write(df)
