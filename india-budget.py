@@ -180,22 +180,13 @@ if selected_category in ["Main Category", "Tax Details"]:
     df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list, ordered=True)
     # Sort the DataFrame by 'Date' (newest first) and 'Description'
     df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
-    
+
 if selected_category in ["Expenditure Details"]:
     df = loadfileexp()
     df = sort_dataframe(df)
-    
-
-# df["Description"] = [x.strip() for x in df["Description"]]
-# # Convert 'Date' column to datetime if not already done
-# df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').apply(lambda x : x.date())
-# # Convert 'Description' to a categorical type for sorting
-# df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list, ordered=True)
-# # Sort the DataFrame by 'Date' (newest first) and 'Description'
-# df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
 
 
-if selected_category == "Main Category":
+if selected_category in ["Main Category", "Expenditure Details"]:
     df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
     df["Actual"] = (df["Actual"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
     df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
@@ -219,6 +210,7 @@ if selected_category == "Tax Details":
     fig1_xaxis_max_value = df["Tax Cum Value"].max()
     xaxis1_title = 'Tax Cum Value Rs Lakh Cr'
     xaxis2_title = 'Tax Cum Value % of GDP'
+
 
 # Unique dates sorted
 unique_dates = df['Date'].unique()
