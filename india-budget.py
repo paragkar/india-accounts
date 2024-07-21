@@ -221,7 +221,7 @@ if 'selected_item' not in st.session_state: #(New Code)
     st.session_state.selected_item = None
 
 if 'selected_speed' not in st.session_state: #(New Code)
-    st.session_state.selected_speed = None
+    st.session_state.selected_speed = "Medium"
 
 # Sidebar for category selection
 with st.sidebar:
