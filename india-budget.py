@@ -53,6 +53,7 @@ hide_st_style = '''
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
 
+#List for defining sorting order for "Main Category" & "Tax Details"
 main_cat_order_list = [
     "Revenue Receipts",
     "Rev Recp - Tax Revenue Net",
@@ -131,20 +132,6 @@ def loadfileexp():
 
 # Main Program Starts Here
 
-# selected_category = st.sidebar.selectbox(
-#     "Select Category",
-#     ["Main Category", "Tax Details", "Expenditure Details"]
-# )
-
-# # Sidebar Control Setup
-# with st.sidebar:
-#     # Use the 'category_select' key to ensure it's uniquely addressed
-#     selected_category = st.selectbox(
-#         "Select Category", 
-#         ["Main Category", "Tax Details", "Expenditure Details"], 
-#         key='category_select'
-#     )
-
 # Initialize title and slider
 if 'current_index' not in st.session_state:
     st.session_state.current_index = 0
@@ -218,6 +205,7 @@ if selected_category in ["Expenditure Details"]:
     top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=100, value=20)
     df = sort_and_filter_dataframe(df, category_choice, top_n)
 
+#Processing Loaded Data
 if selected_category in ["Main Category", "Expenditure Details"]:
     df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
     df["Actual"] = (df["Actual"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
@@ -232,7 +220,6 @@ if selected_category in ["Main Category", "Expenditure Details"]:
     xaxis1_title = 'Absolute Values Rs Lakh Cr (Top Bar - Actuals, Bottom Bar - BE)'
     xaxis2_title ='Values % of GDP'
 
-
 if selected_category == "Tax Details":
     df["Tax Cum Value"] = (df["Month_Cum_Year_CY"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
     df["Tax Cum Value % of GDP"] = ((df["Month_Cum_Year_CY"].astype(float)/df["GDP_Current"].astype(float))*100).round(2)
@@ -242,7 +229,6 @@ if selected_category == "Tax Details":
     fig1_xaxis_max_value = df["Tax Cum Value"].max()
     xaxis1_title = 'Tax Cum Value Rs Lakh Cr'
     xaxis2_title = 'Tax Cum Value % of GDP'
-
 
 # Unique dates sorted
 unique_dates = df['Date'].unique()
@@ -267,6 +253,50 @@ def get_color_map(descriptions):
     colors = get_unique_colors(num_descriptions)
     return dict(zip(unique_descriptions, colors))
 
+def get_financial_year(date):
+    year = date.year
+    if date.month < 4:
+        year -= 1
+    return f'FY{year % 100:02d}-{(year + 1) % 100:02d}'
+
+def update_title(selected_date, selected_category):
+    # Convert the selected_date to a datetime object if it isn't one already
+    if isinstance(selected_date, str):
+        selected_date = datetime.strptime(selected_date, '%Y-%m-%d').date()
+    
+    # Get the financial year string
+    fy = get_financial_year(selected_date)
+    
+    # Format the date correctly with ordinal suffix
+    day_suffix = lambda n: 'th' if 11 <= n <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')
+    formatted_date = selected_date.strftime(f'%b {selected_date.day}{day_suffix(selected_date.day)}, %Y')
+
+    if selected_category == "Main Category":
+        # Prepare the title with financial year and formatted date
+        title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+    if selected_category == "Expenditure Details":
+        # Prepare the title with financial year and formatted date
+        title = f"Central Government's Expenditure For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+    if selected_category == "Tax Details":
+         # Prepare the title with financial year and formatted date
+        title = f"Central Government's Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+
+
+    # Use additional CSS to ensure the title is positioned correctly
+    title_css = """
+    <style>
+        h1 {
+            text-align: center; /* Center align the title */
+            margin-top: -20px !important; /* Adjust top margin to reduce gap */
+            margin-bottom: 5px; /* Add a bit of margin below the title if needed */
+            border-bottom: none !important; /* Ensures no line is under the title */
+        }
+    </style>
+    """
+
+    # Display the title with custom styling
+    st.markdown(title_css, unsafe_allow_html=True)
+    title_placeholder.markdown(f"<h1 style='font-size:30px;'>{title}</h1>", unsafe_allow_html=True) #End of Function Update title
 
 def update_plot(selected_date, selected_category):
     filtered_data = df[df['Date'] == selected_date]
@@ -403,71 +433,14 @@ def update_plot(selected_date, selected_category):
         ),
     )
 
+
     update_title(selected_date, selected_category)
 
-    plot_placeholder.plotly_chart(fig, use_container_width=True)
-
-def get_financial_year(date):
-    year = date.year
-    if date.month < 4:
-        year -= 1
-    return f'FY{year % 100:02d}-{(year + 1) % 100:02d}'
-
-def update_title(selected_date, selected_category):
-    # Convert the selected_date to a datetime object if it isn't one already
-    if isinstance(selected_date, str):
-        selected_date = datetime.strptime(selected_date, '%Y-%m-%d').date()
-    
-    # Get the financial year string
-    fy = get_financial_year(selected_date)
-    
-    # Format the date correctly with ordinal suffix
-    day_suffix = lambda n: 'th' if 11 <= n <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')
-    formatted_date = selected_date.strftime(f'%b {selected_date.day}{day_suffix(selected_date.day)}, %Y')
-
-    if selected_category == "Main Category":
-        # Prepare the title with financial year and formatted date
-        title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
-    if selected_category == "Expenditure Details":
-        # Prepare the title with financial year and formatted date
-        title = f"Central Government's Expenditure For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
-    if selected_category == "Tax Details":
-         # Prepare the title with financial year and formatted date
-        title = f"Central Government's Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
-
-
-    # Use additional CSS to ensure the title is positioned correctly
-    title_css = """
-    <style>
-        h1 {
-            text-align: center; /* Center align the title */
-            margin-top: -20px !important; /* Adjust top margin to reduce gap */
-            margin-bottom: 5px; /* Add a bit of margin below the title if needed */
-            border-bottom: none !important; /* Ensures no line is under the title */
-        }
-    </style>
-    """
-
-    # Display the title with custom styling
-    st.markdown(title_css, unsafe_allow_html=True)
-    title_placeholder.markdown(f"<h1 style='font-size:30px;'>{title}</h1>", unsafe_allow_html=True)
+    plot_placeholder.plotly_chart(fig, use_container_width=True) #End of function update plot
 
 
 
-# # Initialize title and slider
-# if 'current_index' not in st.session_state:
-#     st.session_state.current_index = 0
-
-# if 'is_playing' not in st.session_state:
-#     st.session_state.is_playing = False
-
-# if 'selected_category' not in st.session_state:
-#     st.session_state.selected_category = None
-
-# # Validate the current index
-# if st.session_state.current_index >= len(unique_dates):
-#     st.session_state.current_index = 0
-
+#Animation of plot part of the code
 # Setup columns for buttons
 col1, col2 = st.columns(2)
 with col1:
@@ -533,73 +506,3 @@ if st.session_state.get('is_playing', False):
         time.sleep(0.5)  # Adjust sleep time to control
 
 
-# # Sidebar Control Setup
-# with st.sidebar:
-#     # Use the 'category_select' key to ensure it's uniquely addressed
-#     selected_category = st.selectbox(
-#         "Select Category", 
-#         ["Main Category", "Tax Details", "Expenditure Details"], 
-#         key='category_select'
-#     )
-
-#     # Ensure these buttons also have unique keys if their behavior or existence is dependent on other conditions
-#     play_button = st.button("Play", key="play_button")
-#     pause_button = st.button("Pause", key="pause_button")
-
-#     # Manual navigation buttons with unique keys
-#     col1, col2 = st.columns(2)
-#     prev_button = col1.button('Previous', key='prev_button')
-#     next_button = col2.button('Next', key='next_button')
-
-#     # Slider with a unique key reflecting its dependency on selected_category
-#     slider = st.slider(
-#         "Select Date Index", 
-#         0, 
-#         len(unique_dates)-1, 
-#         key=f"date_slider_{selected_category}"
-#     )
-
-# # Initial state setup
-# if 'current_index' not in st.session_state:
-#     st.session_state.current_index = 0
-# if 'is_playing' not in st.session_state:
-#     st.session_state.is_playing = False
-
-# # Button functionality handling
-# if prev_button:
-#     if st.session_state.current_index > 0:
-#         st.session_state.current_index -= 1
-#         st.session_state.is_playing = False
-# elif next_button:
-#     if st.session_state.current_index < len(unique_dates) - 1:
-#         st.session_state.current_index += 1
-#         st.session_state.is_playing = False
-
-# if play_button:
-#     st.session_state.is_playing = True
-#     if st.session_state.current_index >= len(unique_dates) - 1:
-#         st.session_state.current_index = 0
-
-# if pause_button:
-#     st.session_state.is_playing = False
-
-# # Update plot and title according to the current index
-# selected_date = unique_dates[st.session_state.current_index]
-# if slider != st.session_state.current_index:
-#     st.session_state.current_index = slider
-#     update_plot(selected_date, selected_category)
-#     update_title(selected_date, selected_category)
-#     st.experimental_rerun()
-
-# update_plot(selected_date, selected_category)
-# update_title(selected_date, selected_category)
-
-# # Animation handling
-# if st.session_state.is_playing:
-#     for i in range(st.session_state.current_index, len(unique_dates)):
-#         if not st.session_state.is_playing:
-#             break
-#         st.session_state.current_index = i
-#         update_plot(unique_dates[i], selected_category)
-#         update_title(unique_dates[i], selected_category)
-#         time.sleep(0.5)
