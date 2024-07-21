@@ -307,7 +307,6 @@ def sort_and_filter_dataframe(df, category, top_n):
     return df_sorted
 
 
-
 #Loading Data
 if selected_category in ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details"]:
     df, cat_order_list = loaddata()
