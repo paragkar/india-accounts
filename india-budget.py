@@ -314,7 +314,7 @@ def update_title(selected_date, selected_category):
     formatted_date = selected_date.strftime(f'%b {selected_date.day}{day_suffix(selected_date.day)}, %Y')
 
     if selected_category == "Expenditure Details":
-        # Prepare the title with financial year, formatted date and total values
+        # Prepare the title with financial year, formatted date, and total values
         total_be = df[df['Date'] == selected_date]['BE'].sum().round(2)
         total_actual = df[df['Date'] == selected_date]['Actual'].sum().round(2)
         title = f"Central Government's Expenditure For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span> - Total BE: Rs {total_be} Lakh Cr, Total Actual: Rs {total_actual} Lakh Cr"
@@ -325,7 +325,7 @@ def update_title(selected_date, selected_category):
         elif selected_category == "Tax Details":
             title = f"Central Government's Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
 
-    # Use additional CSS to ensure the title is positioned correctly
+    # Use additional CSS to ensure the title is positioned correctly and reduced in size
     title_css = """
     <style>
         h1 {
@@ -333,13 +333,14 @@ def update_title(selected_date, selected_category):
             margin-top: -20px !important; /* Adjust top margin to reduce gap */
             margin-bottom: 5px; /* Add a bit of margin below the title if needed */
             border-bottom: none !important; /* Ensures no line is under the title */
+            font-size: 22.5px; /* Adjust font size to 75% of the original */
         }
     </style>
     """
 
     # Display the title with custom styling
     st.markdown(title_css, unsafe_allow_html=True)
-    title_placeholder.markdown(f"<h1 style='font-size:30px;'>{title}</h1>", unsafe_allow_html=True)
+    title_placeholder.markdown(f"<h1>{title}</h1>", unsafe_allow_html=True)
     
 
 def update_plot(selected_date, selected_category):
