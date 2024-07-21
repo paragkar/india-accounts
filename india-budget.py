@@ -320,7 +320,12 @@ if selected_category in ["Expenditure Details"]:
         st.session_state.current_index = len(unique_dates) - 1  # Adjust to the last valid index
 
     # Dropdown for user to choose between 'Revenue' and 'Capital'
-    selected_type = st.sidebar.selectbox('Select Type:', ['All','Revenue', 'Capital'], key = 'type_select', index =0)
+    with st.sidebar:
+        selected_type = st.selectbox('Select Type:', ['All','Revenue', 'Capital'], key = 'type_select', index =0)
+        if st.session_state.selected_type != selected_type:
+            st.session_state.selected_type = selected_type
+            st.session_state.is_playing = False  # Auto-pause if category changes
+
     # Numeric input for user to specify how many top items to display
     top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=25, value=15)
     df = sort_and_filter_dataframe(df, selected_type, top_n)
