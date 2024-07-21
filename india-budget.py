@@ -199,16 +199,16 @@ if 'current_index' not in st.session_state:
 if 'is_playing' not in st.session_state:
     st.session_state.is_playing = False
 
-if 'selected_category' not in st.session_state:
+if 'selected_category' not in st.session_state: #"Account Summary Etc"
     st.session_state.selected_category = None
 
-if 'selected_animation' not in st.session_state:
+if 'selected_animation' not in st.session_state: #Animation Time Scale - Month/Year
     st.session_state.selected_animation = None
 
-if 'selected_speed' not in st.session_state:
+if 'selected_speed' not in st.session_state: #Animation Speed - Slow, Medium, Fast
     st.session_state.selected_speed = None
 
-if 'selected_type' not in st.session_state:
+if 'selected_type' not in st.session_state: #Expenditure Type - All, Revenue & Capital
     st.session_state.selected_type = None
 
 # Sidebar for category selection
