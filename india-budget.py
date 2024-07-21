@@ -335,11 +335,6 @@ if selected_category in ["Expenditure Details"]:
         df = sort_and_filter_dataframe(df, category_choice, top_n)
     
     elif selection_type == "Select Individual Items":
-        # Assuming `df` is your DataFrame source for the descriptions
-        # current_description_count = len(df['Description'].unique())
-        # if 'description_count' not in st.session_state or st.session_state.description_count != current_description_count:
-        #     st.session_state.description_count = current_description_count
-        #     st.session_state.selected_items = None  # Resetting the selected items if description count changes
 
         # Sort and filter the dataframe to get the top 15 items
         top_items_df = sort_and_filter_dataframe(df, "All", 15)
@@ -359,10 +354,14 @@ if selected_category in ["Expenditure Details"]:
             st.session_state.is_playing = False  # Auto-pause if category changes
             # Initially filter the DataFrame with default items for first render
             df = df[df['Description'].isin(default_items)]
+            # Now, sort the DataFrame by 'Date' and 'BE' in descending order
+            df = df.sort_values(by=['Date', 'BE'], ascending=[False, False])
 
         # Update the DataFrame based on user's current selection
         # This line is critical as it ensures any user changes to selection are captured and used to filter the DataFrame
         df = df[df['Description'].isin(selected_items)]
+        # Now, sort the DataFrame by 'Date' and 'BE' in descending order
+        df = df.sort_values(by=['Date', 'BE'], ascending=[False, False])
 
 #Processing Loaded Data
 if selected_category in ["Account Summary", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
