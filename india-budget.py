@@ -316,7 +316,7 @@ if selected_category in ["Expenditure Details"]:
         df = sort_and_filter_dataframe(df, category_choice, top_n)
     elif selection_type == "Select Individual Items":
         # Assuming you have a list of all possible items
-        default_items = sort_and_filter_dataframe(df, "All", 15)["Descriptions"].unique().tolist()
+        default_items = sort_and_filter_dataframe(df, "All", 15)["Description"].unique().tolist()
         all_items = sorted(df['Description'].unique().tolist())  # Sort or order items as needed
         selected_items = st.sidebar.multiselect('Select Items:', all_items, default=default_items)
         df = df[df['Description'].isin(selected_items)]
