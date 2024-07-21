@@ -607,10 +607,10 @@ update_plot(selected_date, selected_category)
 update_title(selected_date, selected_category)
 
 # In the sidebar section of your Streamlit application
-selected_speed = st.sidebar.selectbox(
+animation_speed = st.sidebar.selectbox(
     "Select Animation Speed",
     ["Slow", "Medium", "Fast"],
-    key = 'animation_select', index =1  # Default to 'Slow'
+    index=0  # Default to 'Slow'
 )
 
 #Map animation speeds to delay times
@@ -620,7 +620,7 @@ speed_to_delay = {
     "Fast": 0.35,
 }
 # Get the delay time from the dictionary based on selected animation speed
-animation_delay = speed_to_delay[selected_speed]
+animation_delay = speed_to_delay[animation_speed]
 
 # Animation loop controlled by the play button
 if st.session_state.get('is_playing', False):
