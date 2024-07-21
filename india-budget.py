@@ -229,11 +229,11 @@ with st.sidebar:
     # Check if category has changed
     if st.session_state.selected_category != selected_category:
         st.session_state.selected_category = selected_category
-        if selected_category == "Expenditure Details":
-            st.session_state.selection_type = "Number of Top Items"  # Set default selection type when switching to Expenditure Details
-        st.session_state.selected_speed = "Medium"
-        st.session_state.selected_animation = "MonthEnd"
-
+        # if selected_category == "Expenditure Details":
+        #     st.session_state.selection_type = "Number of Top Items"  # Set default selection type when switching to Expenditure Details
+        #     st.session_state.is_playing = False
+        # st.session_state.selected_speed = "Medium"
+        # st.session_state.selected_animation = "MonthEnd"
         st.session_state.is_playing = False  # Auto-pause if category changes
 
 # In the sidebar, under 'Expenditure Details' category selection #(New Code)
