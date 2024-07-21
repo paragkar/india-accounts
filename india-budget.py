@@ -205,6 +205,9 @@ if 'selected_category' not in st.session_state:
 if 'selected_animation' not in st.session_state:
     st.session_state.selected_animation = None
 
+if 'selected_speed' not in st.session_state:
+    st.session_state.selected_speed = None
+
 if 'selection_type' not in st.session_state:
     st.session_state.selection_type = None
 
@@ -232,8 +235,11 @@ with st.sidebar:
     selected_speed = st.sidebar.selectbox(
         "Select Animation Speed",
         ["Slow", "Medium", "Fast"],
-        index=0  # Default to 'Slow'
+        index=1  # Default to 'Slow'
     )
+    if st.session_state.selected_speed != selected_speed:
+        st.session_state.selected_speed = selected_speed
+        st.session_state.is_playing = False  # Auto-pause if category changes
 
 #Map animation speeds to delay times
 speed_to_delay = {
