@@ -225,7 +225,7 @@ if 'selected_speed' not in st.session_state: #(New Code)
 
 # Sidebar for category selection
 with st.sidebar:
-    selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='selected_category')
+    selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='selected_category', index=0 )
     # Check if category has changed
     if st.session_state.selected_category != selected_category:
         st.session_state.selected_category = selected_category
@@ -233,7 +233,7 @@ with st.sidebar:
             st.session_state.selection_type = "Number of Top Items"  # Set default selection type when switching to Expenditure Details
         st.session_state.selected_speed = "Medium"
         st.session_state.selected_animation = "MonthEnd"
-        
+
         st.session_state.is_playing = False  # Auto-pause if category changes
 
 # In the sidebar, under 'Expenditure Details' category selection #(New Code)
