@@ -212,7 +212,7 @@ if 'selected_category' not in st.session_state:
     st.session_state.selected_category = "Account Summary"
 
 if 'selected_animation' not in st.session_state:
-    st.session_state.selected_animation = None
+    st.session_state.selected_animation = "MonthEnd"
 
 if 'selection_type' not in st.session_state: #(New Code)
     st.session_state.selection_type = None
