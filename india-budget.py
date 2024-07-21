@@ -198,12 +198,12 @@ def sort_and_filter_dataframe(df, category, block_index):
     latest_date = df['Date'].max()
 
     # Calculate the offset for slicing the dataframe based on block index
-    offset = block_index * 20
+    offset = block_index * 15
 
     # Get the ordering for the latest date based on 'BE' values for the selected category
     # Adjust to get a specific block of 20 items
     sorted_descriptions = df[df['Date'] == latest_date].sort_values(by='BE', ascending=False)['Description']
-    top_descriptions = sorted_descriptions.iloc[offset:offset+20].tolist()
+    top_descriptions = sorted_descriptions.iloc[offset:offset+15].tolist()
 
     # Filter the DataFrame to keep only rows with descriptions in the top block list
     df = df[df['Description'].isin(top_descriptions)]
