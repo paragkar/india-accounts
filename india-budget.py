@@ -227,6 +227,24 @@ with st.sidebar:
         st.session_state.selected_animation = selected_animation
         st.session_state.is_playing = False  # Auto-pause if category changes
 
+with st.sidebar:
+    # In the sidebar section of your Streamlit application
+    selected_speed = st.sidebar.selectbox(
+        "Select Animation Speed",
+        ["Slow", "Medium", "Fast"],
+        index=0  # Default to 'Slow'
+    )
+
+#Map animation speeds to delay times
+speed_to_delay = {
+    "Slow": 1,
+    "Medium": 0.5,
+    "Fast": 0.35,
+}
+
+# Get the delay time from the dictionary based on selected animation speed
+animation_delay = speed_to_delay[selected_speed]
+
 def loaddata():
     if selected_category == "Account Summary":
         df = loadfilemain()
@@ -605,22 +623,6 @@ if pause_button:
 # selected_date = unique_dates[slider]
 update_plot(selected_date, selected_category)
 update_title(selected_date, selected_category)
-
-# In the sidebar section of your Streamlit application
-animation_speed = st.sidebar.selectbox(
-    "Select Animation Speed",
-    ["Slow", "Medium", "Fast"],
-    index=0  # Default to 'Slow'
-)
-
-#Map animation speeds to delay times
-speed_to_delay = {
-    "Slow": 1,
-    "Medium": 0.5,
-    "Fast": 0.35,
-}
-# Get the delay time from the dictionary based on selected animation speed
-animation_delay = speed_to_delay[animation_speed]
 
 # Animation loop controlled by the play button
 if st.session_state.get('is_playing', False):
