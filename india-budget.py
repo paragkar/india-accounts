@@ -215,7 +215,7 @@ if 'selected_animation' not in st.session_state:
     st.session_state.selected_animation = "MonthEnd"
 
 if 'selection_type' not in st.session_state: #(New Code)
-    st.session_state.selection_type = None
+    st.session_state.selection_type = "No of Top Items"
 
 if 'selected_item' not in st.session_state: #(New Code)
     st.session_state.selected_item = None
