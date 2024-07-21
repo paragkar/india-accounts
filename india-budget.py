@@ -159,53 +159,21 @@ def loaddata():
         cat_order_list = tax_order_list
     return df, cat_order_list
 
-# def sort_and_filter_dataframe(df, category, top_n):
-#     # Convert 'Date' to datetime
-#     df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
-
-#     if category !='All':
-#         # Filter based on the category selected by the user
-#         df = df[df['Description'].str.contains(category)]
-
-#     # Identify the latest date
-#     latest_date = df['Date'].max()
-
-#     # Get the ordering for the latest date based on 'BE' values for the selected category
-#     top_descriptions = df[df['Date'] == latest_date].sort_values(by='BE', ascending=False)['Description'].head(top_n).tolist()
-
-#     # Filter the DataFrame to keep only rows with descriptions in the top 20 list
-#     df = df[df['Description'].isin(top_descriptions)]
-
-#     # Define categorical type with top descriptions only
-#     all_descriptions = pd.CategoricalDtype(categories=top_descriptions, ordered=True)
-#     df['Description'] = df['Description'].astype(all_descriptions)
-
-#     # Sort DataFrame by 'Date' and ordered 'Description'
-#     df_sorted = df.sort_values(by=['Date', 'Description'],ascending=[True, False])
-
-#     return df_sorted
-
-
-def sort_and_filter_dataframe(df, category, block_index):
+def sort_and_filter_dataframe(df, category, top_n):
     # Convert 'Date' to datetime
     df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
 
-    if category != 'All':
+    if category !='All':
         # Filter based on the category selected by the user
         df = df[df['Description'].str.contains(category)]
 
     # Identify the latest date
     latest_date = df['Date'].max()
 
-    # Calculate the offset for slicing the dataframe based on block index
-    offset = block_index * 15
-
     # Get the ordering for the latest date based on 'BE' values for the selected category
-    # Adjust to get a specific block of 20 items
-    sorted_descriptions = df[df['Date'] == latest_date].sort_values(by='BE', ascending=False)['Description']
-    top_descriptions = sorted_descriptions.iloc[offset:offset+15].tolist()
+    top_descriptions = df[df['Date'] == latest_date].sort_values(by='BE', ascending=False)['Description'].head(top_n).tolist()
 
-    # Filter the DataFrame to keep only rows with descriptions in the top block list
+    # Filter the DataFrame to keep only rows with descriptions in the top 20 list
     df = df[df['Description'].isin(top_descriptions)]
 
     # Define categorical type with top descriptions only
@@ -213,9 +181,10 @@ def sort_and_filter_dataframe(df, category, block_index):
     df['Description'] = df['Description'].astype(all_descriptions)
 
     # Sort DataFrame by 'Date' and ordered 'Description'
-    df_sorted = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
+    df_sorted = df.sort_values(by=['Date', 'Description'],ascending=[True, False])
 
     return df_sorted
+
 
 
 #Loading Data
@@ -235,11 +204,8 @@ if selected_category in ["Expenditure Details"]:
     # Dropdown for user to choose between 'Revenue' and 'Capital'
     category_choice = st.sidebar.selectbox('Select Category:', ['All','Revenue', 'Capital'])
     # Numeric input for user to specify how many top items to display
-    # top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=100, value=20)
-    # Sidebar input to choose the block index
-    block_index = st.sidebar.number_input('Select Block Index:', min_value=0, value=0, step=1)
-    # df = sort_and_filter_dataframe(df, category_choice, top_n)
-    df = sort_and_filter_dataframe(df, category_choice, block_index)
+    top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=100, value=20)
+    df = sort_and_filter_dataframe(df, category_choice, top_n)
 
 #Processing Loaded Data
 if selected_category in ["Main Category", "Expenditure Details"]:
