@@ -210,19 +210,11 @@ if 'selection_type' not in st.session_state:
 
 # Sidebar for category selection
 with st.sidebar:
-    selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='category_select')
+    selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='category_select', index =0)
     # Check if category has changed
     if st.session_state.selected_category != selected_category:
         st.session_state.selected_category = selected_category
         st.session_state.is_playing = False  # Auto-pause if category changes
-
-# # In the sidebar, under 'Expenditure Details' category selection
-# if selected_category == "Expenditure Details":
-#     selection_type = st.sidebar.selectbox(
-#         "Choose Selection Type:",
-#         ["Number of Top Items", "Select Individual Items"],
-#         key='selection_type'
-#     )
 
 # Animation basis selection dropdown
 with st.sidebar:
