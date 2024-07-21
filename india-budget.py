@@ -230,6 +230,7 @@ with st.sidebar:
     if st.session_state.selected_category != selected_category:
         st.session_state.selected_category = selected_category
         if selected_category == "Expenditure Details":
+            selection_type = st.session_state.selection_type 
             selection_type = st.sidebar.selectbox(
                 "Choose Selection Type:",
                 ["Number of Top Items", "Select Individual Items"],
