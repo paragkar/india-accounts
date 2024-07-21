@@ -333,13 +333,13 @@ if selected_category in ["Expenditure Details"]:
         # Numeric input for user to specify how many top items to display
         top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=25, value=15)
         df = sort_and_filter_dataframe(df, category_choice, top_n)
+    
     elif selection_type == "Select Individual Items":
-
         # Assuming `df` is your DataFrame source for the descriptions
-        current_description_count = len(df['Description'].unique())
-        if 'description_count' not in st.session_state or st.session_state.description_count != current_description_count:
-            st.session_state.description_count = current_description_count
-            st.session_state.selected_items = None  # Resetting the selected items if description count changes
+        # current_description_count = len(df['Description'].unique())
+        # if 'description_count' not in st.session_state or st.session_state.description_count != current_description_count:
+        #     st.session_state.description_count = current_description_count
+        #     st.session_state.selected_items = None  # Resetting the selected items if description count changes
 
         # Sort and filter the dataframe to get the top 15 items
         top_items_df = sort_and_filter_dataframe(df, "All", 15)
