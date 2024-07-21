@@ -185,7 +185,7 @@ def loaddata():
     if selected_category == "Tax Details":
         df = loadfiletax()
         cat_order_list = tax_order_list
-     if selected_category == "NonTax Details":
+    if selected_category == "NonTax Details":
         df = loadfilenontax()
         cat_order_list = nontax_order_list
     return df, cat_order_list
