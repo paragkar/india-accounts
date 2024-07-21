@@ -303,11 +303,12 @@ if selected_category in ["Expenditure Details"]:
     if st.session_state.current_index >= len(unique_dates):
         st.session_state.current_index = len(unique_dates) - 1  # Adjust to the last valid index
 
-    # Dropdown for user to choose between 'Revenue' and 'Capital'
-    category_choice = st.sidebar.selectbox('Select Category:', ['All','Revenue', 'Capital'])
-    # Numeric input for user to specify how many top items to display
-    top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=25, value=15)
-    df = sort_and_filter_dataframe(df, category_choice, top_n)
+    if selection_type == "Number of Top Items":
+        # Dropdown for user to choose between 'Revenue' and 'Capital'
+        category_choice = st.sidebar.selectbox('Select Category:', ['All','Revenue', 'Capital'])
+        # Numeric input for user to specify how many top items to display
+        top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=25, value=15)
+        df = sort_and_filter_dataframe(df, category_choice, top_n)
 
 #Processing Loaded Data
 if selected_category in ["Account Summary", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
