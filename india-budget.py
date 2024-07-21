@@ -581,8 +581,6 @@ def update_plot(selected_date, selected_category):
 
     plot_placeholder.plotly_chart(fig, use_container_width=True) #End of function update plot
 
-
-
 #Animation of plot part of the code
 # Setup columns for buttons
 col1, col2 = st.columns(2)
