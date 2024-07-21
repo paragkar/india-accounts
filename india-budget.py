@@ -444,7 +444,7 @@ def update_plot(selected_date, selected_category):
 
     
     # Update the layout for the combined figure for 1
-    fig.update_xaxes(row=1, col=2, range=[0, fig2_xaxis_max_value * 1.15], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
+    fig.update_xaxes(row=1, col=2, range=[0, fig2_xaxis_max_value * 1.2], fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
     fig.update_yaxes(row=1, col=2, tickfont=dict(size=15),fixedrange=True, showline=True, linewidth=1.5, linecolor='grey', mirror=True, showgrid=True, gridcolor='lightgrey')
 
     # Update the layout for the combined figure for 2
