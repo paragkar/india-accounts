@@ -52,6 +52,15 @@ hide_st_style = '''
 '''
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
+st.markdown("""
+    <style>
+        .stMultiSelect [data-baseweb=select] span{
+            max-width: 250px;
+            font-size: 0.7rem;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
 
 #List for defining sorting order for "Account Summary" & "Tax Details"
 main_cat_order_list = [
@@ -200,35 +209,56 @@ if 'is_playing' not in st.session_state:
     st.session_state.is_playing = False
 
 if 'selected_category' not in st.session_state:
-    st.session_state.selected_category = None
+    st.session_state.selected_category = "Account Summary"
 
 if 'selected_animation' not in st.session_state:
-    st.session_state.selected_animation = None
+    st.session_state.selected_animation = "MonthEnd"
 
-if 'selection_type' not in st.session_state:
-    st.session_state.selection_type = None
+if 'selection_type' not in st.session_state: #(New Code)
+    st.session_state.selection_type = "No of Top Items"
+
+if 'selected_item' not in st.session_state: #(New Code)
+    st.session_state.selected_item = None
+
+if 'selected_speed' not in st.session_state: #(New Code)
+    st.session_state.selected_speed = "Medium"
 
 # Sidebar for category selection
 with st.sidebar:
-    selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='category_select')
+    selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='selected_category',index=0 )
     # Check if category has changed
     if st.session_state.selected_category != selected_category:
         st.session_state.selected_category = selected_category
+        if selected_category == "Expenditure Details":
+            selection_type = st.session_state.selection_type 
+            selection_type = st.sidebar.selectbox(
+                "Choose Selection Type:",
+                ["Number of Top Items", "Select Individual Items"],
+                key='selection_type', index=0 
+            )
+            # Check if category has changed
+            if st.session_state.selection_type != selection_type:
+                st.session_state.selection_type = selection_type
+                st.session_state.is_playing = False  # Auto-pause if category changes
         st.session_state.is_playing = False  # Auto-pause if category changes
 
-# In the sidebar, under 'Expenditure Details' category selection
-if selected_category == "Expenditure Details":
-    selection_type = st.sidebar.selectbox(
-        "Choose Selection Type:",
-        ["Number of Top Items", "Select Individual Items"],
-        key='selection_type'
-    )
+# In the sidebar, under 'Expenditure Details' category selection #(New Code)
+# if selected_category == "Expenditure Details":
+#     selection_type = st.sidebar.selectbox(
+#         "Choose Selection Type:",
+#         ["Number of Top Items", "Select Individual Items"],
+#         key='selection_type', index=0 
+#     )
+#     # Check if category has changed
+#     if st.session_state.selection_type != selection_type:
+#         st.session_state.selection_type = selection_type
+#         st.session_state.is_playing = False  # Auto-pause if category changes
 
 # Animation basis selection dropdown
 with st.sidebar:
     selected_animation = st.sidebar.selectbox(
         "Select Animation Time Scale (Month/Year)",
-        ["MonthEnd", "YearEnd"], key='animation_select',
+        ["MonthEnd", "YearEnd"], key='selected_animation',
         index=0  # Default to 'MonthEnd'
     )
     if st.session_state.selected_animation != selected_animation:
@@ -283,7 +313,6 @@ def sort_and_filter_dataframe(df, category, top_n):
     return df_sorted
 
 
-
 #Loading Data
 if selected_category in ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details"]:
     df, cat_order_list = loaddata()
@@ -303,12 +332,42 @@ if selected_category in ["Expenditure Details"]:
     if st.session_state.current_index >= len(unique_dates):
         st.session_state.current_index = len(unique_dates) - 1  # Adjust to the last valid index
 
+    #Conditional New Code
     if selection_type == "Number of Top Items":
         # Dropdown for user to choose between 'Revenue' and 'Capital'
         category_choice = st.sidebar.selectbox('Select Category:', ['All','Revenue', 'Capital'])
         # Numeric input for user to specify how many top items to display
         top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=25, value=15)
         df = sort_and_filter_dataframe(df, category_choice, top_n)
+    
+    elif selection_type == "Select Individual Items":
+
+        # Sort and filter the dataframe to get the top 15 items
+        top_items_df = sort_and_filter_dataframe(df, "All", 15)
+        
+        # Get the top 15 items' descriptions as default items for the multiselect
+        default_items = top_items_df["Description"].unique().tolist()
+        
+        # Get all unique descriptions for the multiselect options
+        all_items = sorted(df['Description'].unique().tolist())
+        
+        # Create a multiselect with default items selected
+        selected_items = st.sidebar.multiselect('Select Items:', all_items, default=default_items, key = 'selected_items')
+        
+        # Check if category has changed
+        if st.session_state.selected_items != selected_items:
+            st.session_state.selected_items = selected_items
+            st.session_state.is_playing = False  # Auto-pause if category changes
+            # Initially filter the DataFrame with default items for first render
+            df = df[df['Description'].isin(default_items)]
+            # Now, sort the DataFrame by 'Date' and 'BE' in descending order
+            df = df.sort_values(by=['Date', 'BE'], ascending=[True, True])
+
+        # Update the DataFrame based on user's current selection
+        # This line is critical as it ensures any user changes to selection are captured and used to filter the DataFrame
+        df = df[df['Description'].isin(selected_items)]
+        # Now, sort the DataFrame by 'Date' and 'BE' in descending order
+        df = df.sort_values(by=['Date', 'BE'], ascending=[True, True])
 
 #Processing Loaded Data
 if selected_category in ["Account Summary", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
@@ -617,11 +676,14 @@ update_plot(selected_date, selected_category)
 update_title(selected_date, selected_category)
 
 # In the sidebar section of your Streamlit application
-animation_speed = st.sidebar.selectbox(
+selected_speed = st.sidebar.selectbox(
     "Select Animation Speed",
     ["Slow", "Medium", "Fast"],
-    index=0  # Default to 'Slow'
+    key='selected_speed', index=0 
 )
+if st.session_state.selected_speed != selected_speed:
+    st.session_state.selected_speed = selected_speed
+    st.session_state.is_playing = False  # Auto-pause if category changes
 
 #Map animation speeds to delay times
 speed_to_delay = {
@@ -630,7 +692,7 @@ speed_to_delay = {
     "Fast": 0.35,
 }
 # Get the delay time from the dictionary based on selected animation speed
-animation_delay = speed_to_delay[animation_speed]
+animation_delay = speed_to_delay[selected_speed]
 
 # Animation loop controlled by the play button
 if st.session_state.get('is_playing', False):
