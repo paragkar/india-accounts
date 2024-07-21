@@ -320,7 +320,7 @@ if selected_category in ["Expenditure Details"]:
         top_items_df = sort_and_filter_dataframe(df, "All", 15)
         
         # Get the top 15 items' descriptions as default items for the multiselect
-        default_items = top_items_df["Description"].tolist()
+        default_items = top_items_df["Description"].unique().tolist()
         
         # Get all unique descriptions for the multiselect options
         all_items = sorted(df['Description'].unique().tolist())
