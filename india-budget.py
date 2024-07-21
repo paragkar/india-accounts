@@ -221,7 +221,7 @@ def loaddata():
         df = loadfilenontax()
         cat_order_list = nontax_order_list
     if selected_category == "NonDebt Details":
-        df = loadfilenontax()
+        df = loadfilenondebt()
         cat_order_list = nondebt_order_list
 
     # Ensure that the 'current_index' does not exceed the number of unique dates in the new dataset
