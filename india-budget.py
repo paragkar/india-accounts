@@ -581,6 +581,22 @@ if pause_button:
 update_plot(selected_date, selected_category)
 update_title(selected_date, selected_category)
 
+# In the sidebar section of your Streamlit application
+animation_speed = st.sidebar.selectbox(
+    "Select Animation Speed",
+    ["Slow", "Medium", "Fast"],
+    index=0  # Default to 'Slow'
+)
+
+ Map animation speeds to delay times
+speed_to_delay = {
+    "Slow": 0.5,
+    "Medium": 0.35,
+    "Fast": 0.25
+}
+# Get the delay time from the dictionary based on selected animation speed
+animation_delay = speed_to_delay[animation_speed]
+
 # Animation loop controlled by the play button
 if st.session_state.get('is_playing', False):
     start_index = st.session_state.current_index
@@ -592,6 +608,6 @@ if st.session_state.get('is_playing', False):
         update_title(selected_date, selected_category)
         st.session_state.current_index = i
         slider_placeholder.slider("Slider for Selecting Date Index", min_value=0, max_value=len(unique_dates) - 1, value=i, key=f"date_slider_{i}")
-        time.sleep(0.5)  # Adjust sleep time to control
+        time.sleep(animation_delay)  # Adjust sleep time to control
 
 
