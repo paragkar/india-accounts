@@ -211,6 +211,9 @@ if 'selection_type' not in st.session_state: #(New Code)
 if 'selected_item' not in st.session_state: #(New Code)
     st.session_state.selected_item = None
 
+if 'selected_speed' not in st.session_state: #(New Code)
+    st.session_state.selected_speed = None
+
 # Sidebar for category selection
 with st.sidebar:
     selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='category_select')
@@ -651,11 +654,14 @@ update_plot(selected_date, selected_category)
 update_title(selected_date, selected_category)
 
 # In the sidebar section of your Streamlit application
-animation_speed = st.sidebar.selectbox(
+selected_speed = st.sidebar.selectbox(
     "Select Animation Speed",
     ["Slow", "Medium", "Fast"],
-    index=0  # Default to 'Slow'
+    key='selected_speed', index=0 
 )
+if st.session_state.selected_speed != selected_speed:
+    st.session_state.selected_speed = selected_speed
+    st.session_state.is_playing = False  # Auto-pause if category changes
 
 #Map animation speeds to delay times
 speed_to_delay = {
@@ -664,7 +670,7 @@ speed_to_delay = {
     "Fast": 0.35,
 }
 # Get the delay time from the dictionary based on selected animation speed
-animation_delay = speed_to_delay[animation_speed]
+animation_delay = speed_to_delay[selected_speed]
 
 # Animation loop controlled by the play button
 if st.session_state.get('is_playing', False):
