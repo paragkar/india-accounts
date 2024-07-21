@@ -331,6 +331,10 @@ date_index = range(len(unique_dates))
 # After loading data and extracting unique_dates
 if selected_animation == "YearEnd":
     unique_dates = [date for date in unique_dates if date.month == 3 and date.day == 31]
+    # Ensure that the 'current_index' does not exceed the number of unique dates in the new dataset
+    if st.session_state.current_index >= len(unique_dates):
+        st.session_state.current_index = len(unique_dates) - 1  # Adjust to the last valid index
+
 
 title_placeholder = st.empty()
 slider_placeholder = st.sidebar.empty()
