@@ -205,7 +205,7 @@ if 'selected_category' not in st.session_state:
 if 'selected_animation' not in st.session_state:
     st.session_state.selected_animation = None
 
-if 'selection_type' not in st.session_state: #(New Code)
+if 'selection_type' not in st.session_state:
     st.session_state.selection_type = None
 
 # Sidebar for category selection
@@ -216,17 +216,13 @@ with st.sidebar:
         st.session_state.selected_category = selected_category
         st.session_state.is_playing = False  # Auto-pause if category changes
 
-# In the sidebar, under 'Expenditure Details' category selection #(New Code)
+# In the sidebar, under 'Expenditure Details' category selection
 if selected_category == "Expenditure Details":
     selection_type = st.sidebar.selectbox(
         "Choose Selection Type:",
         ["Number of Top Items", "Select Individual Items"],
         key='selection_type'
     )
-    # Check if category has changed
-    if st.session_state.selection_type != selection_type:
-        st.session_state.selection_type = selection_type
-        st.session_state.is_playing = False  # Auto-pause if category changes
 
 # Animation basis selection dropdown
 with st.sidebar:
@@ -307,19 +303,12 @@ if selected_category in ["Expenditure Details"]:
     if st.session_state.current_index >= len(unique_dates):
         st.session_state.current_index = len(unique_dates) - 1  # Adjust to the last valid index
 
-    #Conditional New Code
     if selection_type == "Number of Top Items":
         # Dropdown for user to choose between 'Revenue' and 'Capital'
         category_choice = st.sidebar.selectbox('Select Category:', ['All','Revenue', 'Capital'])
         # Numeric input for user to specify how many top items to display
         top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=25, value=15)
         df = sort_and_filter_dataframe(df, category_choice, top_n)
-    elif selection_type == "Select Individual Items":
-        # Assuming you have a list of all possible items
-        default_items = sort_and_filter_dataframe(df, category_choice, 15).unique().tolist()
-        all_items = sorted(df['Description'].unique().tolist())  # Sort or order items as needed
-        selected_items = st.sidebar.multiselect('Select Items:', all_items, default=default_items)
-        df = df[df['Description'].isin(selected_items)]
 
 #Processing Loaded Data
 if selected_category in ["Account Summary", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
