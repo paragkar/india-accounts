@@ -188,6 +188,12 @@ def loaddata():
     if selected_category == "NonTax Details":
         df = loadfilenontax()
         cat_order_list = nontax_order_list
+
+    # Ensure that the 'current_index' does not exceed the number of unique dates in the new dataset
+    unique_dates = df['Date'].unique()
+    if st.session_state.current_index >= len(unique_dates):
+        st.session_state.current_index = len(unique_dates) - 1  # Adjust to the last valid index
+
     return df, cat_order_list
 
 def sort_and_filter_dataframe(df, category, top_n):
@@ -228,15 +234,24 @@ if selected_category in ["Main Category", "Tax Details", "NonTax Details"]:
     df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list, ordered=True)
     # Sort the DataFrame by 'Date' (newest first) and 'Description'
     df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
+    update_plot(unique_dates[st.session_state.current_index], selected_category)
+    update_title(unique_dates[st.session_state.current_index], selected_category)
 
 #Loading Data
 if selected_category in ["Expenditure Details"]:
     df = loadfileexp()
+     # Ensure that the 'current_index' does not exceed the number of unique dates in the new dataset
+    unique_dates = df['Date'].unique()
+    if st.session_state.current_index >= len(unique_dates):
+        st.session_state.current_index = len(unique_dates) - 1  # Adjust to the last valid index
+
     # Dropdown for user to choose between 'Revenue' and 'Capital'
     category_choice = st.sidebar.selectbox('Select Category:', ['All','Revenue', 'Capital'])
     # Numeric input for user to specify how many top items to display
     top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=100, value=20)
     df = sort_and_filter_dataframe(df, category_choice, top_n)
+    update_plot(unique_dates[st.session_state.current_index], selected_category)
+    update_title(unique_dates[st.session_state.current_index], selected_category)
 
 #Processing Loaded Data
 if selected_category in ["Main Category", "NonTax Details", "Expenditure Details"]:
