@@ -234,8 +234,6 @@ if selected_category in ["Main Category", "Tax Details", "NonTax Details"]:
     df['Description'] = pd.Categorical(df['Description'], categories=cat_order_list, ordered=True)
     # Sort the DataFrame by 'Date' (newest first) and 'Description'
     df = df.sort_values(by=['Date', 'Description'], ascending=[True, False])
-    # update_plot(unique_dates[st.session_state.current_index], selected_category)
-    # update_title(unique_dates[st.session_state.current_index], selected_category)
 
 #Loading Data
 if selected_category in ["Expenditure Details"]:
@@ -250,8 +248,6 @@ if selected_category in ["Expenditure Details"]:
     # Numeric input for user to specify how many top items to display
     top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=100, value=20)
     df = sort_and_filter_dataframe(df, category_choice, top_n)
-    # update_plot(unique_dates[st.session_state.current_index], selected_category)
-    # update_title(unique_dates[st.session_state.current_index], selected_category)
 
 #Processing Loaded Data
 if selected_category in ["Main Category", "NonTax Details", "Expenditure Details"]:
