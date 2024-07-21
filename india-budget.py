@@ -88,6 +88,20 @@ tax_order_list = [
     "IGST"
 ]
 
+nontax_order_list = [
+    "A.Interest Receipts",
+    "B.Dividend & Profits",
+    "C.NonTaxRev of UTs",
+    "D.Fiscal Services Net",
+    "D.General Services Net",
+    "D.Social Services",
+    "D.Economic Services Net",
+    "D.Grant in Aid",
+    "Total of D",
+    "Total NonTax Rev"
+]
+
+
 # Load file function
 @st.cache_data
 def loadfilemain():
@@ -108,6 +122,20 @@ def loadfiletax():
     password = st.secrets["db_password"]
     excel_content = io.BytesIO()
     with open("T02_TAX_Details.xlsx", 'rb') as f:
+        excel = msoffcrypto.OfficeFile(f)
+        excel.load_key(password)
+        excel.decrypt(excel_content)
+    
+    # Loading data from excel file
+    df = pd.read_excel(excel_content, sheet_name="Sheet1")
+    return df
+
+# Load file function
+@st.cache_data
+def loadfilenontax():
+    password = st.secrets["db_password"]
+    excel_content = io.BytesIO()
+    with open("T03_NonTAX_Details.xlsx", 'rb') as f:
         excel = msoffcrypto.OfficeFile(f)
         excel.load_key(password)
         excel.decrypt(excel_content)
@@ -144,7 +172,7 @@ if 'selected_category' not in st.session_state:
 
 # Sidebar for category selection
 with st.sidebar:
-    selected_category = st.selectbox("Select Category", ["Main Category", "Tax Details", "Expenditure Details"], key='category_select')
+    selected_category = st.selectbox("Select Category", ["Main Category", "Tax Details", "NonTax Details", "Expenditure Details"], key='category_select')
     # Check if category has changed
     if st.session_state.selected_category != selected_category:
         st.session_state.selected_category = selected_category
@@ -157,6 +185,9 @@ def loaddata():
     if selected_category == "Tax Details":
         df = loadfiletax()
         cat_order_list = tax_order_list
+     if selected_category == "NonTax Details":
+        df = loadfilenontax()
+        cat_order_list = nontax_order_list
     return df, cat_order_list
 
 def sort_and_filter_dataframe(df, category, top_n):
@@ -188,7 +219,7 @@ def sort_and_filter_dataframe(df, category, top_n):
 
 
 #Loading Data
-if selected_category in ["Main Category", "Tax Details"]:
+if selected_category in ["Main Category", "Tax Details", "NonTax Details"]:
     df, cat_order_list = loaddata()
     df["Description"] = [x.strip() for x in df["Description"]]
     # Convert 'Date' column to datetime if not already done
@@ -208,7 +239,7 @@ if selected_category in ["Expenditure Details"]:
     df = sort_and_filter_dataframe(df, category_choice, top_n)
 
 #Processing Loaded Data
-if selected_category in ["Main Category", "Expenditure Details"]:
+if selected_category in ["Main Category", "NonTax Details", "Expenditure Details"]:
     df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
     df["Actual"] = (df["Actual"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
     df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
@@ -261,44 +292,6 @@ def get_financial_year(date):
         year -= 1
     return f'FY{year % 100:02d}-{(year + 1) % 100:02d}'
 
-# def update_title(selected_date, selected_category):
-#     # Convert the selected_date to a datetime object if it isn't one already
-#     if isinstance(selected_date, str):
-#         selected_date = datetime.strptime(selected_date, '%Y-%m-%d').date()
-    
-#     # Get the financial year string
-#     fy = get_financial_year(selected_date)
-    
-#     # Format the date correctly with ordinal suffix
-#     day_suffix = lambda n: 'th' if 11 <= n <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')
-#     formatted_date = selected_date.strftime(f'%b {selected_date.day}{day_suffix(selected_date.day)}, %Y')
-
-#     if selected_category == "Main Category":
-#         # Prepare the title with financial year and formatted date
-#         title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
-#     if selected_category == "Expenditure Details":
-#         # Prepare the title with financial year and formatted date
-#         title = f"Central Government's Expenditure For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
-#     if selected_category == "Tax Details":
-#          # Prepare the title with financial year and formatted date
-#         title = f"Central Government's Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
-
-
-#     # Use additional CSS to ensure the title is positioned correctly
-#     title_css = """
-#     <style>
-#         h1 {
-#             text-align: center; /* Center align the title */
-#             margin-top: -20px !important; /* Adjust top margin to reduce gap */
-#             margin-bottom: 5px; /* Add a bit of margin below the title if needed */
-#             border-bottom: none !important; /* Ensures no line is under the title */
-#         }
-#     </style>
-#     """
-
-#     # Display the title with custom styling
-#     st.markdown(title_css, unsafe_allow_html=True)
-#     title_placeholder.markdown(f"<h1 style='font-size:30px;'>{title}</h1>", unsafe_allow_html=True) #End of Function Update title
 
 
 def update_title(selected_date, selected_category):
@@ -324,6 +317,8 @@ def update_title(selected_date, selected_category):
             title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
         elif selected_category == "Tax Details":
             title = f"Central Government's Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+        elif selected_category == "NonTax Details":
+            title = f"Central Government's Non Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
 
     # Use additional CSS to ensure the title is positioned correctly and reduced in size
     title_css = """
@@ -350,7 +345,7 @@ def update_plot(selected_date, selected_category):
 
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.7, 0.3], horizontal_spacing=0.01)
 
-    if selected_category in ["Main Category", "Expenditure Details"]:
+    if selected_category in ["Main Category", "NonTax Details", "Expenditure Details"]:
 
          # Add bar charts on the right 1
         fig.add_trace(go.Bar(
