@@ -355,13 +355,13 @@ if selected_category in ["Expenditure Details"]:
             # Initially filter the DataFrame with default items for first render
             df = df[df['Description'].isin(default_items)]
             # Now, sort the DataFrame by 'Date' and 'BE' in descending order
-            df = df.sort_values(by=['Date', 'BE'], ascending=[False, False])
+            df = df.sort_values(by=['Date', 'BE'], ascending=[True, True])
 
         # Update the DataFrame based on user's current selection
         # This line is critical as it ensures any user changes to selection are captured and used to filter the DataFrame
         df = df[df['Description'].isin(selected_items)]
         # Now, sort the DataFrame by 'Date' and 'BE' in descending order
-        df = df.sort_values(by=['Date', 'BE'], ascending=[False, False])
+        df = df.sort_values(by=['Date', 'BE'], ascending=[True, True])
 
 #Processing Loaded Data
 if selected_category in ["Account Summary", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
