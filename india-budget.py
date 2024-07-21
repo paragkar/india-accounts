@@ -613,9 +613,9 @@ animation_speed = st.sidebar.selectbox(
 
 #Map animation speeds to delay times
 speed_to_delay = {
-    "Slow": 0.5,
-    "Medium": 0.35,
-    "Fast": 0.25
+    "Slow": 1,
+    "Medium": 0.5,
+    "Fast": 0.35,
 }
 # Get the delay time from the dictionary based on selected animation speed
 animation_delay = speed_to_delay[animation_speed]
