@@ -163,8 +163,9 @@ def sort_and_filter_dataframe(df, category, top_n):
     # Convert 'Date' to datetime
     df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
 
-    # Filter based on the category selected by the user
-    df = df[df['Description'].str.contains(category)]
+    if category !='All':
+        # Filter based on the category selected by the user
+        df = df[df['Description'].str.contains(category)]
 
     # Identify the latest date
     latest_date = df['Date'].max()
@@ -200,7 +201,7 @@ if selected_category in ["Main Category", "Tax Details"]:
 if selected_category in ["Expenditure Details"]:
     df = loadfileexp()
     # Dropdown for user to choose between 'Revenue' and 'Capital'
-    category_choice = st.sidebar.selectbox('Select Category:', ['Revenue', 'Capital'])
+    category_choice = st.sidebar.selectbox('Select Category:', ['All','Revenue', 'Capital'])
     # Numeric input for user to specify how many top items to display
     top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=100, value=20)
     df = sort_and_filter_dataframe(df, category_choice, top_n)
