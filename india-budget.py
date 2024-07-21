@@ -349,9 +349,8 @@ if selected_category in ["Expenditure Details"]:
         if st.session_state.selected_items != selected_items:
             st.session_state.selected_items = selected_items
             st.session_state.is_playing = False  # Auto-pause if category changes
-        
-        # Initially filter the DataFrame with default items for first render
-        df = df[df['Description'].isin(default_items)]
+            # Initially filter the DataFrame with default items for first render
+            df = df[df['Description'].isin(default_items)]
 
         # Update the DataFrame based on user's current selection
         # This line is critical as it ensures any user changes to selection are captured and used to filter the DataFrame
