@@ -333,7 +333,7 @@ def update_title(selected_date, selected_category):
             margin-top: -20px !important; /* Adjust top margin to reduce gap */
             margin-bottom: 5px; /* Add a bit of margin below the title if needed */
             border-bottom: none !important; /* Ensures no line is under the title */
-            font-size: 22.5px; /* Adjust font size to 75% of the original */
+            font-size: 30px; /* Adjust font size to 80% of the original */
         }
     </style>
     """
@@ -341,7 +341,7 @@ def update_title(selected_date, selected_category):
     # Display the title with custom styling
     st.markdown(title_css, unsafe_allow_html=True)
     title_placeholder.markdown(f"<h1>{title}</h1>", unsafe_allow_html=True)
-    
+
 
 def update_plot(selected_date, selected_category):
     filtered_data = df[df['Date'] == selected_date]
