@@ -379,7 +379,7 @@ def update_title(selected_date, selected_category):
         # Prepare the title with financial year, formatted date, and total values
         total_be = df[df['Date'] == selected_date]['BE'].sum().round(2)
         total_actual = df[df['Date'] == selected_date]['Actual'].sum().round(2)
-        title = f"Central Government's Expenditure For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span> - <span style='color:green;'>Total BE: Rs {total_be} Lakh Cr</span>, <span style='color:orange;'>Total Actual: Rs {total_actual} Lakh Cr</span>"
+        title = f"Central Government's Expenditure For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span> - Total BE: Rs <span style='color:green;'>{total_be} Lakh Cr</span>, Total Actual: Rs <span style='color:orange;'>{total_actual} Lakh Cr</span>"
     else:
         # Prepare the title with financial year and formatted date for other categories
         if selected_category == "Main Category":
