@@ -324,13 +324,13 @@ if selected_category == "Tax Details":
     xaxis2_title = 'Tax Cum Value % of GDP'
 
 
-# After loading data and extracting unique_dates
-if selected_animation == "YearEnd":
-    unique_dates = [date for date in unique_dates if date.month == 3 and date.day == 31]
-
 # Unique dates sorted
 unique_dates = df['Date'].unique()
 date_index = range(len(unique_dates))
+
+# After loading data and extracting unique_dates
+if selected_animation == "YearEnd":
+    unique_dates = [date for date in unique_dates if date.month == 3 and date.day == 31]
 
 title_placeholder = st.empty()
 slider_placeholder = st.sidebar.empty()
