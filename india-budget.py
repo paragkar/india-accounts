@@ -208,6 +208,9 @@ if 'selected_animation' not in st.session_state:
 if 'selection_type' not in st.session_state: #(New Code)
     st.session_state.selection_type = None
 
+if 'selected_item' not in st.session_state: #(New Code)
+    st.session_state.selected_item = None
+
 # Sidebar for category selection
 with st.sidebar:
     selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='category_select')
@@ -326,7 +329,11 @@ if selected_category in ["Expenditure Details"]:
         all_items = sorted(df['Description'].unique().tolist())
         
         # Create a multiselect with default items selected
-        selected_items = st.sidebar.multiselect('Select Items:', all_items, default=default_items)
+        selected_items = st.sidebar.multiselect('Select Items:', all_items, default=default_items, key = 'selected_items')
+        # Check if category has changed
+        if st.session_state.selected_items != selected_items:
+            st.session_state.selected_items = selected_items
+            st.session_state.is_playing = False  # Auto-pause if category changes
         
         # Initially filter the DataFrame with default items for first render
         df = df[df['Description'].isin(default_items)]
