@@ -208,8 +208,8 @@ if 'selected_animation' not in st.session_state:
 if 'selected_speed' not in st.session_state:
     st.session_state.selected_speed = None
 
-if 'selection_type' not in st.session_state:
-    st.session_state.selection_type = None
+if 'selected_type' not in st.session_state:
+    st.session_state.selected_type = None
 
 # Sidebar for category selection
 with st.sidebar:
