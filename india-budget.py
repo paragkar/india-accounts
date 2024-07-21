@@ -250,7 +250,7 @@ if selected_category == "Expenditure Details":
 with st.sidebar:
     selected_animation = st.sidebar.selectbox(
         "Select Animation Time Scale (Month/Year)",
-        ["MonthEnd", "YearEnd"], key='animation_select',
+        ["MonthEnd", "YearEnd"], key='selected_animation',
         index=0  # Default to 'MonthEnd'
     )
     if st.session_state.selected_animation != selected_animation:
