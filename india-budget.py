@@ -209,7 +209,7 @@ if 'is_playing' not in st.session_state:
     st.session_state.is_playing = False
 
 if 'selected_category' not in st.session_state:
-    st.session_state.selected_category = None
+    st.session_state.selected_category = "Account Summary"
 
 if 'selected_animation' not in st.session_state:
     st.session_state.selected_animation = None
@@ -225,7 +225,7 @@ if 'selected_speed' not in st.session_state: #(New Code)
 
 # Sidebar for category selection
 with st.sidebar:
-    selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='selected_category', index=0 )
+    selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='selected_category',index=0 )
     # Check if category has changed
     if st.session_state.selected_category != selected_category:
         st.session_state.selected_category = selected_category
