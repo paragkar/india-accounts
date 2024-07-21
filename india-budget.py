@@ -52,6 +52,15 @@ hide_st_style = '''
 '''
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
+st.markdown("""
+    <style>
+        .stMultiSelect [data-baseweb=select] span{
+            max-width: 250px;
+            font-size: 0.7rem;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
 
 #List for defining sorting order for "Account Summary" & "Tax Details"
 main_cat_order_list = [
