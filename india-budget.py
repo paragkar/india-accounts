@@ -229,20 +229,29 @@ with st.sidebar:
     # Check if category has changed
     if st.session_state.selected_category != selected_category:
         st.session_state.selected_category = selected_category
+        if selected_category == "Expenditure Details":
+            selection_type = st.sidebar.selectbox(
+                "Choose Selection Type:",
+                ["Number of Top Items", "Select Individual Items"],
+                key='selection_type', index=0 
+            )
+            # Check if category has changed
+            if st.session_state.selection_type != selection_type:
+                st.session_state.selection_type = selection_type
+                st.session_state.is_playing = False  # Auto-pause if category changes
         st.session_state.is_playing = False  # Auto-pause if category changes
 
 # In the sidebar, under 'Expenditure Details' category selection #(New Code)
-if selected_category == "Expenditure Details":
-    st.session_state.selection_type = "No of Top Items"
-    selection_type = st.sidebar.selectbox(
-        "Choose Selection Type:",
-        ["Number of Top Items", "Select Individual Items"],
-        key='selection_type', index=0 
-    )
-    # Check if category has changed
-    if st.session_state.selection_type != selection_type:
-        st.session_state.selection_type = selection_type
-        st.session_state.is_playing = False  # Auto-pause if category changes
+# if selected_category == "Expenditure Details":
+#     selection_type = st.sidebar.selectbox(
+#         "Choose Selection Type:",
+#         ["Number of Top Items", "Select Individual Items"],
+#         key='selection_type', index=0 
+#     )
+#     # Check if category has changed
+#     if st.session_state.selection_type != selection_type:
+#         st.session_state.selection_type = selection_type
+#         st.session_state.is_playing = False  # Auto-pause if category changes
 
 # Animation basis selection dropdown
 with st.sidebar:
