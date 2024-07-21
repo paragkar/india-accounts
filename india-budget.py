@@ -315,18 +315,24 @@ if selected_category in ["Expenditure Details"]:
         top_n = st.sidebar.number_input('Number of Top Items:', min_value=1, max_value=25, value=15)
         df = sort_and_filter_dataframe(df, category_choice, top_n)
     elif selection_type == "Select Individual Items":
-        # Assuming you have a function 'sort_and_filter_dataframe' that can return top N items
-        # Sort and filter the dataframe to get the top 15 items by your preferred criteria
+        # Sort and filter the dataframe to get the top 15 items
+        # Ensure this function returns a DataFrame sorted by your chosen metric, such as 'BE' or another measure
         top_items_df = sort_and_filter_dataframe(df, "All", 15)
+        
+        # Get the top 15 items' descriptions as default items for the multiselect
         default_items = top_items_df["Description"].tolist()
-
-        # Retrieve all unique descriptions from the dataframe for the multiselect dropdown
+        
+        # Get all unique descriptions for the multiselect options
         all_items = sorted(df['Description'].unique().tolist())
-
-        # Create a multiselect box with the top 15 items as default selection
+        
+        # Create a multiselect with default items selected
         selected_items = st.sidebar.multiselect('Select Items:', all_items, default=default_items)
+        
+        # Initially filter the DataFrame with default items for first render
+        df = df[df['Description'].isin(default_items)]
 
-        # Filter the DataFrame based on the user's selection from the multiselect box
+        # Update the DataFrame based on user's current selection
+        # This line is critical as it ensures any user changes to selection are captured and used to filter the DataFrame
         df = df[df['Description'].isin(selected_items)]
 
 #Processing Loaded Data
