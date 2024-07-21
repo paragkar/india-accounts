@@ -101,6 +101,24 @@ nontax_order_list = [
     "Total NonTax Rev"
 ]
 
+nondebt_order_list = [
+    "Gross Recoveries",
+    "Less Recoveries of Ways&Means Adv&Loans to Govt Emp",
+    "Less Expenditure Netted",
+    "Less Short Term Loans",
+    "Net Recoveries Loans",
+    "Net Issue of Bonus Share",
+    "Misc Cap Receipts",
+    "Misc-Other Receipts",
+    "Misc-Issue Bonds & Shares",
+    "Misc-Disinvestment Govt Equity",
+    "Misc-Monetization of Highways",
+    "Misc-Disinvestment Govt Equity in PSB & FIs",
+    "Misc-Listing Insurance Co",
+    "Total Non Debt Receipts"
+]
+
+
 
 # Load file function
 @st.cache_data
@@ -144,6 +162,20 @@ def loadfilenontax():
     df = pd.read_excel(excel_content, sheet_name="Sheet1")
     return df
 
+# Load file function
+@st.cache_data
+def loadfilenondebt():
+    password = st.secrets["db_password"]
+    excel_content = io.BytesIO()
+    with open("T04_NonDebt_Details.xlsx", 'rb') as f:
+        excel = msoffcrypto.OfficeFile(f)
+        excel.load_key(password)
+        excel.decrypt(excel_content)
+    
+    # Loading data from excel file
+    df = pd.read_excel(excel_content, sheet_name="Sheet1")
+    return df
+
  #Load file function
 @st.cache_data
 def loadfileexp():
@@ -172,7 +204,7 @@ if 'selected_category' not in st.session_state:
 
 # Sidebar for category selection
 with st.sidebar:
-    selected_category = st.selectbox("Select Category", ["Main Category", "Tax Details", "NonTax Details", "Expenditure Details"], key='category_select')
+    selected_category = st.selectbox("Select Category", ["Main Category", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='category_select')
     # Check if category has changed
     if st.session_state.selected_category != selected_category:
         st.session_state.selected_category = selected_category
@@ -188,6 +220,9 @@ def loaddata():
     if selected_category == "NonTax Details":
         df = loadfilenontax()
         cat_order_list = nontax_order_list
+    if selected_category == "NonDebt Details":
+        df = loadfilenontax()
+        cat_order_list = nondebt_order_list
 
     # Ensure that the 'current_index' does not exceed the number of unique dates in the new dataset
     unique_dates = df['Date'].unique()
@@ -225,7 +260,7 @@ def sort_and_filter_dataframe(df, category, top_n):
 
 
 #Loading Data
-if selected_category in ["Main Category", "Tax Details", "NonTax Details"]:
+if selected_category in ["Main Category", "Tax Details", "NonTax Details", "NonDebt Details"]:
     df, cat_order_list = loaddata()
     df["Description"] = [x.strip() for x in df["Description"]]
     # Convert 'Date' column to datetime if not already done
@@ -250,7 +285,7 @@ if selected_category in ["Expenditure Details"]:
     df = sort_and_filter_dataframe(df, category_choice, top_n)
 
 #Processing Loaded Data
-if selected_category in ["Main Category", "NonTax Details", "Expenditure Details"]:
+if selected_category in ["Main Category", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
     df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
     df["Actual"] = (df["Actual"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
     df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
@@ -330,6 +365,9 @@ def update_title(selected_date, selected_category):
             title = f"Central Government's Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
         elif selected_category == "NonTax Details":
             title = f"Central Government's Non Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+        elif selected_category == "NonDebt Details":
+            title = f"Central Government's Non Debt Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+
 
     # Use additional CSS to ensure the title is positioned correctly and reduced in size
     title_css = """
@@ -356,7 +394,7 @@ def update_plot(selected_date, selected_category):
 
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.7, 0.3], horizontal_spacing=0.01)
 
-    if selected_category in ["Main Category", "NonTax Details", "Expenditure Details"]:
+    if selected_category in ["Main Category", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
 
          # Add bar charts on the right 1
         fig.add_trace(go.Bar(
