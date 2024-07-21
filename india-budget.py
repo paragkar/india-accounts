@@ -202,6 +202,9 @@ if 'is_playing' not in st.session_state:
 if 'selected_category' not in st.session_state:
     st.session_state.selected_category = None
 
+if 'selected_animation' not in st.session_state:
+    st.session_state.selected_animation = None
+
 # Sidebar for category selection
 with st.sidebar:
     selected_category = st.selectbox("Select Category", ["Main Category", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='category_select')
@@ -211,15 +214,15 @@ with st.sidebar:
         st.session_state.is_playing = False  # Auto-pause if category changes
 
 # Animation basis selection dropdown
-animation_basis = st.sidebar.selectbox(
-    "Select Animation Basis",
-    ["MonthEnd", "YearEnd"],
-    index=0  # Default to 'MonthEnd'
-)
-
-if animation_basis_changed:
-    st.session_state.current_index = 0
-    st.session_state.is_playing = False  # Auto-pause if category changes
+with st.sidebar:
+    selected_animation = st.sidebar.selectbox(
+        "Select Animation Basis",
+        ["MonthEnd", "YearEnd"], key='animation_select',
+        index=0  # Default to 'MonthEnd'
+    )
+    st.session_state.selected_animation != selected_animation:
+        st.session_state.selected_animation = selected_animation
+        st.session_state.is_playing = False  # Auto-pause if category changes
 
 def loaddata():
     if selected_category == "Main Category":
@@ -322,7 +325,7 @@ if selected_category == "Tax Details":
 
 
 # After loading data and extracting unique_dates
-if animation_basis == "YearEnd":
+if selected_animation == "YearEnd":
     unique_dates = [date for date in unique_dates if date.month == 3 and date.day == 31]
 
 # Unique dates sorted
