@@ -588,7 +588,7 @@ animation_speed = st.sidebar.selectbox(
     index=0  # Default to 'Slow'
 )
 
- Map animation speeds to delay times
+#Map animation speeds to delay times
 speed_to_delay = {
     "Slow": 0.5,
     "Medium": 0.35,
