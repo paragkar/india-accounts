@@ -217,6 +217,10 @@ animation_basis = st.sidebar.selectbox(
     index=0  # Default to 'MonthEnd'
 )
 
+if animation_basis_changed:
+    st.session_state.current_index = 0
+    st.session_state.is_playing = False  # Auto-pause if category changes
+
 def loaddata():
     if selected_category == "Main Category":
         df = loadfilemain()
@@ -315,6 +319,11 @@ if selected_category == "Tax Details":
     fig1_xaxis_max_value = df["Tax Cum Value"].max()
     xaxis1_title = 'Tax Cum Value Rs Lakh Cr'
     xaxis2_title = 'Tax Cum Value % of GDP'
+
+
+# After loading data and extracting unique_dates
+if animation_basis == "YearEnd":
+    unique_dates = [date for date in unique_dates if date.month == 3 and date.day == 31]
 
 # Unique dates sorted
 unique_dates = df['Date'].unique()
