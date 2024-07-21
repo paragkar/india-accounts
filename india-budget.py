@@ -216,7 +216,7 @@ with st.sidebar:
 # Animation basis selection dropdown
 with st.sidebar:
     selected_animation = st.sidebar.selectbox(
-        "Select Animation Basis",
+        "Select Animation Time Scale (Month/Year)",
         ["MonthEnd", "YearEnd"], key='animation_select',
         index=0  # Default to 'MonthEnd'
     )
