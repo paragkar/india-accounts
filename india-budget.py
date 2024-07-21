@@ -261,6 +261,46 @@ def get_financial_year(date):
         year -= 1
     return f'FY{year % 100:02d}-{(year + 1) % 100:02d}'
 
+# def update_title(selected_date, selected_category):
+#     # Convert the selected_date to a datetime object if it isn't one already
+#     if isinstance(selected_date, str):
+#         selected_date = datetime.strptime(selected_date, '%Y-%m-%d').date()
+    
+#     # Get the financial year string
+#     fy = get_financial_year(selected_date)
+    
+#     # Format the date correctly with ordinal suffix
+#     day_suffix = lambda n: 'th' if 11 <= n <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')
+#     formatted_date = selected_date.strftime(f'%b {selected_date.day}{day_suffix(selected_date.day)}, %Y')
+
+#     if selected_category == "Main Category":
+#         # Prepare the title with financial year and formatted date
+#         title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+#     if selected_category == "Expenditure Details":
+#         # Prepare the title with financial year and formatted date
+#         title = f"Central Government's Expenditure For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+#     if selected_category == "Tax Details":
+#          # Prepare the title with financial year and formatted date
+#         title = f"Central Government's Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+
+
+#     # Use additional CSS to ensure the title is positioned correctly
+#     title_css = """
+#     <style>
+#         h1 {
+#             text-align: center; /* Center align the title */
+#             margin-top: -20px !important; /* Adjust top margin to reduce gap */
+#             margin-bottom: 5px; /* Add a bit of margin below the title if needed */
+#             border-bottom: none !important; /* Ensures no line is under the title */
+#         }
+#     </style>
+#     """
+
+#     # Display the title with custom styling
+#     st.markdown(title_css, unsafe_allow_html=True)
+#     title_placeholder.markdown(f"<h1 style='font-size:30px;'>{title}</h1>", unsafe_allow_html=True) #End of Function Update title
+
+
 def update_title(selected_date, selected_category):
     # Convert the selected_date to a datetime object if it isn't one already
     if isinstance(selected_date, str):
@@ -273,16 +313,17 @@ def update_title(selected_date, selected_category):
     day_suffix = lambda n: 'th' if 11 <= n <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')
     formatted_date = selected_date.strftime(f'%b {selected_date.day}{day_suffix(selected_date.day)}, %Y')
 
-    if selected_category == "Main Category":
-        # Prepare the title with financial year and formatted date
-        title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
     if selected_category == "Expenditure Details":
-        # Prepare the title with financial year and formatted date
-        title = f"Central Government's Expenditure For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
-    if selected_category == "Tax Details":
-         # Prepare the title with financial year and formatted date
-        title = f"Central Government's Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
-
+        # Prepare the title with financial year, formatted date and total values
+        total_be = df[df['Date'] == selected_date]['BE'].sum().round(2)
+        total_actual = df[df['Date'] == selected_date]['Actual'].sum().round(2)
+        title = f"Central Government's Expenditure For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span> - Total BE: Rs {total_be} Lakh Cr, Total Actual: Rs {total_actual} Lakh Cr"
+    else:
+        # Prepare the title with financial year and formatted date for other categories
+        if selected_category == "Main Category":
+            title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+        elif selected_category == "Tax Details":
+            title = f"Central Government's Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
 
     # Use additional CSS to ensure the title is positioned correctly
     title_css = """
@@ -298,7 +339,8 @@ def update_title(selected_date, selected_category):
 
     # Display the title with custom styling
     st.markdown(title_css, unsafe_allow_html=True)
-    title_placeholder.markdown(f"<h1 style='font-size:30px;'>{title}</h1>", unsafe_allow_html=True) #End of Function Update title
+    title_placeholder.markdown(f"<h1 style='font-size:30px;'>{title}</h1>", unsafe_allow_html=True)
+    
 
 def update_plot(selected_date, selected_category):
     filtered_data = df[df['Date'] == selected_date]
