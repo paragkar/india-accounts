@@ -210,6 +210,13 @@ with st.sidebar:
         st.session_state.selected_category = selected_category
         st.session_state.is_playing = False  # Auto-pause if category changes
 
+# Animation basis selection dropdown
+animation_basis = st.sidebar.selectbox(
+    "Select Animation Basis",
+    ["MonthEnd", "YearEnd"],
+    index=0  # Default to 'MonthEnd'
+)
+
 def loaddata():
     if selected_category == "Main Category":
         df = loadfilemain()
