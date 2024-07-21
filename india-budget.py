@@ -53,7 +53,7 @@ hide_st_style = '''
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
 
-#List for defining sorting order for "Main Category" & "Tax Details"
+#List for defining sorting order for "Account Summary" & "Tax Details"
 main_cat_order_list = [
     "Revenue Receipts",
     "Rev Recp - Tax Revenue Net",
@@ -207,7 +207,7 @@ if 'selected_animation' not in st.session_state:
 
 # Sidebar for category selection
 with st.sidebar:
-    selected_category = st.selectbox("Select Category", ["Main Category", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='category_select')
+    selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='category_select')
     # Check if category has changed
     if st.session_state.selected_category != selected_category:
         st.session_state.selected_category = selected_category
@@ -225,7 +225,7 @@ with st.sidebar:
         st.session_state.is_playing = False  # Auto-pause if category changes
 
 def loaddata():
-    if selected_category == "Main Category":
+    if selected_category == "Account Summary":
         df = loadfilemain()
         cat_order_list = main_cat_order_list
     if selected_category == "Tax Details":
@@ -274,7 +274,7 @@ def sort_and_filter_dataframe(df, category, top_n):
 
 
 #Loading Data
-if selected_category in ["Main Category", "Tax Details", "NonTax Details", "NonDebt Details"]:
+if selected_category in ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details"]:
     df, cat_order_list = loaddata()
     df["Description"] = [x.strip() for x in df["Description"]]
     # Convert 'Date' column to datetime if not already done
@@ -299,7 +299,7 @@ if selected_category in ["Expenditure Details"]:
     df = sort_and_filter_dataframe(df, category_choice, top_n)
 
 #Processing Loaded Data
-if selected_category in ["Main Category", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
+if selected_category in ["Account Summary", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
     df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
     df["Actual"] = (df["Actual"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
     df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
@@ -382,7 +382,7 @@ def update_title(selected_date, selected_category):
         title = f"Central Government's Expenditure For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span> - Total BE: Rs <span style='color:green;'>{total_be} Lakh Cr</span>, Total Actual: Rs <span style='color:orange;'>{total_actual} Lakh Cr</span>"
     else:
         # Prepare the title with financial year and formatted date for other categories
-        if selected_category == "Main Category":
+        if selected_category == "Account Summary":
             title = f"Central Government's Accounts For <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
         elif selected_category == "Tax Details":
             title = f"Central Government's Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
@@ -417,7 +417,7 @@ def update_plot(selected_date, selected_category):
 
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.7, 0.3], horizontal_spacing=0.01)
 
-    if selected_category in ["Main Category", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
+    if selected_category in ["Account Summary", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
 
          # Add bar charts on the right 1
         fig.add_trace(go.Bar(
