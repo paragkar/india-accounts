@@ -221,8 +221,8 @@ with st.sidebar:
         index=0  # Default to 'MonthEnd'
     )
     st.session_state.selected_animation != selected_animation:
-        st.session_state.selected_animation = selected_animation
-        st.session_state.is_playing = False  # Auto-pause if category changes
+    st.session_state.selected_animation = selected_animation
+    st.session_state.is_playing = False  # Auto-pause if category changes
 
 def loaddata():
     if selected_category == "Main Category":
