@@ -118,6 +118,24 @@ nondebt_order_list = [
     "Total Non Debt Receipts"
 ]
 
+financing_order_list = [
+    "External Financing",
+    "Domestic Financing",
+    "Market Borrowing",
+    "Securities Against Small Savings",
+    "State Provident Funds",
+    "Special Deposits",
+    "National Small Saving Fund",
+    "Saving Deposit and Certificates",
+    "Public Provident Funds",
+    "Investment in Securities",
+    "Income or Expenditure of NSSF",
+    "Others",
+    "Cash Balance (Decrease / Increase)",
+    "Total Financing"
+]
+
+
 
 
 # Load file function
@@ -190,6 +208,21 @@ def loadfileexp():
     df = pd.read_excel(excel_content, sheet_name="Sheet1")
     return df
 
+# Load file function
+@st.cache_data
+def loadfilefinance():
+    password = st.secrets["db_password"]
+    excel_content = io.BytesIO()
+    with open("T01_Financing.xlsx", 'rb') as f:
+        excel = msoffcrypto.OfficeFile(f)
+        excel.load_key(password)
+        excel.decrypt(excel_content)
+    
+    # Loading data from excel file
+    df = pd.read_excel(excel_content, sheet_name="Sheet1")
+    return df
+
+
 # Main Program Starts Here
 
 # Initialize title and slider
@@ -213,7 +246,7 @@ if 'selected_type' not in st.session_state: #Expenditure Type - All, Revenue & C
 
 # Sidebar for category selection
 with st.sidebar:
-    selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details"], key='category_select', index =0)
+    selected_category = st.selectbox("Select Category", ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Expenditure Details", "Financing Details"], key='category_select', index =0)
     # Check if category has changed
     if st.session_state.selected_category != selected_category:
         st.session_state.selected_category = selected_category
@@ -264,6 +297,9 @@ def loaddata():
     if selected_category == "NonDebt Details":
         df = loadfilenondebt()
         cat_order_list = nondebt_order_list
+     if selected_category == "Financing Details":
+        df = loadfilefinance()
+        cat_order_list = financing_order_list
 
     # Ensure that the 'current_index' does not exceed the number of unique dates in the new dataset
     unique_dates = df['Date'].unique()
@@ -301,7 +337,7 @@ def sort_and_filter_dataframe(df, category, top_n):
 
 
 #Loading Data
-if selected_category in ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details"]:
+if selected_category in ["Account Summary", "Tax Details", "NonTax Details", "NonDebt Details", "Financing Details"]:
     df, cat_order_list = loaddata()
     df["Description"] = [x.strip() for x in df["Description"]]
     # Convert 'Date' column to datetime if not already done
@@ -331,7 +367,7 @@ if selected_category in ["Expenditure Details"]:
     df = sort_and_filter_dataframe(df, selected_type, top_n)
 
 #Processing Loaded Data
-if selected_category in ["Account Summary", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
+if selected_category in ["Account Summary", "NonTax Details", "NonDebt Details", "Expenditure Details", "Financing Details"]:
     df["Actual % of BE"] = ((df["Actual"].astype(float)/df["BE"].astype(float))*100).round(2)
     df["Actual"] = (df["Actual"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
     df["BE"] = (df["BE"].astype(float)/100000).round(2) #converting into Rs Lakh Cr
@@ -421,6 +457,8 @@ def update_title(selected_date, selected_category):
             title = f"Central Govt's Non Tax Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
         elif selected_category == "NonDebt Details":
             title = f"Central Govt's Non Debt Collection Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
+        elif selected_category == "Financing Details":
+            title = f"Central Govt's Deficit Financing Details <span style='color:blue;'>{fy}</span> - <span style='color:red;'>{formatted_date}</span>"
 
 
     # Use additional CSS to ensure the title is positioned correctly and reduced in size
@@ -448,7 +486,7 @@ def update_plot(selected_date, selected_category):
 
     fig = make_subplots(rows=1, cols=2, shared_yaxes=True, specs=[[{"type": "bar"}, {"type": "bar"}]], column_widths=[0.7, 0.3], horizontal_spacing=0.01)
 
-    if selected_category in ["Account Summary", "NonTax Details", "NonDebt Details", "Expenditure Details"]:
+    if selected_category in ["Account Summary", "NonTax Details", "NonDebt Details", "Expenditure Details", "Financing Details"]:
 
          # Add bar charts on the right 1
         fig.add_trace(go.Bar(
